@@ -1,5 +1,5 @@
 DataTable::attachBindings = ()->
-	SimplyBind.setOption 'invokeOnBind', true
+	SimplyBind.setOption 'updateOnBind', true
 
 
 	SimplyBind('data').of(@)
@@ -46,6 +46,6 @@ DataTable::attachBindings = ()->
 
 
 
-	SimplyBind.setOption 'invokeOnBind', false
+	SimplyBind.setOption 'updateOnBind', false
 	Promise.resolve()
 
