@@ -9,8 +9,7 @@
     "foreach-cli": "^1.0.1",
     "node-sass": "^3.4.2",
     "simplyimport": "^1.2.2",
-    "uglify-js": "^2.6.2",
-    "forever": "^0.15.1"
+    "uglify-js": "^2.6.2"
   },
   "scripts": {
     "compile": "npm run compile:js && npm run compile:sass",
