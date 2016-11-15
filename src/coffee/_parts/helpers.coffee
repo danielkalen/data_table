@@ -23,7 +23,7 @@ helpers.normalizeColumns = (columns)->
 
 
 
-helpers.genHeaderCellClassname = (column)->
+helpers.genCellClassname = (column)->
 	classString = ''
 	
 	if column.sortable
