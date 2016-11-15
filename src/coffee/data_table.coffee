@@ -1,4 +1,5 @@
 do ($=jQuery)->
+	import 'node_modules/bluebird/js/browser/bluebird.js'
 	import '_parts/markup.coffee'
 	import '_parts/defaults.coffee'
 	import '_parts/helpers.coffee'
@@ -28,16 +29,29 @@ do ($=jQuery)->
 
 
 		# Events & Bindings
-		@attachEvents().then ()=>
-			@attachBindings().then ()=>
-				@fetchData()
+		Promise.bind(@)
+			.then(@attachEvents)
+			.then(@attachBindings)
+			.then(@loadData)
 
 		return @
 
 
 
 	DataTable::fetchData = ()->
-		@options.data().then (response)=> @data = response
+		@state.loading = true
+		@options.data().then (data)=>
+			@state.loading = false
+			@state.noResults = !data?.length
+			Promise.resolve(data)
+
+	DataTable::setData = (data)->
+		@data = data if Array.isArray(data)
+	
+	DataTable::loadData = ()->
+		@fetchData().then (data)=> @setData(data)
+
+
 
 
 
