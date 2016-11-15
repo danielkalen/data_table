@@ -1,6 +1,6 @@
 DataTable::attachEvents = ()->
 	# ==== Table head sorting listeners =================================================================================
-	@els.tableHead.on 'click', 'th.is_sortable', (event)=> @sortBy event.currentTarget.dataset.slug
+	@els.tableHeading.on 'click', 'th.is_sortable', (event)=> @sortBy event.currentTarget.dataset.slug
 
 
 
@@ -82,7 +82,7 @@ DataTable::attachEvents = ()->
 				return unless ipDetails
 				
 				output = for label,value of ipDetails 
-					markup.table_body_row_cell_ip_details_item({label,value})
+					markup.ipDetailsItem({label,value})
 
 				$content.html output.join('')
 				$trigger.parent().addClass 'ready'

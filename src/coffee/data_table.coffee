@@ -9,13 +9,14 @@ do ($=jQuery)->
 
 		# Markup
 		@els = {}
-		@els.tableOuterwrap = $(markup.table {columns:@generateColumns(), pagination:markup.pagination()})
-
-		@els.table = @els.tableOuterwrap.children().first()
-		@els.tableHead = @els.table.children().first().children()
+		@els.tableOuterwrap = $(markup.tableOuterwrap())
+		@els.table = $(markup.table()).appendTo(@els.tableOuterwrap)
+		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()
-		@els.pagination = @els.tableOuterwrap.children().last()
+		@els.noResultsMessage = $(markup.noResults()).appendTo(@els.tableOuterwrap)
+		@els.pagination = $(markup.pagination()).appendTo(@els.tableOuterwrap)
 
+		@els.tableHeading.append(@generateColumns())
 
 		@els.tableOuterwrap.appendTo @container
 		@els.table.data 'DataTable', @

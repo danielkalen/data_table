@@ -1,8 +1,9 @@
 DataTable::generateColumns = ()->
 	@options.columns
 		.map (column)->
-			markup.table_head_cell
-				'isSortable': column.sorting?
+			markup.headingCell
+				# 'isSortable': column.sorting?
+				'extraClasses': column.notes
 				'slug': column.label.toLowerCase().replace /\W/g, '_'
 				'icon': column.icon or ''
 				'label': column.label
@@ -16,16 +17,16 @@ DataTable::generateBodyRows = (rows)->
 	rowItems = ''
 
 	genRow = (row, parentRow, isSub)=>		
-		rowItems += markup.table_body_row
-			'isSub': isSub
-			'itemID': if isSub then parentRow.ID else row.ID
+		rowItems += markup.row
+			# 'isSub': isSub
+			'rowID': if isSub then parentRow.ID else row.ID
 			'cells': do ()=>
 				rowCells = ''
 				
 				for column,index in @options.columns
 					cellValue = row[column.label] or ''
 
-					rowCells += markup.table_body_row_cell
+					rowCells += markup.rowCell
 						'slug': column.label.toLowerCase().replace /\W/g, '_'
 						'value': do ()=>
 							switch column.type
@@ -59,11 +60,11 @@ DataTable::generateBodyRows = (rows)->
 
 
 DataTable::generateInlineFields = (dataFields)->
-	markup.table_body_row_cell_fields 'fields': do ()->
+	markup.fields 'fields': do ()->
 		return '' unless typeof dataFields is 'object'
 		
 		output = for label,value of dataFields
-			markup.table_body_row_cell_fields_item {label,value}
+			markup.fieldsItem {label,value}
 
 
 		return output.join('')
@@ -73,11 +74,11 @@ DataTable::generateInlineFields = (dataFields)->
 
 
 DataTable::generateActions = ()->
-	markup.table_body_row_cell_actions 'actions': do ()=>
+	markup.actions 'actions': do ()=>
 		return '' unless @tableOptions.actions
 		
 		output = for action in @tableOptions.actions
-			markup.table_body_row_cell_actions_item(action)
+			markup.actionsItem(action)
 
 
 		return output.join('')
@@ -89,7 +90,7 @@ DataTable::generateActions = ()->
 
 
 DataTable::generateIpDetails = (ipAddress)->
-	markup.table_body_row_cell_ip_details {ipAddress} # data attribute
+	markup.ipDetails {ipAddress} # data attribute
 
 
 

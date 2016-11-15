@@ -25,7 +25,7 @@ DataTable::attachBindings = ()->
 			.transform (count)->
 				paginationItems = ''
 				for value in [1..count]
-					paginationItems += markup.pagination_item({value}) unless value is 0
+					paginationItems += markup.paginationItem({value}) unless value is 0
 
 				return paginationItems
 

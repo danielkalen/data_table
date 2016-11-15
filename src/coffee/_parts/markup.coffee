@@ -1,92 +1,31 @@
 markup =
-	table: ({columns, pagination})-> "
-		<div class='#{DataTable.defaults.baseClass}-outerwrap'>
-			<table class='#{DataTable.defaults.baseClass} chart horizontal'>
-				<thead class='#{DataTable.defaults.baseClass}-head'>
-					<tr class='#{DataTable.defaults.baseClass}-head-row'>
-						<th class='#{DataTable.defaults.baseClass}-head-row-cell is_expand_button'></th>
-						#{columns}
-					</tr>
-				</thead>
-
-				<tbody class='#{DataTable.defaults.baseClass}-body'></tbody>
-			</table>
-			#{pagination}
-		</div>
+	tableOuterwrap: ()-> "
+		<div class='#{DataTable.defaults.baseClass}-outerwrap'></div>
 	"
 
-
-	table_head_cell: ({isSortable, slug, icon, label})-> "
-		<th class='#{DataTable.defaults.baseClass}-head-row-cell #{if isSortable then 'isSortable' else ''} #{slug}' data-slug='#{slug}' data-icon='#{icon}'>
-			<div class='#{DataTable.defaults.baseClass}-head-row-cell-text'>#{label}</div>
-		</th>
-	"
-
-
-	table_body_row: ({isSub, itemID, cells})-> "
-		<tr class='#{DataTable.defaults.baseClass}-body-row #{if isSub then 'isSub' else ''}' data-id='#{itemID}'>
-			<td class='#{DataTable.defaults.baseClass}-body-row-cell is_expand_button'>
-				<div class='#{DataTable.defaults.baseClass}-body-row-cell-expand'></div>
-			</td>
-
-			#{cells}
-		</tr>
-	"
-	
-
-	table_body_row_cell: ({slug, value})-> "
-		<td class='#{DataTable.defaults.baseClass}-body-row-cell cell_#{slug}' data-slug='#{slug}'>
-			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap'>#{value}</div>
-		</td>
-	"
-	
-
-
-
-	table_body_row_cell_ip_details: ({ipAddress})-> "
-		<div class='#{DataTable.defaults.baseClass}-ip_details' data-ip='#{ipAddress}'>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-trigger'>
-				<div class='#{DataTable.defaults.baseClass}-ip_details-content'>Loading IP Details</div>
+	table: ()-> "
+		<div class='#{DataTable.defaults.baseClass}'>
+			<div class='#{DataTable.defaults.baseClass}-heading'>
+				<div class='#{DataTable.defaults.baseClass}-heading-row'>
+					<div class='#{DataTable.defaults.baseClass}-heading-row-cell is_expand_button'></div>
+				</div>
 			</div>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-country'></div>
-		</div>
-	"
-
-	table_body_row_cell_ip_details_item: ({label, value})-> "
-		<div class='#{DataTable.defaults.baseClass}-ip_details-content-item'>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-content-item-label'>#{label}: </div>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-content-item-value'>#{value}</div>
-		</div>
-	"
-	
-
-
-
-	table_body_row_cell_fields: ({fields})-> "
-		<div class='#{DataTable.defaults.baseClass}-fields'>#{fields}</div>
-	"
-
-	table_body_row_cell_fields_item: ({label,value})-> "
-		<div class='#{DataTable.defaults.baseClass}-fields-item'>
-			<div class='#{DataTable.defaults.baseClass}-fields-item-label'>#{label}: </div>
-			<div class='#{DataTable.defaults.baseClass}-fields-item-value'>#{value}</div>
-		</div>
-	"
-	
-
-
-
-	table_body_row_cell_actions: ({actions})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions'>#{actions}</div>
-	"
-
-	table_body_row_cell_actions_item: ({action, icon, label, color='grey'})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-button color_#{color}' data-action='#{action}' data-icon='#{icon}'>
-			<div class='#{DataTable.defaults.baseClass}-actions-button-text'>#{label}</div>
+			<div class='#{DataTable.defaults.baseClass}-body'></div>
 		</div>
 	"
 
 
+	noResults: ()-> "
+		<div class='#{DataTable.defaults.baseClass}-no_results {{isVisible}}'>
+			<div class='#{DataTable.defaults.baseClass}-no_results-innerwrap'>
+				<div class='#{DataTable.defaults.baseClass}-no_results-icon'></div>
+				<div class='#{DataTable.defaults.baseClass}-no_results-text'>
+					<div class='#{DataTable.defaults.baseClass}-no_results-text-title'>No {{searchTerm}}s to Display</div>
+					<div class='#{DataTable.defaults.baseClass}-no_results-text-subtitle'>There are no matching {{searchTermSmall}}s for the search query you've typed.</div>
+				</div>
+			</div>
+		</div>
+	"
 
 
 	pagination: ()-> "
@@ -102,8 +41,84 @@ markup =
 	"
 
 
-	pagination_item: ({value})-> "
+	paginationItem: ({value})-> "
 		<div class='#{DataTable.defaults.baseClass}-pagination-item'>
 			<div class='#{DataTable.defaults.baseClass}-pagination-item-text'>#{value}</div>
+		</div>
+	"
+
+
+
+	headingCell: ({extraClasses='', slug, icon, label})-> "
+		<div class='#{DataTable.defaults.baseClass}-heading-row-cell #{extraClasses} __#{slug}' data-slug='#{slug}' data-icon='#{icon}'>
+			<div class='#{DataTable.defaults.baseClass}-heading-row-cell-text'>#{label}</div>
+		</div>
+	"
+
+
+	row: ({rowID, cells, drilldown=''})-> "
+		<div class='#{DataTable.defaults.baseClass}-body-row _tableRow {{drilldownOpen}}' data-row-id='#{rowID}'>
+			<div class='#{DataTable.defaults.baseClass}-body-row-cell is_expand_button'>
+				<div class='#{DataTable.defaults.baseClass}-body-row-cell-expand'></div>
+			</div>
+			
+			#{cells}
+			
+			<div class='#{DataTable.defaults.baseClass}-body-row-drilldown _tableRowDrilldown'>
+				#{drilldown}
+			</div>
+		</div>
+	"
+	
+
+	rowCell: ({extraClasses='', label, slug, value})-> "
+		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} __#{extraClasses}' data-slug='#{slug}'>
+			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap' title='{{label}}'>#{value}</div>
+		</div>
+	"
+	
+
+
+
+	ipDetails: ({ipAddress})-> "
+		<div class='#{DataTable.defaults.baseClass}-ip_details' data-ip='#{ipAddress}'>
+			<div class='#{DataTable.defaults.baseClass}-ip_details-trigger'>
+				<div class='#{DataTable.defaults.baseClass}-ip_details-content'>Loading IP Details</div>
+			</div>
+			<div class='#{DataTable.defaults.baseClass}-ip_details-country'></div>
+		</div>
+	"
+
+	ipDetailsItem: ({label, value})-> "
+		<div class='#{DataTable.defaults.baseClass}-ip_details-content-item'>
+			<div class='#{DataTable.defaults.baseClass}-ip_details-content-item-label'>#{label}: </div>
+			<div class='#{DataTable.defaults.baseClass}-ip_details-content-item-value'>#{value}</div>
+		</div>
+	"
+	
+
+
+
+	fields: ({fields})-> "
+		<div class='#{DataTable.defaults.baseClass}-fields'>#{fields}</div>
+	"
+
+	fieldsItem: ({label,value})-> "
+		<div class='#{DataTable.defaults.baseClass}-fields-item'>
+			<div class='#{DataTable.defaults.baseClass}-fields-item-label'>#{label}: </div>
+			<div class='#{DataTable.defaults.baseClass}-fields-item-value'>#{value}</div>
+		</div>
+	"
+	
+
+
+
+	actions: ({actions})-> "
+		<div class='#{DataTable.defaults.baseClass}-actions'>#{actions}</div>
+	"
+
+	actionsItem: ({action, icon, label, color='grey'})-> "
+		<div class='#{DataTable.defaults.baseClass}-actions-button color_#{color}' data-action='#{action}' data-icon='#{icon}'>
+			<div class='#{DataTable.defaults.baseClass}-actions-button-text'>#{label}</div>
 		</div>
 	"
