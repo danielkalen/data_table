@@ -23,6 +23,38 @@ helpers.normalizeColumns = (columns)->
 
 
 
+helpers.genHeaderCellClassname = (column)->
+	classString = ''
+	
+	if column.sortable
+		classString += ' _isSortable'
+	
+	if column.noLabel
+		classString += ' _noLabel'
+	
+	if column.isLink
+		classString += ' _isLink'
+	
+	if column.color
+		classString += ' _hasColor'
+	
+	if column.type is 'button'
+		classString += ' _isButton'
+	
+	if column.type is 'breakdownBar'
+		classString += ' _isBreakdownBar'
+	
+	if column.type is 'ipDetails'
+		classString += ' _isIpDetails'
+	
+	if column.type is 'fields'
+		classString += ' _isFields'
+
+	return classString
+
+
+
+
 
 
 
