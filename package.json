@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/danielkalen/data_table/issues"
   },
-  "homepage": "https://github.com/danielkalen/data_table#readme"
+  "homepage": "https://github.com/danielkalen/data_table#readme",
+  "dependencies": {
+    "@danielkalen/simplybind": "^1.7.1"
+  }
 }
