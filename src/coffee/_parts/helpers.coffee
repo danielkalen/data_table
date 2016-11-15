@@ -54,6 +54,16 @@ helpers.genHeaderCellClassname = (column)->
 
 
 
+helpers.genHeaderCellStyle = (column)->
+	styleString = ''
+
+	if column.width
+		styleString += "width: #{column.width};"
+
+	return if styleString then "style='#{styleString}'" else ''
+
+
+
 
 
 
