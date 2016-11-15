@@ -13,7 +13,7 @@ DataTable::attachEvents = ()->
 		itemID = $itemRow.data('id')
 		itemIndex = $itemRow.index()
 
-		@els.table.trigger "action.#{action}", {itemID, 'data':@data[itemIndex]}
+		@els.table.trigger "action.#{action}", {itemID, 'data':@allRows[itemIndex]}
 
 
 

@@ -6,10 +6,12 @@ do ($=jQuery)->
 
 	DataTable = (@container, options={})->
 		@options = $.extend {}, DataTable.defaults, options
-		@data = []
 		@state = 'loading':true, 'noResults':false
+		@visibleRows = []
+		@availableRows = []
+		@allRows = []
 
-		# Markup
+		# ==== Markup =================================================================================
 		@els = {}
 		@els.tableOuterwrap = $(markup.tableOuterwrap())
 		@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
@@ -24,11 +26,9 @@ do ($=jQuery)->
 		@els.tableOuterwrap.appendTo @container
 		@els.table.data 'DataTable', @
 
-		
 
 
-
-		# Events & Bindings
+		# ==== Events & Bindings =================================================================================
 		Promise.bind(@)
 			.then(@attachEvents)
 			.then(@attachBindings)
@@ -46,7 +46,7 @@ do ($=jQuery)->
 			Promise.resolve(data)
 
 	DataTable::setData = (data)->
-		@data = data if Array.isArray(data)
+		@allRows = data if Array.isArray(data)
 	
 	DataTable::loadData = ()->
 		@fetchData().then (data)=> @setData(data)

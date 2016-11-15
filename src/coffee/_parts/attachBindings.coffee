@@ -6,7 +6,7 @@ DataTable::attachBindings = ()->
 		.to('className.isVisible').of(@els.noResultsMessage).transform (noResults)-> if noResults then 'is_visible' else ''
 
 
-	SimplyBind('data').of(@)
+	SimplyBind('allRows').of(@)
 		.to (rows)=> # Calculate pageCount
 			@pageCount = Math.ceil rows.length/@options.perPage
 			@pageCount = 15 if @pageCount > 15
