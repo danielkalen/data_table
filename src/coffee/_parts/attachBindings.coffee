@@ -33,6 +33,10 @@ DataTable::attachBindings = ()->
 
 				return paginationItems
 
+	
+		.and.to('className.isVisible').of(@els.pagination)
+			.transform (count)-> if count > 1 then 'is_visible' else ''
+
 
 
 
