@@ -1,15 +1,16 @@
 &-fieldGroup
 	font-size: 11.2px
+	text-align: left
 	
 	&-item
-		display: table
-		line-height: 1.2
+		+ellipsis(100%)
+		display: block
+		line-height: 1.6
 
 		&-label
-			display: table-cell
+			display: inline-block
 			font-weight: 700
 
 		&-value
-			+ellipsis(70%)
-			display: table-cell
+			display: inline-block
 			padding-left: 3px
