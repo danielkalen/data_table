@@ -75,9 +75,9 @@ DataTable::generateInlineFields = (dataFields)->
 
 DataTable::generateActions = ()->
 	markup.actions 'actions': do ()=>
-		return '' unless @tableOptions.actions
+		return '' unless @options.actions
 		
-		output = for action in @tableOptions.actions
+		output = for action in @options.actions
 			markup.actionsItem(action)
 
 

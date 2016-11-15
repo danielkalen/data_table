@@ -4,7 +4,7 @@ DataTable::attachBindings = ()->
 
 	SimplyBind('data').of(@)
 		.to (rows)=> # Calculate pageCount
-			@pageCount = Math.ceil rows.length/@tableOptions.perPage
+			@pageCount = Math.ceil rows.length/@options.perPage
 			@pageCount = 15 if @pageCount > 15
 			@currentPage = 1
 
@@ -35,11 +35,11 @@ DataTable::attachBindings = ()->
 	SimplyBind('currentPage').of(@)
 		.to (currentPage)=>
 			$rows = @els.tableBody.children()
-			$rowsToReveal = $rows.slice((currentPage-1) * @tableOptions.perPage) .slice(0, @tableOptions.perPage)
+			$rowsToReveal = $rows.slice((currentPage-1) * @options.perPage) .slice(0, @options.perPage)
 			$rowsToHide = $rows.not('.hidden')
 
 			if $rowsToHide.length is $rows.length
-				$rowsToHide = $rows.slice(@tableOptions.perPage)
+				$rowsToHide = $rows.slice(@options.perPage)
 
 			$rowsToHide.addClass 'hidden'
 			$rowsToReveal.removeClass 'hidden'

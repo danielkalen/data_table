@@ -3,8 +3,8 @@ do ($=jQuery)->
 	import '_parts/defaults.coffee'
 	import '_parts/helpers.coffee'
 
-	DataTable = (@container, @options)->
-		@tableOptions = $.extend {}, DataTable.defaults, @options.table or {}
+	DataTable = (@container, options={})->
+		@options = $.extend {}, DataTable.defaults, options
 		@data = []
 
 		# Markup

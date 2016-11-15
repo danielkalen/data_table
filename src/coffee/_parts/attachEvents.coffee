@@ -78,7 +78,7 @@ DataTable::attachEvents = ()->
 		unless isLoaded
 			$trigger.data 'isLoaded', !isLoaded
 			
-			@tableOptions.ipDataFetcher(ipAddress).then (ipDetails)->
+			@options.ipDataFetcher(ipAddress).then (ipDetails)->
 				return unless ipDetails
 				
 				output = for label,value of ipDetails 
