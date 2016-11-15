@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/danielkalen/data_table#readme",
   "dependencies": {
-    "@danielkalen/simplybind": "^1.7.1"
+    "@danielkalen/simplybind": "^1.7.1",
+    "bluebird": "^3.4.6"
   }
 }
