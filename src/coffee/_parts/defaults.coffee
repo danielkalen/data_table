@@ -3,7 +3,7 @@ defaults =
 	'pageCountMax': 10
 	'columns': []
 	'searchField': []
-	'baseClass': 'data_table'
+	'baseClass': 'DataTable'
 	'sortBy': ''
 	'actions': false
 	'ipDataFetcher': (ipAddress)-> new Promise (resolve)-> $.get "http://ipinfo.io/#{ipAddress}", resolve, 'JSON'
