@@ -5,7 +5,7 @@
   "main": "dist/js/data_table.js",
   "devDependencies": {
     "coffee-script": "^1.10.0",
-    "foreach-cli": "^1.0.1",
+    "foreach-cli": "^1.6.1",
     "fsevents": "^1.0.15",
     "node-sass": "^3.4.2",
     "simplyimport": "^2.2.1",
