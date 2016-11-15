@@ -7,6 +7,7 @@
     "coffee-script": "^1.10.0",
     "foreach-cli": "^1.6.1",
     "fsevents": "^1.0.15",
+    "json": "^9.0.4",
     "node-sass": "^3.4.2",
     "simplyimport": "^2.2.1",
     "simplywatch": "^2.2.0",
@@ -18,8 +19,8 @@
     "compile:sass": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed {{path}} --output dist/css/'",
     "compile:sass:pretty": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions ./sass-fns.js -x --output-style nested {{path}} --output dist/css/'",
     "watch": "npm run watch:js & npm run watch:sass",
-    "watch:js": "simplywatch 'src/coffee/*' -e 'coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js && uglifyjs dist/js/{{name}}.pretty.js -m -c keep_fargs,unused=false > dist/js/{{name}}.js'",
-    "watch:sass": "simplywatch 'src/sass/*' -e 'sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed {{path}} --output dist/css/'"
+    "watch:js": "simplywatch 'src/coffee/*.coffee' -e 'coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js && uglifyjs dist/js/{{name}}.pretty.js -m -c keep_fargs,unused=false > dist/js/{{name}}.js'",
+    "watch:sass": "simplywatch 'src/sass/*.sass' -e 'sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed {{path}} --output dist/css/'"
   },
   "repository": {
     "type": "git",
