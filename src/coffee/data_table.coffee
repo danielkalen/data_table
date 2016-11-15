@@ -14,7 +14,7 @@ do ($=jQuery)->
 
 		# Markup
 		@els = {}
-		@els.tableOuterwrap = $(markup.table {columns:@generateColumns, pagination:markup.pagination()})
+		@els.tableOuterwrap = $(markup.table {columns:@generateColumns(), pagination:markup.pagination()})
 
 		@els.table = @els.tableOuterwrap.children().first()
 		@els.tableHead = @els.table.children().first().children()
