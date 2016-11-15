@@ -78,7 +78,7 @@ markup =
 
 
 	table_body_row_cell_actions: ({actions})-> "
-		<div class='data_table-actions'>{{actions}}</div>
+		<div class='data_table-actions'>#{actions}</div>
 	"
 
 	table_body_row_cell_actions_item: ({action, icon, label, color='grey'})-> "
