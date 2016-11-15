@@ -91,18 +91,18 @@ markup =
 
 
 	ipDetails: ({ipAddress})-> "
-		<div class='#{DataTable.defaults.baseClass}-ip_details' data-ip='#{ipAddress}'>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-trigger'>
-				<div class='#{DataTable.defaults.baseClass}-ip_details-content'>Loading IP Details</div>
+		<div class='#{DataTable.defaults.baseClass}-ipDetails _ipDetails' data-ip='#{ipAddress}'>
+			<div class='#{DataTable.defaults.baseClass}-ipDetails-trigger'>
+				<div class='#{DataTable.defaults.baseClass}-ipDetails-content'>Loading IP Details</div>
 			</div>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-country'></div>
+			<div class='#{DataTable.defaults.baseClass}-ipDetails-country'></div>
 		</div>
 	"
 
 	ipDetailsItem: ({label, value})-> "
-		<div class='#{DataTable.defaults.baseClass}-ip_details-content-item'>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-content-item-label'>#{label}: </div>
-			<div class='#{DataTable.defaults.baseClass}-ip_details-content-item-value'>#{value}</div>
+		<div class='#{DataTable.defaults.baseClass}-ipDetails-content-item'>
+			<div class='#{DataTable.defaults.baseClass}-ipDetails-content-item-label'>#{label}: </div>
+			<div class='#{DataTable.defaults.baseClass}-ipDetails-content-item-value'>#{value}</div>
 		</div>
 	"
 	
