@@ -36,7 +36,7 @@ DataTable::generateBodyRows = (rows)->
 						'value': do ()=> switch column.type
 							when 'fields' 		then @generateInlineFields(cellValue)
 							when 'actions' 		then @generateActions()
-							when 'ip-details' 	then @generateIpDetails(cellValue)
+							when 'ipDetails' 	then @generateIpDetails(cellValue)
 							else @options.formatters?[column.label]?(cellValue) or cellValue
 
 				return rowCells
