@@ -67,7 +67,7 @@ DataTable::attachEvents = ()->
 
 
 	# ==== IP Details listeners =================================================================================
-	@els.tableBody.on 'mouseover', '.data_table-ip_details-trigger', (event)=>
+	@els.tableBody.on 'mouseover', '._ipDetails-trigger', (event)=>
 		$trigger = $(event.currentTarget)
 		$content = $trigger.children()
 		$country = $trigger.next()

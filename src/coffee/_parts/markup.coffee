@@ -92,7 +92,7 @@ markup =
 
 	ipDetails: ({ipAddress})-> "
 		<div class='#{DataTable.defaults.baseClass}-ipDetails _ipDetails' data-ip='#{ipAddress}'>
-			<div class='#{DataTable.defaults.baseClass}-ipDetails-trigger'>
+			<div class='#{DataTable.defaults.baseClass}-ipDetails-trigger _ipDetails-trigger'>
 				<div class='#{DataTable.defaults.baseClass}-ipDetails-content'>Loading IP Details</div>
 			</div>
 			<div class='#{DataTable.defaults.baseClass}-ipDetails-country'></div>
