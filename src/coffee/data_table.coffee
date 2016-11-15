@@ -4,7 +4,7 @@ do ($=jQuery)->
 	import '_parts/helpers.coffee'
 
 	DataTable = (@container, @options)->
-		@tableOptions = $.extend {}, DataTable.defaultOptions, @options.table or {}
+		@tableOptions = $.extend {}, DataTable.defaults, @options.table or {}
 		@data = []
 
 		# Markup
@@ -46,5 +46,5 @@ do ($=jQuery)->
 	DataTable.version = import '../../.version.coffee'
 	DataTable.helpers = helpers
 	DataTable.markup = markup
-	DataTable.defaultOptions = defaultOptions
+	DataTable.defaults = defaults
 	window.DataTable = DataTable
