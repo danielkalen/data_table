@@ -68,24 +68,23 @@ DataTable::attachEvents = ()->
 
 	# ==== IP Details listeners =================================================================================
 	@els.tableBody.on 'mouseover', '._ipDetails-trigger', (event)=>
-		$trigger = $(event.currentTarget)
-		$content = $trigger.children()
-		$country = $trigger.next()
-		ipAddress = $trigger.parent().data 'ip'
-		isLoaded = $trigger.data 'isLoaded'
+		trigger$ = $(event.currentTarget)
+		wrapper$ = trigger$.parent()
+		content$ = trigger$.next()
+		country$ = content$.next()
+		ipAddress = wrapper$.data 'address'
+		isLoaded = trigger$.hasClass '_isReady'
 
 
-		unless isLoaded
-			$trigger.data 'isLoaded', !isLoaded
-			
+		unless isLoaded			
 			@options.ipDataFetcher(ipAddress).then (ipDetails)->
 				return unless ipDetails
 				
 				output = for label,value of ipDetails 
 					markup.ipDetailsItem({label,value})
 
-				$content.html output.join('')
-				$trigger.parent().addClass 'ready'
+				content$.html output.join('')
+				wrapper$.addClass '_isReady'
 
 
 
