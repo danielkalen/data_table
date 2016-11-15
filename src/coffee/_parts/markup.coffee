@@ -39,7 +39,7 @@ markup =
 
 
 	pagination: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-pagination block-pagination'>
+		<div class='#{DataTable.defaults.baseClass}-pagination block-pagination {{isVisible}}'>
 			<div class='#{DataTable.defaults.baseClass}-pagination-item back'>
 				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
 			</div>
