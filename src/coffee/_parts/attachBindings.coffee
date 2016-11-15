@@ -1,5 +1,9 @@
 DataTable::attachBindings = ()->
-	SimplyBind.setOption 'updateOnBind', true
+	SimplyBind('loading').of(@state)
+		.to('className.isVisible').of(@els.loadingMessage).transform (loading)-> if loading then 'is_visible' else ''
+	
+	SimplyBind('noResults').of(@state)
+		.to('className.isVisible').of(@els.noResultsMessage).transform (noResults)-> if noResults then 'is_visible' else ''
 
 
 	SimplyBind('data').of(@)
@@ -46,6 +50,5 @@ DataTable::attachBindings = ()->
 
 
 
-	SimplyBind.setOption 'updateOnBind', false
 	Promise.resolve()
 
