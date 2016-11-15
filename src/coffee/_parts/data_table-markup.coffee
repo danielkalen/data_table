@@ -81,7 +81,7 @@ markup =
 		<div class='data_table-actions'>{{actions}}</div>
 	"
 
-	table_body_row_cell_actions_item: ({action, icon, label, color:'grey'})-> "
+	table_body_row_cell_actions_item: ({action, icon, label, color='grey'})-> "
 		<div class='data_table-actions-button color_#{color}' data-action='#{action}' data-icon='#{icon}'>
 			<div class='data_table-actions-button-text'>#{label}</div>
 		</div>
