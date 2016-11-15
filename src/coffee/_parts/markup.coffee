@@ -59,8 +59,8 @@ markup =
 
 
 
-	headingCell: ({extraClasses='', slug, icon, label})-> "
-		<div class='#{DataTable.defaults.baseClass}-heading-row-cell #{extraClasses} __#{slug}' data-slug='#{slug}' data-icon='#{icon}'>
+	headingCell: ({extraClasses='', slug, icon='', label, style=''})-> "
+		<div class='#{DataTable.defaults.baseClass}-heading-row-cell #{extraClasses} __#{slug}' data-slug='#{slug}' data-icon='#{icon}' #{style}>
 			<div class='#{DataTable.defaults.baseClass}-heading-row-cell-text'>#{label}</div>
 		</div>
 	"
