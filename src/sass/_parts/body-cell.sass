@@ -21,7 +21,7 @@
 	@import 'body-cell.expandButton'
 
 
-	&.hasIcon
+	&._hasIcon
 		padding-right: 5px
 		&:before
 			+icon( attr(data-icon) )
@@ -33,18 +33,18 @@
 			float: left
 			padding-right: 5px
 
-	&.hasColor
+	&._hasColor
 		@each $label,$color in $cellColors
 			&.color---#{$label}
 				color: $color
 	
-	&.isLink
+	&._isLink
 		cursor: pointer
 		a
 			color: #008fff
 			text-decoration: none
 
-	&.isBreakdownBar
+	&._isBreakdownBar
 		cursor: help
 
 
@@ -52,5 +52,5 @@
 		+ellipsis(100%)
 		display: block
 
-		.isBreakdownBar &
+		._isBreakdownBar &
 			overflow: visible

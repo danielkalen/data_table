@@ -1,12 +1,16 @@
 DataTable::generateColumns = ()->
-	@options.columns
-		.map (column)->
+	@options.columns = helpers.normalizeHeaderColumns(@options.columns)
+
+	Object.keys(@options.columns)
+		.map (label)=>
+			column = @options.columns[label]
 			markup.headingCell
-				# 'isSortable': column.sorting?
-				# 'extraClasses': column.notes
-				'slug': column.label.toLowerCase().replace /\W/g, '_'
-				'icon': column.icon or ''
+				'slug': column.slug
+				'icon': column.icon
 				'label': column.label
+				'style': helpers.genHeaderCellStyle(column)
+				'extraClasses': helpers.genCellClassname(column)
+		
 		.join('')
 
 
