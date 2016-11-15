@@ -1,5 +1,5 @@
 DataTable::generateColumns = ()->
-	@options.columns = helpers.normalizeHeaderColumns(@options.columns)
+	@options.columns = helpers.normalizeColumns(@options.columns)
 
 	Object.keys(@options.columns)
 		.map (label)=>
