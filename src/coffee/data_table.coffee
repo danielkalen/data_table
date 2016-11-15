@@ -1,6 +1,6 @@
 do ($=jQuery)->
-	# @import '_parts/data_table-markup.coffee'
-	# @import '_parts/data_table-helpers.coffee'
+	import '_parts/data_table-markup.coffee'
+	import '_parts/data_table-helpers.coffee'
 
 	defaultTableOptions = 
 		'checkbox': true
@@ -48,10 +48,10 @@ do ($=jQuery)->
 
 
 
-	# @import '_parts/data_table-generators.coffee'
-	# @import '_parts/data_table-attachEvents.coffee'
-	# @import '_parts/data_table-attachBindings.coffee'
-	# @import '_parts/data_table-userActionMethods.coffee'
+	import '_parts/data_table-generators.coffee'
+	import '_parts/data_table-attachEvents.coffee'
+	import '_parts/data_table-attachBindings.coffee'
+	import '_parts/data_table-userActionMethods.coffee'
 
 
 	window.DataTable = DataTable
