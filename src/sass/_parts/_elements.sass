@@ -21,6 +21,7 @@ $deleteIcon: '7'
 	&.disabled
 		cursor: not-allowed
 	&.error
+		$animationName: ''
 		@if $smoothErrorAnimation
 			$animationName: shakeyTransform
 		@else
@@ -123,39 +124,38 @@ $deleteIcon: '7'
 
 		
 
-	
 	@if $renderAll or $renderLabel
-		+fieldset-label($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-label($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderInput or $renderSelect
-		+fieldset-input_n_select($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-input_n_select($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderInput
-		+fieldset-input($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-input($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderSelect
-		+fieldset-select($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-select($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderFile
-		+fieldset-file($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-file($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderRadio
-		+fieldset-radio($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-radio($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderCheckbox
-		+fieldset-checkbox($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-checkbox($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderCheckboxSingle
-		+fieldset-checkbox_single($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-checkbox_single($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderTextarea
-		+fieldset-textarea($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-textarea($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderGroup
-		+fieldset-group($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-group($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 	
 	@if $renderAll or $renderRepeater
-		+fieldset-repeater($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
+		+fieldset-repeater($style, $textareaStyle, $inputHeight, $textareaHeight, $bgColor, $textColor, $labelColor, $borderColor, $fontSize, $labelSize, $oldLabelSize, $iconSize, $margin, $paddingLeft, $paddingRight, $labelMargin, $iconMargin, $borderRadius, $checkmarkTop, $widthRules, $smoothErrorAnimation, $alignRadioLabels, $hasIcon, $iconPosition, $placeholder, $iconMarginForOld)
 
 	@if $style == old
 		.checkmark
@@ -164,7 +164,7 @@ $deleteIcon: '7'
 
 
 // ==== Label =================================================================================
-=fieldset-label($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-label($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	@if $style == new	
 		&-label
 			position: absolute
@@ -228,7 +228,7 @@ $deleteIcon: '7'
 
 
 // ==== Input & Select =================================================================================
-=fieldset-input_n_select($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-input_n_select($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-input,
 	&-select
 		position: relative
@@ -250,10 +250,9 @@ $deleteIcon: '7'
 			border-color: $error-color
 
 		
+		$placeholderColor: $textColor
 		@if $placeholder
 			$placeholderColor: fade-out($textColor, 0.55)
-		@else
-			$placeholderColor: $textColor
 		
 		&:-ms-input-placeholder
 			color: $placeholderColor !important
@@ -281,7 +280,7 @@ $deleteIcon: '7'
 
 
 // ==== Input =================================================================================
-=fieldset-input($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-input($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-input
 		padding: 4px $paddingRight 0 $paddingLeft
 		@if $style == new
@@ -294,7 +293,7 @@ $deleteIcon: '7'
 
 
 // ==== Select =================================================================================
-=fieldset-select($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-select($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&.fieldtype_select
 		&:after
 			+icon($dropdownIcon)
@@ -309,10 +308,9 @@ $deleteIcon: '7'
 			@if $style == old
 				top: $iconMarginForOld
 
+	$placeholderColor: $textColor
 	@if $placeholder
 		$placeholderColor: fade-out($textColor, 0.5)
-	@else
-		$placeholderColor: $textColor
 
 	&-select
 		color: $placeholderColor
@@ -347,7 +345,7 @@ $deleteIcon: '7'
 
 
 // ==== File =================================================================================
-=fieldset-file($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-file($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&.fieldtype_file
 		position: relative
 		z-index: 2
@@ -410,7 +408,7 @@ $deleteIcon: '7'
 
 
 // ==== Textarea =================================================================================
-=fieldset-textarea($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-textarea($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-textarea
 		position: relative
 		z-index: 2
@@ -444,7 +442,7 @@ $deleteIcon: '7'
 			color: darken($label-color, 6)
 
 // ==== Radio =================================================================================
-=fieldset-radio($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-radio($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&.fieldtype_radio
 		display: block
 		+clearfix
@@ -572,7 +570,7 @@ $deleteIcon: '7'
 
 
 // ==== Checkbox =================================================================================
-=fieldset-checkbox($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-checkbox($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-checkbox
 		margin-top: 13px
 		cursor: pointer
@@ -626,7 +624,7 @@ $deleteIcon: '7'
 
 
 // ==== Checkbox Single =================================================================================
-=fieldset-checkbox_single($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-checkbox_single($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-checkbox_single
 		&-label
 			font-size: $fontSize
@@ -672,7 +670,7 @@ $deleteIcon: '7'
 
 
 // ==== Group =================================================================================
-=fieldset-group($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-group($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-group
 		position: relative
 		background-color: $subwhite
@@ -697,7 +695,7 @@ $deleteIcon: '7'
 
 
 // ==== Repeater Group =================================================================================
-=fieldset-repeater($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld: 69%)
+=fieldset-repeater($style:new, $textareaStyle:new, $inputHeight:48px, $textareaHeight:78px, $bgColor:white, $textColor:$text-color, $labelColor:fade-out($textColor, 0.3), $borderColor:$textColor, $fontSize:14px, $labelSize:11px, $oldLabelSize:16px, $iconSize:18px, $margin:4.5%, $paddingLeft:15px, $paddingRight:15px, $labelMargin: 12px, $iconMargin:12px, $borderRadius:3px, $checkmarkTop:68%, $widthRules:false, $smoothErrorAnimation:false, $alignRadioLabels:false, $hasIcon:false, $iconPosition:right, $placeholder:true, $iconMarginForOld:69%)
 	&-repeater,
 	&-repeater_group
 		.repeater-template
@@ -858,7 +856,7 @@ $deleteIcon: '7'
 
 
 // ==== Form Button =================================================================================
-=form-button($buttonHeight:50px, $borderRadius:3px, $buttonColor:$contrast, $margin-top:25px, $arrow:true, $icon:'b')
+=form-button($buttonHeight:50px, $borderRadius:3px, $buttonColor:$contrast, $margin-top:25px, $arrow:true, $iconSize:23px, $iconPadding:8px, $icon:'b')
 	position: relative
 	float: left
 	display: block
@@ -898,7 +896,7 @@ $deleteIcon: '7'
 				text-transform: none
 				position: absolute
 				top: 0px
-				padding-left: 8px
-				font-size: 23px
+				padding-left: $iconPadding
+				font-size: $iconSize
 				font-weight: 400
 				letter-spacing: -10px

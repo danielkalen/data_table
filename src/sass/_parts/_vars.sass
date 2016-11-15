@@ -10,11 +10,6 @@
 	//   [background-color]
 
 
-=maxmin($maxsize: 760, $minsize: 760, $maxdimension:width, $mindimension:width)
-	@media screen and (max-#{$maxdimension}: #{$maxsize}px) and (min-#{$mindimension}: #{$minsize}px)
-		@content
-
-
 // ==== Color =================================================================================
 $primary: #fff
 $contrast: #000
@@ -150,9 +145,35 @@ $stumbleupon: #f74425
 	@media screen and (max-#{$maxdimension}: #{$maxsize}px) and (min-#{$mindimension}: #{$minsize}px)
 		@content
 
-// =e($element)
-//   &-#{$element}
-//     @content
+=portrait
+	@media screen and (orientation: portrait)
+		@content
+
+=landscape
+	@media screen and (orientation: landscape)
+		@content
+
+=iphone4
+	+maxmin(320, 320)
+		+maxmin(480, 480, height, height)
+			@content
+=iphone5
+	+maxmin(320, 320)
+		+maxmin(568, 568, height, height)
+			@content
+=iphone45
+	+max(320)
+		+max(568, height)
+			+min(480, height)
+				@content
+=iphone6
+	+maxmin(375, 375)
+		+maxmin(667, 667, height, height)
+			@content
+=iphone6plus
+	+maxmin(414, 414)
+		+maxmin(736, 736, height, height)
+			@content
 
 =center($top: 0, $bottom: 0, $important: '')
 	@if $top == 0 and $bottom == 0
@@ -194,20 +215,20 @@ $stumbleupon: #f74425
 =unvalign
 	top: 0
 	-webkit-transform: translateY(0)
+	-ms-transform: translateY(0)
 	-o-transform: translateY(0)
 	transform: translateY(0)
 
-=ratio($percentual-height, $content-fix: true)
-	// Wrapper
-	position: relative
+=ratio($percentual-height, $content-fix:true, $position:relative)
+	position: $position
 	display: block
 	vertical-align: top
 	&:after
 		padding-top: $percentual-height
 		content: ''
 		display: block
-	// Content
-	@if $content-fix == true
+
+	@if $content-fix == true // Content
 		> *
 			position: absolute
 			top: 0
@@ -233,6 +254,14 @@ $stumbleupon: #f74425
 	&:after
 		clear: both
 
+
+=innerwrap($width:1170px, $padding:20px)
+	max-width: 1170px
+	+center
+	padding: 0 20px
+	box-sizing: border-box
+
+	
 =ellipsis($width: 100%)
 	display: inline-block
 	max-width: $width
@@ -247,12 +276,18 @@ $stumbleupon: #f74425
 	-o-hyphens: $opt
 	hyphens: $opt
 
-=user-select($opt)
+=user-select($opt, $disableLong:false)
 	-webkit-user-select: $opt
 	-khtml-user-select: $opt
 	-moz-user-select: $opt
 	-ms-user-select: $opt
 	user-select: $opt
+	@if $disableLong
+		-webkit-touch-callout: $opt
+		-khtml-touch-callout: $opt
+		-moz-touch-callout: $opt
+		-ms-touch-callout: $opt
+		touch-callout: $opt
 
 =linear-gradient($fromColor, $toColor)
 	background-color: $toColor
@@ -277,16 +312,16 @@ $stumbleupon: #f74425
 	transition: $transition
 
 
-=transitionTransform($time:0.25s, $additional:false)
+=transitionTransform($time:0.25s, $additional:false, $easing:ease, $delay:0s)
 	// $transformTransition: transform $time, -ms-transform $time, -moz-transform $time, -webkit-transform $time
-	$transformTransition: transform $time, -webkit-transform $time
+	$transformTransition: transform $time $easing $delay, -webkit-transform $time $easing $delay
 	@if $additional
 		transition: $transformTransition, $additional
 	@else
 		transition: $transformTransition
 
 
-=tooltip($side: 'top', $margin: 33px)
+=tooltip($side:'top', $margin:33px, $color:#181818, $borderColor:"none", $textColor:white)
 	position: absolute
 	z-index: 10
 	@if $side == 'top'
@@ -304,24 +339,94 @@ $stumbleupon: #f74425
 	display: block
 	padding: 6px 8px 5px
 	border-radius: 2px
-	background-color: #181818
+	background-color: $color
 	font-family: avenir
 	font-weight: 700
 	line-height: 1
 	font-size: 10px
 	letter-spacing: .4px
 	text-transform: uppercase
-	color: white
-	+arrow($side: $side, $align: "center", $size: 5px, $color: #181818, $borderColor: "none", $borderSize: 3px)
+	color: $textColor
+	+arrow($side: $side, $align: "center", $size: 5px, $color: $color, $borderColor: $borderColor, $borderSize: 3px)
 	opacity: 0
 	visibility: hidden
 	transition: opacity 0.2s, visibility 0.2s
+	
 
 =tooltip-hover
 	visibility: visible
 	opacity: 1
 	transition: opacity 0.20s linear 0.25s, visibility 0.20s linear 0.25s
 
+
+=shadow-box($opacity:0.2, $size:1, $offset:true)
+	$blurAmount: 12px*$size
+	$vOffset: 4px*$size
+	@if $offset == false
+		$vOffset: 0px
+	box-shadow: 0px $vOffset $blurAmount rgba(24, 23, 24, $opacity)
+
+
+=inline-list
+	text-align: justify
+	text-justify: distribute-all-lines
+	&:after
+		content: ''
+		display: inline-block
+		width: 100%
+
+=inline-list-item
+	display: inline-block
+	vertical-align: top
+
+
+=toggle($size:50px, $color:$green, $background:rgb(230,230,230), $border:rgba(190, 190, 190, 0.4))
+	position: relative
+	z-index: 2
+	width: $size
+	height: $size/2
+	background-color: $background
+	border: 1px solid $border
+	border-radius: 50px
+	cursor: pointer
+
+	&-ball
+		position: absolute
+		left: 0
+		right: 0
+		width: $size/2
+		height: $size/2
+		+center
+		background-color: white
+		border-radius: 50%
+		border: 1px solid $divider
+		box-sizing: border-box
+		-webkit-transform: translateX(-55%)
+		transform: translateX(-55%)
+		transition: -webkit-transform 0.2s, transform 0.2s
+		+user-select(none)
+		.enabled &
+			-webkit-transform: translateX(50%)
+			transform: translateX(50%)
+			border: 1px solid $color
+	
+	// BG color
+	&:before
+		content: ''
+		position: absolute
+		top: 0
+		left: 0
+		width: $size/2
+		height: 100%
+		background-color: $color
+		border-radius: 50px 0 0 50px
+		opacity: 0
+		transition: all 0.2s
+		
+	&.enabled:before
+		opacity: 1
+		width: $size*0.7
+		
 
 =transform($transforms) 
 	-moz-transform: $transforms
@@ -336,6 +441,12 @@ $stumbleupon: #f74425
 	-ms-transform-origin: $transforms
 	-webkit-transform-origin: $transforms
 	transform-origin: $transforms
+
+
+=animation($animations) 
+	-moz-animation: $animations
+	-webkit-animation: $animations
+	animation: $animations
 
 
 =filter($filters)
@@ -414,7 +525,31 @@ $stumbleupon: #f74425
 			+arrow_helper($size + $borderSize, $borderColor, $size - $borderSize, $side, $align)
 
 
+=font-face($name, $font-file, $type, $base64: true, $eot: false, $weight: false, $style: false)
+	$prefix: ''
+	$b64type: ''
+	@if $type == 'woff'
+		$prefix: 'data:application/font-ttf;charset=utf-8;base64,'
+		$b64type: 'woff'
+	@elseif $type == 'ttf'
+		$prefix: 'data:application/font-ttf;charset=utf-8;base64,'
+		$b64type: 'truetype'
+	@elseif $type == 'eot'
+		$prefix: 'data:font/opentype;charset=utf-8;base64,'
+		$b64type: 'embedded-opentype'
+	$iefont: unquote("#{$eot}?#iefix")
+	@font-face
+		font-family: quote($name)
 
+		@if $base64
+			src: unquote("url(#{$prefix}#{$font-file})") unquote("format('#{$b64type}')")
+		@else
+			src: unquote("url(#{$font-file})") unquote("format('#{$b64type}')")
+		
+		@if $weight
+			font-weight: $weight
+		@if $style
+			font-style: $style
 
 
 
