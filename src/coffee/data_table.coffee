@@ -10,7 +10,7 @@ do ($=jQuery)->
 		# Markup
 		@els = {}
 		@els.tableOuterwrap = $(markup.tableOuterwrap())
-		@els.table = $(markup.table()).appendTo(@els.tableOuterwrap)
+		@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
 		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()
 		@els.noResultsMessage = $(markup.noResults()).appendTo(@els.tableOuterwrap)

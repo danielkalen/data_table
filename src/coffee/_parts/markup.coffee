@@ -3,8 +3,8 @@ markup =
 		<div class='#{DataTable.defaults.baseClass}-outerwrap'></div>
 	"
 
-	table: ()-> "
-		<div class='#{DataTable.defaults.baseClass}'>
+	table: ({alignment})-> "
+		<div class='#{DataTable.defaults.baseClass} alignment---#{alignment}'>
 			<div class='#{DataTable.defaults.baseClass}-heading'>
 				<div class='#{DataTable.defaults.baseClass}-heading-row'>
 					<div class='#{DataTable.defaults.baseClass}-heading-row-cell __expandButton'></div>
