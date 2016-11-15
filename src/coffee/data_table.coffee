@@ -1,15 +1,10 @@
 do ($=jQuery)->
 	import '_parts/data_table-markup.coffee'
+	import '_parts/data_table-defaults.coffee'
 	import '_parts/data_table-helpers.coffee'
 
-	defaultTableOptions = 
-		'perPage': 20
-		'actions': false
-		'ipDataFetcher': (ipAddress)-> new Promise (resolve)-> $.get "http://ipinfo.io/#{ipAddress}", resolve, 'JSON'
-
-
 	DataTable = (@container, @options)->
-		@tableOptions = $.extend {}, defaultTableOptions, @options.table or {}
+		@tableOptions = $.extend {}, DataTable.defaultOptions, @options.table or {}
 		@data = []
 
 		# Markup
@@ -49,4 +44,5 @@ do ($=jQuery)->
 	import '_parts/data_table-userActionMethods.coffee'
 
 	DataTable.version = import '../../.version.coffee'
+	DataTable.defaultOptions = defaultOptions
 	window.DataTable = DataTable
