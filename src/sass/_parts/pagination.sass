@@ -1,0 +1,46 @@
+&-pagination
+	float: right
+	margin: 15px 0
+	+user-select(none)
+
+	&-item
+		position: relative
+		float: left
+		width: 20px
+		height: 20px
+		margin-left: 6px
+		background-color: $greyLight
+		border: 1px solid $dividerLight
+		border-radius: 2px
+		color: $black
+		cursor: pointer
+		&:hover
+			background-color: lighten($grey, 45)
+		&.current
+			background-color: $highlightColor
+			border-color: $highlightColor
+			color: white
+		&.current &-text
+			font-weight: 400
+
+
+
+		&-text
+			position: absolute
+			width: 100%
+			+valign(59%)
+			font-weight: 600
+			font-size: 11.2px
+			line-height: 1
+			text-align: center
+
+			.back &:after,
+			.next &:after
+				font-weight: 400
+				font-size: 14px
+				opacity: 0.3
+			
+			.back &:after
+				+icon('\e009')			
+			.next &:after
+				+icon('\e00a')

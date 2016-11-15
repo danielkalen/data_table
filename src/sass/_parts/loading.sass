@@ -1,0 +1,49 @@
+&-loading
+	position: absolute
+	z-index: 901
+	top: 0
+	left: 0
+	right: 0
+	+inheritSize
+	+user-select(none)
+	cursor: default
+	opacity: 0
+	visibility: hidden
+	&.is_visible
+		opacity: 1
+		visibility: visible
+
+	&:before // White overlay
+		content: ''
+		position: absolute
+		z-index: 1
+		top: 0
+		left: 0
+		+inheritSize
+		padding-bottom: 54px
+		background-color: white
+		opacity: 0.85
+		transition: opacity 0.25s, visibility 0.25s
+
+
+	&-innerwrap
+		position: absolute
+		z-index: 2
+		+valign
+		margin-top: 25px
+		width: 100%
+		text-align: center
+
+	&-icon
+		+spinnerLoader($size:50px)
+		z-index: 3
+		+center
+		cursor: default
+
+
+	&-text
+		position: relative
+		z-index: 3
+		margin-top: 10px
+		font-size: 18px
+		font-weight: 500

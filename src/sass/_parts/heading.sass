@@ -1,0 +1,28 @@
+&-heading
+	text-align: left
+	&-row
+		display: flex
+		flex-direction: row
+		flex-wrap: wrap
+		align-items: stretch
+		align-content: stretch
+		width: 100%
+
+		&-cell
+			flex: auto
+			flex-grow: 1
+			width: 15px
+			font-weight: 600
+			letter-spacing: letter-spacing(20)
+			color: $black
+			padding-bottom: 5px
+			cursor: default
+			+user-select(none)
+			&.__expandButton
+				display: none
+				max-width: 35px
+				.isExpandingTable &
+					display: block
+
+			&.no_label
+				opacity: 0

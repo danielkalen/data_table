@@ -1,0 +1,79 @@
+.ipDetails
+	padding: 0 25px
+
+	&-trigger
+		position: relative
+		display: inline-block
+		top: 2px
+		width: 15px
+		height: 15px
+		background-color: lighten($grey-lighter, 13)
+		background-color: $black
+		box-sizing: border-box
+		border-radius: 50%
+		cursor: pointer
+		
+		&:before // Icon
+			content: '?'
+			position: absolute
+			+valign(54%)
+			line-height: 1
+			display: block
+			width: 100%
+			font-size: 12px
+			font-weight: 600
+			font-family: avenir
+			text-align: center
+			color: white
+	
+
+	&-content
+		position: absolute
+		z-index: 10
+		+halign
+		top: 33px
+		display: block
+		padding: 6px 8px 5px
+		border-radius: 2px
+		background-color: $black
+		font-weight: 600
+		line-height: 1
+		font-size: 11.2px
+		letter-spacing: .4px
+		text-transform: uppercase
+		color: white
+		+arrow($side: "top", $align: "center", $size: 5px, $color: $black, $borderColor: "none", $borderSize: 3px)
+		opacity: 0
+		visibility: hidden
+		transition: opacity 0.20s linear 0.25s, visibility 0.20s linear 0.25s
+		.ready &
+			width: 200px
+			padding: 10px
+			box-sizing: border-box
+			font-size: 11px
+			text-align: left
+			text-transform: none
+
+
+		&-item
+			margin-top: 10px
+			&:first-child
+				margin-top: 0
+			
+			&-label
+				display: inline
+				font-weight: 600
+
+			&-value
+				display: inline
+				font-weight: 400
+
+
+
+	&:hover &-content
+		visibility: visible
+		opacity: 1
+
+
+	&-country
+		text-align: center

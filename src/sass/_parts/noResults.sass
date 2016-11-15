@@ -1,0 +1,89 @@
+&-noResults
+	position: absolute
+	z-index: 900
+	top: 0
+	left: 0
+	right: 0
+	+inheritSize
+	+user-select(none)
+	cursor: default
+	opacity: 0
+	visibility: hidden
+	&.is_visible
+		opacity: 1
+		visibility: visible
+		.loading &,
+		.no_content &
+			opacity: 0
+			visibility: hidden
+
+	&:before // White overlay
+		content: ''
+		position: absolute
+		z-index: 1
+		top: 0
+		left: 0
+		+inheritSize
+		padding-bottom: 54px
+		background-color: white
+		opacity: 0.85
+		transition: opacity 0.25s, visibility 0.25s
+
+
+	&-innerwrap
+		position: absolute
+		z-index: 2
+		+valign
+		margin-top: 25px
+		width: 100%
+		text-align: center
+
+	$iconSize: 50
+	&-icon
+		position: relative
+		z-index: 3
+		display: block
+		width: #{$iconSize}px
+		height: #{$iconSize}px
+		+center
+		color: $red
+		cursor: default
+
+		&:after
+			+icon('')
+			position: absolute
+			z-index: 2
+			top: 0
+			left: 0
+			right: 0
+			font-size: #{$iconSize}px
+
+
+
+
+
+	&-text
+		position: relative
+		z-index: 3
+		margin-top: 10px
+
+		&-title
+			font-size: 18px
+			font-weight: 500
+
+		&-subtitle
+			color: lighten($grey, 10)
+			font-size: 12.2px
+			margin-top: 2px
+			font-weight: 500
+
+			&-link
+				margin-top: 2px
+				color: #008fff
+				opacity: 0.8
+				// color: #0000EE
+				cursor: pointer
+
+				&:hover
+					text-decoration: underline
+

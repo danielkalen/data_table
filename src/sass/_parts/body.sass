@@ -1,0 +1,21 @@
+&-body
+	&-row
+		display: flex
+		flex-direction: row
+		flex-wrap: wrap
+		align-items: stretch
+		align-content: stretch
+		width: 100%
+
+		&-drilldown
+			display: none
+			flex-direction: row
+			flex-wrap: wrap
+			align-items: stretch
+			align-content: stretch
+			width: 100%
+			.drilldown_is_open &
+				display: flex
+
+
+		@import 'body-cell'

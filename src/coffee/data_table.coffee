@@ -14,6 +14,7 @@ do ($=jQuery)->
 		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()
 		@els.noResultsMessage = $(markup.noResults()).appendTo(@els.tableOuterwrap)
+		@els.loadingMessage = $(markup.loading()).appendTo(@els.tableOuterwrap)
 		@els.pagination = $(markup.pagination()).appendTo(@els.tableOuterwrap)
 
 		@els.tableHeading.append(@generateColumns())

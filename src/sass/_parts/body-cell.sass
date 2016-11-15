@@ -1,0 +1,51 @@
+&-cell
+	flex: auto
+	flex-grow: 1
+	width: 15px
+	position: relative
+	font-weight: 500
+	padding: 12px 0px 6px
+	line-height: 1
+	border-top: 1px solid $dividerLight
+	box-sizing: border-box
+	._tableRowDrilldown &
+		background-color: $subberwhite
+
+	
+	@import 'body-cell.button'
+	@import 'body-cell.expandButton'
+
+
+	&.hasIcon
+		padding-right: 5px
+		&:before
+			+icon( attr(data-icon) )
+			position: relative
+			font-weight: 400
+			font-size: 14px
+			opacity: 0.7
+			top: -2.5px
+			float: left
+			padding-right: 5px
+
+	&.hasColor
+		@each $label,$color in $cellColors
+			&.color---#{$label}
+				color: $color
+	
+	&.isLink
+		cursor: pointer
+		a
+			color: #008fff
+			text-decoration: none
+
+	&.isBreakdownBar
+		cursor: help
+
+
+	&-innerwrap
+		+ellipsis(100%)
+		display: block
+
+		.isBreakdownBar &
+			overflow: visible

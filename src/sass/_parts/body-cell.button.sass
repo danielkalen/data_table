@@ -1,0 +1,32 @@
+&.isButton
+	&:before
+		position: absolute
+		z-index: 2
+		+valign(52%)
+		left: 0
+		right: 0
+		display: block
+		+center
+		padding: 0
+		text-align: center
+		text-align: right
+		right: 33px
+		cursor: pointer
+		opacity: 1
+		pointer-events: none
+
+
+
+&-button
+	position: absolute
+	+valign(50%)
+	right: 25px
+	width: 30px
+	height: 23px
+	+center
+	border-radius: 2px
+	background-color: $grey-lighter
+	cursor: pointer
+
+	&:hover
+		background-color: $grey-light

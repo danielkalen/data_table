@@ -15,13 +15,23 @@ markup =
 	"
 
 
+	loading: ()-> "
+		<div class='#{DataTable.defaults.baseClass}-loading {{isVisible}}'>
+			<div class='#{DataTable.defaults.baseClass}-loading-innerwrap'>
+				<div class='#{DataTable.defaults.baseClass}-loading-icon'></div>
+				<div class='#{DataTable.defaults.baseClass}-loading-text'>Loading</div>
+			</div>
+		</div>
+	"
+
+
 	noResults: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-no_results {{isVisible}}'>
-			<div class='#{DataTable.defaults.baseClass}-no_results-innerwrap'>
-				<div class='#{DataTable.defaults.baseClass}-no_results-icon'></div>
-				<div class='#{DataTable.defaults.baseClass}-no_results-text'>
-					<div class='#{DataTable.defaults.baseClass}-no_results-text-title'>No {{searchTerm}}s to Display</div>
-					<div class='#{DataTable.defaults.baseClass}-no_results-text-subtitle'>There are no matching {{searchTermSmall}}s for the search query you've typed.</div>
+		<div class='#{DataTable.defaults.baseClass}-noResults {{isVisible}}'>
+			<div class='#{DataTable.defaults.baseClass}-noResults-innerwrap'>
+				<div class='#{DataTable.defaults.baseClass}-noResults-icon'></div>
+				<div class='#{DataTable.defaults.baseClass}-noResults-text'>
+					<div class='#{DataTable.defaults.baseClass}-noResults-text-title'>No {{searchTerm}}s to Display</div>
+					<div class='#{DataTable.defaults.baseClass}-noResults-text-subtitle'>There are no matching {{searchTermSmall}}s for the search query you've typed.</div>
 				</div>
 			</div>
 		</div>
@@ -100,13 +110,13 @@ markup =
 
 
 	fields: ({fields})-> "
-		<div class='#{DataTable.defaults.baseClass}-fields'>#{fields}</div>
+		<div class='#{DataTable.defaults.baseClass}-fieldGroup'>#{fields}</div>
 	"
 
 	fieldsItem: ({label,value})-> "
-		<div class='#{DataTable.defaults.baseClass}-fields-item'>
-			<div class='#{DataTable.defaults.baseClass}-fields-item-label'>#{label}: </div>
-			<div class='#{DataTable.defaults.baseClass}-fields-item-value'>#{value}</div>
+		<div class='#{DataTable.defaults.baseClass}-fieldGroup-item'>
+			<div class='#{DataTable.defaults.baseClass}-fieldGroup-item-label'>#{label}: </div>
+			<div class='#{DataTable.defaults.baseClass}-fieldGroup-item-value'>#{value}</div>
 		</div>
 	"
 	

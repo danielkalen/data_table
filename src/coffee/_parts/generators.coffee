@@ -3,7 +3,7 @@ DataTable::generateColumns = ()->
 		.map (column)->
 			markup.headingCell
 				# 'isSortable': column.sorting?
-				'extraClasses': column.notes
+				# 'extraClasses': column.notes
 				'slug': column.label.toLowerCase().replace /\W/g, '_'
 				'icon': column.icon or ''
 				'label': column.label
@@ -47,7 +47,7 @@ DataTable::generateBodyRows = (rows)->
 		if subRows
 			genRow(mainRow)
 			genRow(subRow, mainRow, true) for subRow in subRows
-			@els.table.addClass('is_expanding_table')
+			@els.table.addClass('isExpandingTable')
 		else
 			genRow(mainRow)
 	
