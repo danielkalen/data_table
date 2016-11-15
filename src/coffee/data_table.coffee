@@ -53,5 +53,5 @@ do ($=jQuery)->
 	import '_parts/data_table-attachBindings.coffee'
 	import '_parts/data_table-userActionMethods.coffee'
 
-
+	DataTable.version = import '../../.version.coffee'
 	window.DataTable = DataTable

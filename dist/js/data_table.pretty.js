@@ -240,7 +240,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.attachBindings = function() {
-    SimplyBind.setOption('invokeOnBind', true);
+    SimplyBind.setOption('updateOnBind', true);
     SimplyBind('data').of(this).to((function(_this) {
       return function(rows) {
         _this.pageCount = Math.ceil(rows.length / _this.tableOptions.perPage);
@@ -283,9 +283,10 @@
         return $rowsToReveal.removeClass('hidden');
       };
     })(this));
-    SimplyBind.setOption('invokeOnBind', false);
+    SimplyBind.setOption('updateOnBind', false);
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
+  DataTable.version = '1.0.2';
   return window.DataTable = DataTable;
 })(jQuery);
