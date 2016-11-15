@@ -2,14 +2,10 @@ markup =
 
 	table: "
 		<div class='data_table-outerwrap'>
-			<table class='data_table chart horizontal {{hasCheckbox}}'>
+			<table class='data_table chart horizontal'>
 				<thead class='data_table-head'>
 					<tr class='data_table-head-row'>
-						<th class='data_table-head-row-cell checkbox'>
-							<div class='data_table-head-row-cell-text'><input class='data_table-checkbox' type='checkbox'></div>
-						</th>
 						<th class='data_table-head-row-cell is_expand_button'></th>
-
 						{{columns}}
 					</tr>
 				</thead>
@@ -30,9 +26,6 @@ markup =
 
 	table_body_row: "
 		<tr class='data_table-body-row {{isSub}}' data-id='{{itemID}}'>
-			<td class='data_table-body-row-cell checkbox'>
-				<input class='data_table-checkbox' type='checkbox' data-id='{{itemID}}'>
-			</td>
 			<td class='data_table-body-row-cell is_expand_button'>
 				<div class='data_table-body-row-cell-expand'></div>
 			</td>
