@@ -8,11 +8,11 @@ DataTable::attachBindings = ()->
 			@pageCount = 15 if @pageCount > 15
 			@currentPage = 1
 
-		.and('prop:innerHTML').of(@els.tableBody) # Render body rows
+		.and.to('prop:innerHTML').of(@els.tableBody) # Render body rows
 			.transform (rows)=> @generateBodyRows(rows)
 
 
-		.and ()=>
+		.and.to ()=>
 			SimplyBind.setOption('updateEvenIfSame', true)
 			@currentPage = 1
 			SimplyBind.setOption('updateEvenIfSame', false)

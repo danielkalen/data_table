@@ -249,11 +249,11 @@
         }
         return _this.currentPage = 1;
       };
-    })(this)).and('prop:innerHTML').of(this.els.tableBody).transform((function(_this) {
+    })(this)).and.to('prop:innerHTML').of(this.els.tableBody).transform((function(_this) {
       return function(rows) {
         return _this.generateBodyRows(rows);
       };
-    })(this)).and((function(_this) {
+    })(this)).and.to((function(_this) {
       return function() {
         SimplyBind.setOption('updateEvenIfSame', true);
         _this.currentPage = 1;
