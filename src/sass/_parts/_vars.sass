@@ -25,9 +25,10 @@ $colorsList: #ff5e3a, #ff9500, #ffdb4c, #87fc70, #52edc7, #1ad6fd, #c644fc, #ef4
 	border-bottom: $borderSize solid fade-out($color, $bgFade)
 	border-left: $borderSize solid $color
 	box-sizing: border-box
-	+animation(spin $speed infinite linear)
 	@if $transform
 		+transform($transform)
+	
+	+animation(spin $speed infinite linear)
 
 
 
