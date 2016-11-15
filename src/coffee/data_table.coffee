@@ -44,5 +44,7 @@ do ($=jQuery)->
 	import '_parts/userActionMethods.coffee'
 
 	DataTable.version = import '../../.version.coffee'
+	DataTable.helpers = helpers
+	DataTable.markup = markup
 	DataTable.defaultOptions = defaultOptions
 	window.DataTable = DataTable
