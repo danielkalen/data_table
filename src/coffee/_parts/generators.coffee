@@ -10,7 +10,6 @@ DataTable::generateColumns = ()->
 				'label': column.label
 				'style': helpers.genHeaderCellStyle(column)
 				'extraClasses': helpers.genCellClassname(column)
-		
 		.join('')
 
 

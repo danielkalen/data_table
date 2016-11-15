@@ -9,7 +9,7 @@ helpers.normalizeColumns = (columns)->
 		if typeof columns[0] is 'string'
 			output[label] = {label} for label in columns
 		
-		else columns[0]?.label
+		else if columns[0]?.label
 			output[column.label] = column for column in columns
 
 
@@ -97,7 +97,7 @@ helpers.colorMapping = (value, colorType='name')-> switch colorType
 		else 'unknown'
 
 	
-	when 'name' switch value
+	when 'name' then switch value
 		when 'orange' then '#ee6f0e'
 		when 'green' then '#00ad09'
 		when 'blue' then '#4788f3'
