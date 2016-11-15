@@ -287,6 +287,6 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '1.0.2';
+  DataTable.version = '1.0.3';
   return window.DataTable = DataTable;
 })(jQuery);
