@@ -31,6 +31,8 @@ DataTable::generateBodyRows = (rows)->
 
 					rowCells += markup.rowCell
 						'slug': column.slug
+						'extraClasses': helpers.genCellClassname(column)
+						# 'style': helpers.genCellStyle(column)
 						'value': do ()=> switch column.type
 							when 'fields' 		then @generateInlineFields(cellValue)
 							when 'actions' 		then @generateActions()

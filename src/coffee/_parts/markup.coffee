@@ -81,8 +81,8 @@ markup =
 	"
 	
 
-	rowCell: ({extraClasses='', label, slug, value})-> "
-		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}'>
+	rowCell: ({extraClasses='', label, slug, value, style=''})-> "
+		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}' #{style}>
 			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap' title='{{label}}'>#{value}</div>
 		</div>
 	"
