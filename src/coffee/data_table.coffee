@@ -6,6 +6,7 @@ do ($=jQuery)->
 	DataTable = (@container, options={})->
 		@options = $.extend {}, DataTable.defaults, options
 		@data = []
+		@state = 'loading':true, 'noResults':false
 
 		# Markup
 		@els = {}
