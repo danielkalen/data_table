@@ -81,10 +81,8 @@ DataTable::attachEvents = ()->
 			@tableOptions.ipDataFetcher(ipAddress).then (ipDetails)->
 				return unless ipDetails
 				
-				output = for key,value of ipDetails 
-					markup.table_body_row_cell_ip_details_item
-						.replace '{{label}}', key
-						.replace '{{value}}', value
+				output = for label,value of ipDetails 
+					markup.table_body_row_cell_ip_details_item({label,value})
 
 				$content.html output.join('')
 				$trigger.parent().addClass 'ready'

@@ -24,8 +24,8 @@ DataTable::attachBindings = ()->
 		.to('prop:innerHTML.pages').of(@els.pagination) # Render pagination
 			.transform (count)->
 				paginationItems = ''
-				for index in [1..count]
-					paginationItems += markup.pagination_item.replace('{{value}}', index) unless index is 0
+				for value in [1..count]
+					paginationItems += markup.pagination_item({value}) unless value is 0
 
 				return paginationItems
 

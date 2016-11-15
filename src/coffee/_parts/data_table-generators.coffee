@@ -2,10 +2,10 @@ DataTable::generateColumns = ()->
 	@options.columns
 		.map (column)->
 			markup.table_head_cell
-				.replace '{{isSortable}}', if column.sorting then 'is_sortable' else ''
-				.replace /\{\{slug\}\}/g, column.label.toLowerCase().replace /\W/g, '_'
-				.replace '{{icon}}', column.icon or ''
-				.replace '{{label}}', column.label
+				'isSortable': column.sorting?
+				'slug': column.label.toLowerCase().replace /\W/g, '_'
+				'icon': column.icon or ''
+				'label': column.label
 		.join('')
 
 
@@ -17,17 +17,17 @@ DataTable::generateBodyRows = (rows)->
 
 	genRow = (row, parentRow, isSub)=>		
 		rowItems += markup.table_body_row
-			.replace '{{isSub}}', if isSub then 'is_sub is_hidden' else ''
-			.replace /\{\{itemID\}\}/g, if isSub then parentRow.ID else row.ID
-			.replace '{{cells}}', ()=>
+			'isSub': isSub
+			'itemID': if isSub then parentRow.ID else row.ID
+			'cells': do ()=>
 				rowCells = ''
 				
 				for column,index in @options.columns
 					cellValue = row[column.label] or ''
 
 					rowCells += markup.table_body_row_cell
-						.replace /\{\{slug\}\}/g, column.label.toLowerCase().replace /\W/g, '_'
-						.replace '{{value}}', ()=>
+						'slug': column.label.toLowerCase().replace /\W/g, '_'
+						'value': do ()=>
 							switch column.type
 								when 'fields' 		then @generateInlineFields(cellValue)
 								when 'actions' 		then @generateActions()
@@ -59,13 +59,11 @@ DataTable::generateBodyRows = (rows)->
 
 
 DataTable::generateInlineFields = (dataFields)->
-	markup.table_body_row_cell_fields.replace '{{fields}}', ()->
+	markup.table_body_row_cell_fields 'fields': do ()->
 		return '' unless typeof dataFields is 'object'
 		
-		output = for key,value of dataFields
-			markup.table_body_row_cell_fields_item
-				.replace '{{label}}', key
-				.replace '{{value}}', value
+		output = for label,value of dataFields
+			markup.table_body_row_cell_fields_item {label,value}
 
 
 		return output.join('')
@@ -75,15 +73,11 @@ DataTable::generateInlineFields = (dataFields)->
 
 
 DataTable::generateActions = ()->
-	markup.table_body_row_cell_actions.replace '{{actions}}', ()=>
+	markup.table_body_row_cell_actions 'actions': do ()=>
 		return '' unless @tableOptions.actions
 		
 		output = for action in @tableOptions.actions
-			markup.table_body_row_cell_actions_item
-				.replace '{{action}}', action.action
-				.replace '{{label}}', action.label
-				.replace '{{icon}}', action.icon
-				.replace '{{color}}', action.color or 'grey'
+			markup.table_body_row_cell_actions_item(action)
 
 
 		return output.join('')
@@ -95,7 +89,7 @@ DataTable::generateActions = ()->
 
 
 DataTable::generateIpDetails = (ipAddress)->
-	markup.table_body_row_cell_ip_details.replace '{{ipAddress}}', ipAddress # data attribute
+	markup.table_body_row_cell_ip_details {ipAddress} # data attribute
 
 
 

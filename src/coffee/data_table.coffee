@@ -3,7 +3,6 @@ do ($=jQuery)->
 	import '_parts/data_table-helpers.coffee'
 
 	defaultTableOptions = 
-		'checkbox': true
 		'perPage': 20
 		'actions': false
 		'ipDataFetcher': (ipAddress)-> new Promise (resolve)-> $.get "http://ipinfo.io/#{ipAddress}", resolve, 'JSON'
@@ -15,11 +14,7 @@ do ($=jQuery)->
 
 		# Markup
 		@els = {}
-		@els.tableOuterwrap = $(markup.table
-			.replace '{{hasCheckbox}}', if @tableOptions.checkbox then 'has_checkbox' else ''
-			.replace '{{columns}}', @generateColumns()
-			.replace '{{pagination}}', markup.pagination
-		)
+		@els.tableOuterwrap = $(markup.table {columns:@generateColumns, pagination:markup.pagination()})
 
 		@els.table = @els.tableOuterwrap.children().first()
 		@els.tableHead = @els.table.children().first().children()
