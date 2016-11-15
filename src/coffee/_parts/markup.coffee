@@ -7,7 +7,7 @@ markup =
 		<div class='#{DataTable.defaults.baseClass}'>
 			<div class='#{DataTable.defaults.baseClass}-heading'>
 				<div class='#{DataTable.defaults.baseClass}-heading-row'>
-					<div class='#{DataTable.defaults.baseClass}-heading-row-cell is_expand_button'></div>
+					<div class='#{DataTable.defaults.baseClass}-heading-row-cell __expandButton'></div>
 				</div>
 			</div>
 			<div class='#{DataTable.defaults.baseClass}-body'></div>
@@ -58,7 +58,7 @@ markup =
 
 	row: ({rowID, cells, drilldown=''})-> "
 		<div class='#{DataTable.defaults.baseClass}-body-row _tableRow {{drilldownOpen}}' data-row-id='#{rowID}'>
-			<div class='#{DataTable.defaults.baseClass}-body-row-cell is_expand_button'>
+			<div class='#{DataTable.defaults.baseClass}-body-row-cell __expandButton'>
 				<div class='#{DataTable.defaults.baseClass}-body-row-cell-expand'></div>
 			</div>
 			
