@@ -26,17 +26,16 @@ DataTable::generateBodyRows = (rows)->
 			'cells': do ()=>
 				rowCells = ''
 				
-				for column,index in @options.columns
+				for label,column of @options.columns
 					cellValue = row[column.label] or ''
 
 					rowCells += markup.rowCell
-						'slug': column.label.toLowerCase().replace /\W/g, '_'
-						'value': do ()=>
-							switch column.type
-								when 'fields' 		then @generateInlineFields(cellValue)
-								when 'actions' 		then @generateActions()
-								when 'ip-details' 	then @generateIpDetails(cellValue)
-								else @options.formatters?[column.label]?(cellValue) or cellValue
+						'slug': column.slug
+						'value': do ()=> switch column.type
+							when 'fields' 		then @generateInlineFields(cellValue)
+							when 'actions' 		then @generateActions()
+							when 'ip-details' 	then @generateIpDetails(cellValue)
+							else @options.formatters?[column.label]?(cellValue) or cellValue
 
 				return rowCells
 
