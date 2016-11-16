@@ -40,6 +40,7 @@ DataTable::attachBindings = ()->
 
 
 	SimplyBind('allRows').of(@)
+		.transformSelf (allRows)=> if @options.sortBy then @sortRows(allRows) else allRows
 		.to (rows)=>
 			@searchCriteria = ''
 			@currentPage = 1
