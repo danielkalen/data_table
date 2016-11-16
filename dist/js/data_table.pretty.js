@@ -5490,7 +5490,7 @@
       return "<div class='" + DataTable.defaults.baseClass + "-noResults {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-noResults-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-noResults-icon'></div> <div class='" + DataTable.defaults.baseClass + "-noResults-text'> <div class='" + DataTable.defaults.baseClass + "-noResults-text-title'>No {{searchTerm}}s to Display</div> <div class='" + DataTable.defaults.baseClass + "-noResults-text-subtitle'>There are no matching {{searchTermSmall}}s for the search query you've typed.</div> </div> </div> </div>";
     },
     pagination: function() {
-      return "<div class='" + DataTable.defaults.baseClass + "-pagination block-pagination {{hasExtra}} {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-pagination-item back'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> {{pages}} <div class='" + DataTable.defaults.baseClass + "-pagination-item extraIndicator'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> <select class='" + DataTable.defaults.baseClass + "-pagination-item-select'></select> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-item next'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> </div>";
+      return "<div class='" + DataTable.defaults.baseClass + "-pagination {{hasExtra}} {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _back'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-itemswrap _paginationItems'></div> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _extraIndicator'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> <select class='" + DataTable.defaults.baseClass + "-pagination-item-select'></select> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _next'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> </div>";
     },
     paginationItem: function(arg) {
       var value;
@@ -5545,12 +5545,15 @@
     actions: function(arg) {
       var actions;
       actions = arg.actions;
-      return "<div class='" + DataTable.defaults.baseClass + "-actions'>" + actions + "</div>";
+      return "<div class='" + DataTable.defaults.baseClass + "-actions'> <div class='" + DataTable.defaults.baseClass + "-actions-popup'>" + actions + "</div> </div>";
+    },
+    actionsOverlay: function() {
+      return "<div class='" + DataTable.defaults.baseClass + "-actions-overlay'></div>";
     },
     actionsItem: function(arg) {
       var action, icon, label;
       action = arg.action, icon = arg.icon, label = arg.label;
-      return "<div class='" + DataTable.defaults.baseClass + "-actions-item _actionButton' data-action='" + action + "'> <div class='" + DataTable.defaults.baseClass + "-actions-item-icon'>" + icon + "</div> <div class='" + DataTable.defaults.baseClass + "-actions-item-text'>" + label + "</div> </div>";
+      return "<div class='" + DataTable.defaults.baseClass + "-actions-popup-item _actionButton' data-action='" + action + "'> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
     }
   };
   defaults = {
@@ -5579,6 +5582,21 @@
       case typeof valueA !== 'number':
         return valueA === parseFloat(valueB);
     }
+  };
+  helpers.toggleActionsPopup = function(actionsPopup$) {
+    var isOpen, overlay$;
+    isOpen = actionsPopup$.data('isOpen');
+    if (isOpen) {
+      actionsPopup$.data('overlay').remove();
+      actionsPopup$.removeClass('is_visible');
+    } else {
+      actionsPopup$.data('overlay', overlay$ = $(markup.actionsOverlay()));
+      actionsPopup$.addClass('is_visible');
+      overlay$.appendTo(document.body).one('click', function() {
+        return helpers.toggleActionsPopup(actionsPopup$);
+      });
+    }
+    return actionsPopup$.data('isOpen', !isOpen);
   };
   helpers.getBreakdownTotal = function(breakdown, breakdownKeys) {
     switch (false) {
@@ -5856,7 +5874,7 @@
     this.allRows = [];
     this.largestBreakdownTotal = 0;
     this.searchCriteria = '';
-    this.searchParam = 'Item';
+    this.searchParam = '';
     this.currentPage = 1;
     this.els = {};
     this.els.tableOuterwrap = $(markup.tableOuterwrap());
@@ -5866,10 +5884,13 @@
     this.els.noResultsMessage = $(markup.noResults()).appendTo(this.els.tableOuterwrap);
     this.els.loadingMessage = $(markup.loading()).appendTo(this.els.tableOuterwrap);
     this.els.pagination = $(markup.pagination()).appendTo(this.els.tableOuterwrap);
-    this.els.paginationExtra = this.els.pagination.children('.extraIndicator');
+    this.els.paginationItems = this.els.pagination.children('._paginationItems');
+    this.els.paginationExtra = this.els.pagination.children('._extraIndicator');
     this.els.paginationExtraSelect = this.els.paginationExtra.children('select');
     this.els.paginationExtraText = this.els.paginationExtraSelect.prev();
     this.els.searchField = $(markup.searchField(this.options)).insertBefore(this.els.table);
+    this.els.searchParam = this.els.searchField.children('select');
+    this.els.searchCriteria = this.els.searchField.children('input');
     this.els.tableHeading.append(this.generateHeadingColumns());
     this.els.tableOuterwrap.appendTo(this.container);
     this.els.table.data('DataTable', this);
@@ -5881,7 +5902,6 @@
     return this.options.data().then((function(_this) {
       return function(data) {
         _this.state.loading = false;
-        _this.state.noResults = !(data != null ? data.length : void 0);
         return Promise.resolve(data);
       };
     })(this));
@@ -5908,7 +5928,7 @@
   };
   DataTable.prototype.calcPageCount = function(rows) {
     this.pageCountReal = Math.ceil(rows.length / this.options.perPage);
-    return this.pageCount = this.pageCountReal > 5 ? 5 : this.pageCountReal;
+    return this.pageCount = this.pageCountReal > this.options.pageCountMax ? this.options.pageCountMax : this.pageCountReal;
   };
   DataTable.prototype.calcPercentageString = function(columnValue, columnName, row) {
     var columnA, columnB, formula, mathOperator, percent, percentageValue;
@@ -5956,6 +5976,33 @@
       default:
         return rows;
     }
+  };
+  DataTable.prototype.setVisiblePage = function(targetPage) {
+    var i, len, row, rowsToHide, rowsToReveal, slice;
+    targetPage--;
+    slice = {
+      'start': targetPage * this.options.perPage,
+      'end': (targetPage * this.options.perPage) + this.options.perPage
+    };
+    rowsToReveal = this.availableRows.slice(slice.start, slice.end);
+    rowsToHide = this.visibleRows.slice();
+    for (i = 0, len = rowsToHide.length; i < len; i++) {
+      row = rowsToHide[i];
+      row.visible = false;
+    }
+    this.visibleRows.length = 0;
+    return this.visibleRows.push.apply(this.visibleRows, rowsToReveal);
+  };
+  DataTable.prototype.setPageIndicator = function(targetPage) {
+    var matchedPageEl$, pageItems$;
+    if (targetPage === '...') {
+      targetPage = 1;
+    }
+    targetPage = targetPage > this.options.pageCountMax ? this.options.pageCountMax : targetPage - 1;
+    pageItems$ = this.els.pagination.find('._paginationItem').slice(1, -1);
+    matchedPageEl$ = pageItems$.eq(targetPage);
+    matchedPageEl$.addClass('current');
+    return pageItems$.not(matchedPageEl$).removeClass('current');
   };
   DataTable.prototype.processRow = function(row) {
     if (row.processed) {
@@ -6241,9 +6288,9 @@
       return function(event) {
         var $this, isBack, isExtra, isNext, pageNumber;
         $this = $(event.currentTarget);
-        isBack = $this.hasClass('back');
-        isNext = $this.hasClass('next');
-        isExtra = $this.hasClass('extra_indicator');
+        isBack = $this.hasClass('_back');
+        isNext = $this.hasClass('_next');
+        isExtra = $this.hasClass('_extraIndicator');
         if (isBack) {
           if (_this.currentPage !== 1) {
             return _this.currentPage--;
@@ -6260,11 +6307,10 @@
     })(this));
     this.els.tableBody.on('click', '._actionButton', (function(_this) {
       return function(event) {
-        var action, button$, dataItem, itemID, itemIndex, itemRow$, subActions$;
+        var action, button$, dataItem, itemID, itemIndex, itemRow$;
         button$ = $(event.currentTarget);
         if (button$.hasClass('_isMulti')) {
-          subActions$ = button$.next();
-          return subActions$.toggleClass('is_visible');
+          return helpers.toggleActionsPopup(button$.next().children());
         } else {
           itemRow$ = button$.closest('._tableRow');
           action = button$.data('action');
@@ -6273,6 +6319,9 @@
           dataItem = itemID ? _this.allRows.find(function(row) {
             return helpers.compareValues(row[_this.options.uniqueID], itemID);
           }) : void 0;
+          if (dataItem == null) {
+            dataItem = itemID;
+          }
           return _this.els.table.trigger("action." + action, dataItem);
         }
       };
@@ -6325,21 +6374,30 @@
     return Promise.resolve();
   };
   DataTable.prototype.attachBindings = function() {
-    var ref;
+    SimplyBind('noResults').of(this.state).to('className.isVisible').of(this.els.noResultsMessage).transform((function(_this) {
+      return function(noResults) {
+        if (noResults && !_this.state.loading) {
+          return 'is_visible';
+        } else {
+          return '';
+        }
+      };
+    })(this));
     SimplyBind('loading').of(this.state).to('className.isVisible').of(this.els.loadingMessage).transform(function(loading) {
       if (loading) {
         return 'is_visible';
       } else {
         return '';
       }
-    });
-    SimplyBind('noResults').of(this.state).to('className.isVisible').of(this.els.noResultsMessage).transform(function(noResults) {
-      if (noResults) {
-        return 'is_visible';
-      } else {
-        return '';
-      }
-    });
+    }).and.to((function(_this) {
+      return function(loading) {
+        if (loading) {
+          return _this.state.noResults = false;
+        } else {
+          return _this.state.noResults = !_this.visibleRows.length;
+        }
+      };
+    })(this));
     SimplyBind(this.visibleRows, {
       trackArrayChildren: false
     }).to((function(_this) {
@@ -6356,7 +6414,7 @@
           _this.processRow(row);
           row.visible = true;
         }
-        return _this.state.noResults = rows.length === 0;
+        return _this.state.noResults = !rows.length;
       };
     })(this)).and.to((function(_this) {
       return function(rows) {
@@ -6372,10 +6430,19 @@
         }
       };
     })(this));
-    SimplyBind('allRows').of(this).to((function(_this) {
+    SimplyBind('allRows').of(this).transformSelf((function(_this) {
+      return function(allRows) {
+        if (_this.options.sortBy) {
+          return _this.sortRows(allRows);
+        } else {
+          return allRows;
+        }
+      };
+    })(this)).to((function(_this) {
       return function(rows) {
         _this.searchCriteria = '';
-        return _this.currentPage = 1;
+        _this.currentPage = 1;
+        return _this.state.noResults = !rows.length;
       };
     })(this));
     SimplyBind('availableRows', {
@@ -6386,7 +6453,7 @@
         return _this.calcPageCount(rows);
       };
     })(this));
-    SimplyBind('pageCount').of(this).to('innerHTML.pages').of(this.els.pagination).transform(function(count) {
+    SimplyBind('pageCount').of(this).to('innerHTML').of(this.els.paginationItems).transform(function(count) {
       var i, paginationItems, ref, value;
       paginationItems = '';
       for (value = i = 1, ref = count; 1 <= ref ? i <= ref : i >= ref; value = 1 <= ref ? ++i : --i) {
@@ -6397,15 +6464,7 @@
         }
       }
       return paginationItems;
-    }).and.to('className.hasExtra').of(this.els.pagination).transform((function(_this) {
-      return function() {
-        if (_this.pageCountReal > 5) {
-          return 'has_extra';
-        } else {
-          return '';
-        }
-      };
-    })(this)).and.to('className.isVisible').of(this.els.pagination).transform(function(count) {
+    }).and.to('className.isVisible').of(this.els.pagination).transform(function(count) {
       if (count > 1) {
         return 'is_visible';
       } else {
@@ -6413,29 +6472,44 @@
       }
     });
     SimplyBind('pageCountReal').of(this).to('innerHTML').of(this.els.paginationExtraSelect).transform((function(_this) {
-      return function(count) {
-        var i, index, options, ref;
-        options = '<option>...</option>';
-        for (index = i = 6, ref = count; 6 <= ref ? i <= ref : i >= ref; index = 6 <= ref ? ++i : --i) {
-          options += "<option>" + index + "</option>";
+      return function(realCount) {
+        var i, index, options, ref, ref1;
+        if (realCount <= _this.options.pageCountMax) {
+          return '';
+        } else {
+          options = '<option>...</option>';
+          for (index = i = ref = _this.options.pageCountMax + 1, ref1 = realCount; ref <= ref1 ? i <= ref1 : i >= ref1; index = ref <= ref1 ? ++i : --i) {
+            options += "<option>" + index + "</option>";
+          }
+          return options;
         }
-        return options;
+      };
+    })(this)).and.to('className.hasExtra').of(this.els.pagination).transform((function(_this) {
+      return function(realCount) {
+        if (realCount > _this.options.pageCountMax) {
+          return 'has_extra';
+        } else {
+          return '';
+        }
       };
     })(this));
     SimplyBind('value', {
-      'updateOnBind': false
-    }).of(this.els.paginationExtraSelect).to('innerHTML').of(this.els.paginationExtraText).and.to('currentPage').of(this).transform(function(newValue) {
-      if (newValue === '...') {
-        return 1;
-      } else {
-        return parseFloat(newValue);
-      }
-    });
+      updateOnBind: false
+    }).of(this.els.paginationExtraSelect).to('innerHTML').of(this.els.paginationExtraText).and.to('currentPage').of(this);
     SimplyBind('currentPage', {
       updateEvenIfSame: true
-    }).of(this).to('value').of(this.els.paginationExtraSelect).transform((function(_this) {
+    }).of(this).transformSelf((function(_this) {
       return function(currentPage) {
-        if (currentPage > _this.pageCountMax) {
+        currentPage = currentPage === '...' ? 1 : parseFloat(currentPage);
+        if (currentPage > _this.pageCountReal) {
+          return _this.pageCountReal;
+        } else {
+          return currentPage;
+        }
+      };
+    })(this)).to('value').of(this.els.paginationExtraSelect).transform((function(_this) {
+      return function(currentPage) {
+        if (currentPage > _this.options.pageCountMax) {
           return currentPage;
         } else {
           return '...';
@@ -6443,47 +6517,28 @@
       };
     })(this)).and.to((function(_this) {
       return function(currentPage) {
-        var i, len, row, rowsToHide, rowsToReveal, slice;
-        currentPage--;
-        slice = {
-          'start': currentPage * _this.options.perPage,
-          'end': (currentPage * _this.options.perPage) + _this.options.perPage
-        };
-        rowsToReveal = _this.availableRows.slice(slice.start, slice.end);
-        rowsToHide = _this.visibleRows.slice();
-        for (i = 0, len = rowsToHide.length; i < len; i++) {
-          row = rowsToHide[i];
-          row.visible = false;
-        }
-        _this.visibleRows.length = 0;
-        _this.visibleRows.push.apply(_this.visibleRows, rowsToReveal);
-      };
-    })(this)).and.to((function(_this) {
-      return function(currentPage) {
-        var matchedPageEl$, pageItems$;
-        if (currentPage === '...') {
-          currentPage = 1;
-        }
-        currentPage = currentPage > _this.pageCountMax ? _this.pageCountMax : currentPage - 1;
-        pageItems$ = _this.els.pagination.find('._paginationItem').slice(1, -1);
-        matchedPageEl$ = pageItems$.eq(currentPage);
-        matchedPageEl$.addClass('current');
-        return pageItems$.not(matchedPageEl$).removeClass('current');
+        _this.setVisiblePage(currentPage);
+        return _this.setPageIndicator(currentPage);
       };
     })(this));
-    if ((ref = this.options.search) != null ? ref.length : void 0) {
+    if (this.options.search.length) {
       this.searchParam = this.options.search[0];
-      SimplyBind('value').of(this.els.searchField.children('select')).to('searchParam').of(this).pipe('attr:placeholder').of(this.els.searchField.children('input')).transform(function(option) {
+      SimplyBind('search').of(this.options).to('innerHTML').of(this.els.searchParam).transform(function(options) {
+        return options.map(function(option) {
+          return "<option>" + option + "</option>";
+        }).join('');
+      });
+      SimplyBind('value').of(this.els.searchParam).to('searchParam').of(this).pipe('attr:placeholder').of(this.els.searchCriteria).transform(function(option) {
         return "Search by " + option;
       });
     }
-    SimplyBind('value').of(this.els.searchField.children('input')).to('searchCriteria', {
+    SimplyBind('value').of(this.els.searchCriteria).to('searchCriteria', {
       updateEvenIfSame: true
     }).of(this).bothWays().chainTo((function(_this) {
       return function(searchCriteria) {
-        var rowsToMakeAvailable;
+        var ref, rowsToMakeAvailable;
         rowsToMakeAvailable = _this.allRows;
-        if (searchCriteria && _this.columns[_this.searchParam]) {
+        if (searchCriteria && (_this.options.columns[_this.searchParam] || (((ref = _this.allRows[0]) != null ? ref[_this.searchParam] : void 0) != null))) {
           rowsToMakeAvailable = _this.allRows.filter(function(row) {
             var ref1;
             return (ref1 = row[_this.searchParam]) != null ? ref1.toString().toLowerCase().includes(searchCriteria.toLowerCase()) : void 0;
@@ -6493,7 +6548,13 @@
         return _this.currentPage = 1;
       };
     })(this));
-    SimplyBind('searchParam').of(this).to('textContent.searchTerm').of(this.els.noResultsMessage).and.to('textContent.searchTermSmall').of(this.els.noResultsMessage).transform(function(searchTerm) {
+    SimplyBind('searchParam').of(this).transformSelf(function(searchParam) {
+      if (searchParam) {
+        return searchParam;
+      } else {
+        return 'Item';
+      }
+    }).to('textContent.searchTerm').of(this.els.noResultsMessage).and.to('textContent.searchTermSmall').of(this.els.noResultsMessage).transform(function(searchTerm) {
       return (searchTerm != null ? searchTerm.toLowerCase() : void 0) || searchTerm;
     });
     return Promise.resolve();
