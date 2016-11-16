@@ -40,7 +40,7 @@
 	&._hasIcon
 		padding-right: 5px
 		&:before
-			+iconPseudo( attr(data-icon) )
+			+icon( attr(data-icon) )
 			position: relative
 			font-weight: 400
 			font-size: 14px
@@ -49,10 +49,6 @@
 			float: left
 			padding-right: 5px
 
-	&._hasColor
-		@each $label,$color in $cellColors
-			&.color---#{$label}
-				color: $color
 	
 	&._isLink
 		cursor: pointer
