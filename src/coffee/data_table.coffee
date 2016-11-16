@@ -30,6 +30,8 @@ do ($=jQuery)->
 		@els.paginationExtraSelect = @els.paginationExtra.children('select')
 		@els.paginationExtraText = @els.paginationExtraSelect.prev()
 		@els.searchField = $(markup.searchField(@options)).insertBefore(@els.table)
+		@els.searchParam = @els.searchField.children('select')
+		@els.searchCriteria = @els.searchField.children('input')
 
 		@els.tableHeading.append(@generateHeadingColumns())
 

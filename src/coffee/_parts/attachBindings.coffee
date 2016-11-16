@@ -16,6 +16,10 @@ DataTable::attachBindings = ()->
 	
 
 
+
+
+
+
 	## ==========================================================================
 	## Rows array rendering/processing
 	## ========================================================================== 
@@ -48,6 +52,13 @@ DataTable::attachBindings = ()->
 
 	SimplyBind('availableRows', {updateOnBind:false, updateEvenIfSame:true}).of(@)
 		.to (rows)=> @calcPageCount(rows)
+
+
+
+
+
+
+
 
 
 	## ==========================================================================
@@ -103,28 +114,38 @@ DataTable::attachBindings = ()->
 
 
 
+
+
+
+
+
+
 	## ==========================================================================
 	## Search Field
 	## ========================================================================== 
 	
 	# ==== Search Field value/markup =================================================================================
-	if @options.search?.length
+	if @options.search.length
 		@searchParam = @options.search[0]
 
-		SimplyBind('value').of(@els.searchField.children('select'))
+		SimplyBind('search').of(@options)
+			.to('innerHTML').of(@els.searchParam)
+				.transform (options)-> options.map((option)->"<option>#{option}</option>").join('')
+
+		SimplyBind('value').of(@els.searchParam)
 			.to('searchParam').of(@)
-				.pipe('attr:placeholder').of(@els.searchField.children('input'))
+				.pipe('attr:placeholder').of(@els.searchCriteria)
 					.transform (option)-> "Search by #{option}"
 
 
 
 	# ==== Table results filter & avaiable rows =================================================================================
-	SimplyBind('value').of(@els.searchField.children('input')) # Search/Filter
+	SimplyBind('value').of(@els.searchCriteria) # Search/Filter
 		.to('searchCriteria', updateEvenIfSame:true).of(@).bothWays()
 			.chainTo (searchCriteria)=>
 				rowsToMakeAvailable = @allRows
 
-				if searchCriteria and @columns[@searchParam]
+				if searchCriteria and (@options.columns[@searchParam] or @allRows[0]?[@searchParam]?)
 					rowsToMakeAvailable = @allRows.filter (row)=> row[@searchParam]?.toString().toLowerCase().includes searchCriteria.toLowerCase()
 				
 				@availableRows = rowsToMakeAvailable
