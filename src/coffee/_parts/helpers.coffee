@@ -1,5 +1,18 @@
 helpers = {}
 
+
+helpers.compareValues = (valueA, valueB)-> switch
+	when typeof valueA is typeof valueB
+		valueA is valueB
+	
+	when typeof valueA is 'string'
+		valueA is ''+valueB
+
+	when typeof valueA is 'number'
+		valueA is parseFloat(valueB)
+
+
+
 helpers.getBreakdownTotal = (breakdown, breakdownKeys)-> switch
 	when breakdownKeys.length is 0 then 0
 	else
