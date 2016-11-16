@@ -8,24 +8,15 @@
 		top: 2px
 		width: 15px
 		height: 15px
-		background-color: $black
+		color: $black
 		box-sizing: border-box
 		border-radius: 50%
 		cursor: pointer
+
+		&:before
+			+icon('m')
+			font-size: 15px
 		
-		&:before // Icon
-			content: '?'
-			position: absolute
-			+valign(54%)
-			line-height: 1
-			display: block
-			width: 100%
-			font-size: 12px
-			font-weight: 600
-			font-family: avenir
-			text-align: center
-			color: white
-	
 
 	&-content
 		$bgColor: $subberwhite
