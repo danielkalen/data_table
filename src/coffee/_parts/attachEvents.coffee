@@ -71,7 +71,7 @@ DataTable::attachEvents = ()->
 		wrapper$ = trigger$.parent()
 		content$ = trigger$.next()
 		country$ = content$.next()
-		ipAddress = wrapper$.data 'address'
+		ipAddress = wrapper$.data 'ip'
 		isLoaded = trigger$.hasClass '_isReady'
 
 
