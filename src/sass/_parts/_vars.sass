@@ -1,6 +1,7 @@
 // ==== Color =================================================================================
 $red: #cc4820
 $grey: #a2a3a5
+$grey-light: #b2b2b2
 $grey-lighter: #d1d1d1
 $black: #181818
 $subwhite: #f1f1f1
@@ -157,6 +158,15 @@ $colorsList: #ff5e3a, #ff9500, #ffdb4c, #87fc70, #52edc7, #1ad6fd, #c644fc, #ef4
 	transition: opacity 0.20s linear 0.25s, visibility 0.20s linear 0.25s
 
 
+
+
+=transitionTransform($time:0.25s, $additional:false, $easing:ease, $delay:0s)
+	// $transformTransition: transform $time, -ms-transform $time, -moz-transform $time, -webkit-transform $time
+	$transformTransition: transform $time $easing $delay, -webkit-transform $time $easing $delay
+	@if $additional
+		transition: $transformTransition, $additional
+	@else
+		transition: $transformTransition
 		
 
 =transform($transforms) 
@@ -292,6 +302,16 @@ $colorsList: #ff5e3a, #ff9500, #ffdb4c, #87fc70, #52edc7, #1ad6fd, #c644fc, #ef4
 
 
 
+
+=remove-appearance
+	-webkit-appearance: none !important
+	-moz-appearance: none !important
+	-ms-appearance: none !important
+	-o-appearance: none !important
+	appearance: none !important
+	outline: none !important
+	box-shadow: none !important
+	text-shadow: none !important
 
 
 

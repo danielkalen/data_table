@@ -2,7 +2,8 @@ defaults =
 	'perPage': 20
 	'pageCountMax': 10
 	'columns': []
-	'searchField': []
+	'search': []
+	'percentage': {}
 	'baseClass': 'DataTable'
 	'sortBy': ''
 	'alignment': 'left'

@@ -5,15 +5,42 @@ DataTable::attachEvents = ()->
 
 
 
+
+	# ==== Pagination =================================================================================
+	@els.pagination.on 'click', '._paginationItem', (event)=>
+		$this = $(event.currentTarget)
+		isBack = $this.hasClass('back')
+		isNext = $this.hasClass('next')
+		isExtra = $this.hasClass('extra_indicator')
+
+		if isBack
+			@currentPage-- unless @currentPage is 1
+		
+		else if isNext
+			@currentPage++ unless @currentPage is @pageCountReal
+		
+		# else if not isExtra and not isWrapper
+		else if not isExtra
+			pageNumber = parseFloat $this.children().html()
+			@currentPage = pageNumber
+
+
+
 	# ==== Action button event listeners =================================================================================
 	@els.tableBody.on 'click', '._actionButton', (event)=>
-		$button = $(event.currentTarget)
-		$itemRow = $button.closest('tr')
-		action = $button.data('action')
-		itemID = $itemRow.data('id')
-		itemIndex = $itemRow.index()
+		button$ = $(event.currentTarget)
+		if button$.hasClass('_isMulti')
+			subActions$ = button$.next()
+			subActions$.toggleClass('is_visible')
+		
+		else
+			itemRow$ = button$.closest('._tableRow')
+			action = button$.data('action')
+			itemID = itemRow$.data('row-id')
+			itemIndex = itemRow$.data('index')
+			dataItem = if itemID then @allRows.find (row)=> row[@options.uniqueID] is itemID
 
-		@els.table.trigger "action.#{action}", {itemID, 'data':@allRows[itemIndex]}
+			@els.table.trigger "action.#{action}", {itemID, 'data':dataItem}
 
 
 
@@ -22,43 +49,15 @@ DataTable::attachEvents = ()->
 
 	# ==== Row expansion listeners =================================================================================
 	@els.tableBody.on 'click', '._expandButton', (event)=>
-		$button = $(event.currentTarget)
-		$row = $button.closest('tr')
-		rowID = $row.data 'row-id'
+		button$ = $(event.currentTarget)
+		row$ = button$.closest('tr')
+		rowID = row$.data 'row-id'
 
-		$row.siblings('.is_sub')
+		row$.siblings('.is_sub')
 			.filter ()-> @dataset.rowId is rowID
 			.toggleClass 'is_hidden'
 
-		$row.toggleClass 'expanded'
-
-
-
-
-
-
-
-	# ==== Pagination listeners =================================================================================
-	SimplyBind('currentPage').of(@) # Active element
-		.to ()=>
-			matchedPageEl$ = @els.pagination.children().slice(1,-1).eq @currentPage-1 # 0-based index so we subtract 1
-			matchedPageEl$.addClass('current').siblings().removeClass('current')
-		
-
-	@els.pagination.on 'click', '._paginationItem', (event)=> # Setting currentPage on click
-		$this = $(event.currentTarget)
-		isBack = $this.hasClass('back')
-		isNext = $this.hasClass('next')
-
-		if isBack
-			@currentPage-- unless @currentPage is 1
-		
-		else if isNext
-			@currentPage++ unless @currentPage is @pageCount
-		
-		else
-			pageNumber = parseFloat $this.children().html()
-			@currentPage = pageNumber
+		row$.toggleClass 'expanded'
 
 
 
@@ -89,3 +88,5 @@ DataTable::attachEvents = ()->
 
 
 	Promise.resolve()
+
+

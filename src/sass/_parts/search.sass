@@ -1,0 +1,119 @@
+$selectWidth: 37px
+
+&-search
+	position: relative
+	height: 28px
+	margin-bottom: 20px
+	display: none
+	&.is_visible
+		display: block
+
+	&:before // icon
+		+icon('R')
+		position: absolute
+		z-index: 3
+		+valign(54%)
+		left: 11px
+		font-size: 14px
+		color: lighten($grey, 10)
+
+	&:after // icon
+		content: ''
+		position: absolute
+		z-index: 3
+		top: 0
+		left: $selectWidth+4
+		width: 1px
+		height: 100%
+		background-color: $divider
+	
+	
+	&-select_trigger
+		// +icon('R')
+		position: absolute
+		z-index: 4
+		+valign(54%)
+		left: 0
+		width: $selectWidth
+		height: 100%
+		color: lighten($grey, 10)
+		cursor: pointer
+
+		// &:before
+		// 	content: ''
+		// 	position: absolute
+		// 	top: 0
+		// 	left: 0
+		// 	+inheritSize
+		// 	background-color: lighten($grey, 45)
+		// 	padding-right: 4px
+		// 	// padding: 1px
+
+		&:after
+			+icon('g')
+			position: absolute
+			+valign(48%)
+			right: 0px
+			font-size: 12px
+
+		// &:after
+		// 	+icon('\25bc')
+		// 	// font-family: proxima
+		// 	position: absolute
+		// 	// +valign(47%)
+		// 	top: 47%
+		// 	right: 3px
+		// 	font-size: 6px
+		// 	+transform(scaleX(1.5) translateY(-47%))
+
+		// &:after,
+		// &:after
+		// 	+icon('')
+		// 	position: absolute
+		// 	font-size: 11px
+		// 	right: 0px
+		
+		// &:after
+		// 	content: '\e010'
+		// 	top: 5px
+		// &:after
+		// 	content: '\e013'
+		// 	bottom: 5px
+
+
+
+
+	&-select
+		position: absolute
+		z-index: 5
+		top: 0
+		left: 0
+		display: block !important
+		width: $selectWidth !important
+		height: 100% !important
+		max-width: none !important
+		margin: 0 !important
+		padding: 0 !important
+		opacity: 0 !important
+		// visibility: hidden
+
+
+	&-input
+		position: relative
+		z-index: 2
+		display: block
+		height: 100%
+		width: 270px
+		padding: 1px 14px 0 $selectWidth+7
+		padding: 1px 14px 0 $selectWidth+10
+		border: 1px solid $divider !important
+		font-weight: 500
+		font-size: 12px
+		line-height: 1
+		letter-spacing: letter-spacing(20)
+		color: $grey !important
+		+remove-appearance
+		
+		&::-moz-placeholder
+			color: $grey-light !important
+			font-weight: 400

@@ -7,7 +7,7 @@ markup =
 		<div class='#{DataTable.defaults.baseClass} alignment---#{alignment}'>
 			<div class='#{DataTable.defaults.baseClass}-heading'>
 				<div class='#{DataTable.defaults.baseClass}-heading-row'>
-					<div class='#{DataTable.defaults.baseClass}-heading-row-cell __expandButton'></div>
+					<div class='#{DataTable.defaults.baseClass}-heading-row-cell _expandButton'></div>
 				</div>
 			</div>
 			<div class='#{DataTable.defaults.baseClass}-body'></div>
@@ -39,11 +39,15 @@ markup =
 
 
 	pagination: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-pagination block-pagination {{isVisible}}'>
+		<div class='#{DataTable.defaults.baseClass}-pagination block-pagination {{hasExtra}} {{isVisible}}'>
 			<div class='#{DataTable.defaults.baseClass}-pagination-item back'>
 				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
 			</div>
 			{{pages}}
+			<div class='#{DataTable.defaults.baseClass}-pagination-item extraIndicator'>
+				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
+				<select class='#{DataTable.defaults.baseClass}-pagination-item-select'></select>
+			</div>
 			<div class='#{DataTable.defaults.baseClass}-pagination-item next'>
 				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
 			</div>
@@ -68,7 +72,7 @@ markup =
 
 	row: ({rowID, cells, drilldown=''})-> "
 		<div class='#{DataTable.defaults.baseClass}-body-row _tableRow {{drilldownOpen}}' data-row-id='#{rowID}'>
-			<div class='#{DataTable.defaults.baseClass}-body-row-cell __expandButton'>
+			<div class='#{DataTable.defaults.baseClass}-body-row-cell _expandButton'>
 				<div class='#{DataTable.defaults.baseClass}-body-row-cell-expand'></div>
 			</div>
 			
@@ -83,7 +87,19 @@ markup =
 
 	rowCell: ({extraClasses='', label, slug, value, style=''})-> "
 		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}' #{style}>
-			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap' title='{{label}}'>#{value}</div>
+			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap' title='#{label}'>#{value}</div>
+		</div>
+	"
+
+
+
+
+
+	searchField: ({search})-> "
+		<div class='#{DataTable.defaults.baseClass}-search #{if search?.length then 'is_visible' else ''}'>
+			<select class='#{DataTable.defaults.baseClass}-search-select'></select>
+			<input class='#{DataTable.defaults.baseClass}-search-input' />
+			<div class='#{DataTable.defaults.baseClass}-search-selectTrigger'></div>
 		</div>
 	"
 	
@@ -122,12 +138,23 @@ markup =
 
 
 
+	button: ({action, icon='', isMulti})-> "
+		<div class='#{DataTable.defaults.baseClass}-button _actionButton #{if isMulti then '_isMulti' else ''}' data-action='#{action}'>
+			<div class='#{DataTable.defaults.baseClass}-button-icon'>#{icon}</div>
+		</div>
+	"
+	
+
+
+
 	actions: ({actions})-> "
 		<div class='#{DataTable.defaults.baseClass}-actions'>#{actions}</div>
 	"
 
-	actionsItem: ({action, icon, label, color='grey'})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-button _actionButton color_#{color}' data-action='#{action}' data-icon='#{icon}'>
-			<div class='#{DataTable.defaults.baseClass}-actions-button-text'>#{label}</div>
+	actionsItem: ({action, icon, label})-> "
+		<div class='#{DataTable.defaults.baseClass}-actions-item _actionButton' data-action='#{action}'>
+			<div class='#{DataTable.defaults.baseClass}-actions-item-icon'>#{icon}</div>
+			<div class='#{DataTable.defaults.baseClass}-actions-item-text'>#{label}</div>
 		</div>
 	"
+

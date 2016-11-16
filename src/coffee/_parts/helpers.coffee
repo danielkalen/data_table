@@ -1,5 +1,13 @@
 helpers = {}
 
+helpers.getBreakdownTotal = (breakdown, breakdownKeys)-> switch
+	when breakdownKeys.length is 0 then 0
+	else
+		breakdownKeys
+			.map (breakdownItem)-> breakdown[breakdownItem]
+			.reduce (a,b)-> a+b
+
+
 
 helpers.normalizeColumns = (columns)->
 	if not Array.isArray(columns)
@@ -20,6 +28,9 @@ helpers.normalizeColumns = (columns)->
 
 	return output 
 
+
+helpers.getBreakdownBarWidth = (row, largest)->
+	(row.breakdownBarTotal / largest) * (100 - 18)
 
 
 helpers.genHeaderCellStyle = (column)->
@@ -62,7 +73,7 @@ helpers.genCellClassname = (column)->
 	if column.color
 		classString += ' _hasColor'
 	
-	if column.type is 'button'
+	if column.type is 'button' or column.type is 'actions'
 		classString += ' _isButton'
 	
 	if column.type is 'breakdownBar'
@@ -125,6 +136,49 @@ helpers.colorMapping = (value, colorType='name')-> switch colorType
 
 	else value
 
+
+
+
+
+
+helpers.iconMapping = (value, iconType)-> switch iconType
+	when 'browser'
+		switch
+			when value.includes 'Firefox' then '#'
+			when value.includes 'Chrome' then '%'
+			when value.includes 'Safari' then '$'
+			when value.includes 'Mobile Safari' then '$'
+			when value.includes 'IE' then '&'
+			when value.includes 'Edge' then '&'
+			when value.includes 'Opera' then '"'
+			when value.includes 'Android' then '&#039;'
+			else '4'
+	
+	when 'device'
+		switch value
+			when 'Desktop' then '!'
+			when 'Tablet' then '7'
+			when 'Mobile' then '6'
+			else '4'
+	
+	when 'platform'
+		switch value
+			when 'Mac OS X' then '*'
+			when 'Windows' then ')'
+			when 'Windows Phone' then ')'
+			when 'Linux' then '+'
+			when 'iOS' then '*'
+			when 'Android' then "&#039;"
+			else '4'
+	
+	when 'satisfaction'
+		switch value
+			when 'Excellent' then '['
+			when 'Normal' then '@'
+			when 'Poor' then '?'
+			else '4'
+
+	else '4'
 
 
 

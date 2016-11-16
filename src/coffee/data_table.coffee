@@ -10,6 +10,11 @@ do ($=jQuery)->
 		@visibleRows = []
 		@availableRows = []
 		@allRows = []
+		@largestBreakdownTotal = 0
+		@searchCriteria = ''
+		@searchParam = 'Item'
+		@currentPage = 1
+
 
 		# ==== Markup =================================================================================
 		@els = {}
@@ -20,8 +25,12 @@ do ($=jQuery)->
 		@els.noResultsMessage = $(markup.noResults()).appendTo(@els.tableOuterwrap)
 		@els.loadingMessage = $(markup.loading()).appendTo(@els.tableOuterwrap)
 		@els.pagination = $(markup.pagination()).appendTo(@els.tableOuterwrap)
+		@els.paginationExtra = @els.pagination.children('.extraIndicator')
+		@els.paginationExtraSelect = @els.paginationExtra.children('select')
+		@els.paginationExtraText = @els.paginationExtraSelect.prev()
+		@els.searchField = $(markup.searchField(@options)).insertBefore(@els.table)
 
-		@els.tableHeading.append(@generateColumns())
+		@els.tableHeading.append(@generateHeadingColumns())
 
 		@els.tableOuterwrap.appendTo @container
 		@els.table.data 'DataTable', @
@@ -49,13 +58,16 @@ do ($=jQuery)->
 		@allRows = data if Array.isArray(data)
 	
 	DataTable::loadData = ()->
+		@unprocessRow(row) for row in @allRows if @allRows.length
 		@fetchData().then (data)=> @setData(data)
 
 
 
 
 
-	import '_parts/generators.coffee'
+	import '_parts/methods-general.coffee'
+	import '_parts/methods-row.coffee'
+	import '_parts/methods-specialCells.coffee'
 	import '_parts/attachEvents.coffee'
 	import '_parts/attachBindings.coffee'
 	import '_parts/userActionMethods.coffee'
