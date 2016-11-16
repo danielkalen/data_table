@@ -148,13 +148,15 @@ markup =
 
 
 	actions: ({actions})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions'>#{actions}</div>
+		<div class='#{DataTable.defaults.baseClass}-actions'>
+			<div class='#{DataTable.defaults.baseClass}-actions-popup'>#{actions}</div>
+		</div>
 	"
 
 	actionsItem: ({action, icon, label})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-item _actionButton' data-action='#{action}'>
-			<div class='#{DataTable.defaults.baseClass}-actions-item-icon'>#{icon}</div>
-			<div class='#{DataTable.defaults.baseClass}-actions-item-text'>#{label}</div>
+		<div class='#{DataTable.defaults.baseClass}-actions-popup-item _actionButton' data-action='#{action}'>
+			<div class='#{DataTable.defaults.baseClass}-actions-popup-item-icon'>#{icon}</div>
+			<div class='#{DataTable.defaults.baseClass}-actions-popup-item-text'>#{label}</div>
 		</div>
 	"
 
