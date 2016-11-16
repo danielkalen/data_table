@@ -6129,7 +6129,6 @@
               'extraClasses': helpers.genCellClassname(column),
               'style': helpers.genCellStyle(column),
               'value': (function() {
-                var name, ref1;
                 switch (false) {
                   case column.type !== 'fields':
                     return _this.generateInlineFields(cellValue);
@@ -6144,7 +6143,11 @@
                   case !column.isLink:
                     return "<a href='" + cellValue + "' target='_blank'>" + cellValue + "</a>";
                   default:
-                    return ((ref1 = _this.options.formatters) != null ? typeof ref1[name = column.label] === "function" ? ref1[name](cellValue) : void 0 : void 0) || cellValue;
+                    if (column.formatter) {
+                      return column.formatter(cellValue);
+                    } else {
+                      return cellValue;
+                    }
                 }
               })()
             });
@@ -6560,7 +6563,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '1.0.3';
+  DataTable.version = '2.0.0';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
