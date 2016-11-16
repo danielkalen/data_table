@@ -38,7 +38,7 @@ DataTable::attachEvents = ()->
 			action = button$.data('action')
 			itemID = itemRow$.data('row-id')
 			itemIndex = itemRow$.data('index')
-			dataItem = if itemID then @allRows.find (row)=> row[@options.uniqueID] is itemID
+			dataItem = if itemID then @allRows.find (row)=> helpers.compareValues(row[@options.uniqueID], itemID)
 
 			@els.table.trigger "action.#{action}", {itemID, 'data':dataItem}
 
