@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/danielkalen/data_table#readme",
   "dependencies": {
-    "@danielkalen/sass-base": "^1.1.0",
+    "@danielkalen/sass-base": "^1.1.1",
     "@danielkalen/simplybind": "^1.7.1",
     "bluebird": "^3.4.6"
   }
