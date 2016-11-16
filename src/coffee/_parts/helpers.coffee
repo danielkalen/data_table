@@ -12,6 +12,19 @@ helpers.compareValues = (valueA, valueB)-> switch
 		valueA is parseFloat(valueB)
 
 
+helpers.toggleActionsPopup = (actionsPopup$)->
+	isOpen = actionsPopup$.data 'isOpen'
+
+	if isOpen
+		actionsPopup$.data('overlay').remove()
+		actionsPopup$.removeClass 'is_visible'
+	else
+		actionsPopup$.data 'overlay', overlay$ = $(markup.actionsOverlay())
+		actionsPopup$.addClass 'is_visible'
+		overlay$.appendTo(document.body).one 'click', ()-> helpers.toggleActionsPopup(actionsPopup$)
+
+	actionsPopup$.data 'isOpen', !isOpen
+
 
 helpers.getBreakdownTotal = (breakdown, breakdownKeys)-> switch
 	when breakdownKeys.length is 0 then 0

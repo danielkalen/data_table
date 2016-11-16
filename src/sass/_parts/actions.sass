@@ -1,12 +1,70 @@
 &-actions
-	position: absolute
-	top: 30px
-	opacity: 0
-	+transform(scale(0.1))
-	+transform-origin(50% 0)
-	+transitionTransform($time:0.3s, $easing:$ease-in-out-circ, $additional:opacity 0.3s $ease-in-out-circ)
-	&.is_visible
-		opacity: 1
-		+transform(scale(1))
+	$buttonWidth: 30px
+	position: relative
+	z-index: 201
+	width: $buttonWidth
 
-	&-item
+	&-overlay
+		position: fixed
+		z-index: 200
+		top: 0
+		left: 0
+		width: 100vw
+		height: 100vh
+		cursor: default
+
+	&-popup
+		$bgColorActive: fade-out($subberwhite, 0.15)
+		$bgColor: fade-out(white, 0.15)
+		$popupWidth: 178px
+		$iconWidth: 50px
+		$borderRadius: 8px
+		$animationTime: 0.25s
+		position: absolute
+		top: 15px
+		left: (($popupWidth - $buttonWidth)/2) * -1
+		width: $popupWidth
+		border-radius: $borderRadius
+		+arrow($side: "top", $align: "center", $size: 7px, $color: $bgColor, $borderColor: $subwhite, $borderSize: 3px)
+		box-shadow: 0px 3px 18px rgba(0,0,0,0.24)
+		opacity: 0
+		+transform(scale(0.1))
+		+transform-origin(50% 0)
+		+transitionTransform($time:$animationTime, $easing:$ease-in-out-circ, $additional:opacity $animationTime $ease-in-out-circ)
+		&.is_visible
+			opacity: 1
+			+transform(scale(1))
+
+		&-item
+			position: relative
+			height: 41px
+			background-color: $bgColor
+			border-bottom: 1px solid #cacaca
+			+clearfix
+			&:first-child
+				border-radius: $borderRadius $borderRadius 0 0
+			&:last-child
+				border-radius: 0 0 $borderRadius $borderRadius
+				border-bottom: 0
+			&:hover
+				background-color: $bgColorActive
+
+			
+			&-icon,
+			&-text
+				position: relative
+				+valign(56%)
+				float: left
+			
+			&-icon
+				width: $iconWidth
+				font-size: 19px
+				text-align: center
+
+			&-text
+				+ellipsis(85%)
+				top: 57%
+				width: $popupWidth - $iconWidth
+				display: block
+				text-align: left
+				font-size: 14.2px

@@ -30,8 +30,7 @@ DataTable::attachEvents = ()->
 	@els.tableBody.on 'click', '._actionButton', (event)=>
 		button$ = $(event.currentTarget)
 		if button$.hasClass('_isMulti')
-			subActions$ = button$.next()
-			subActions$.toggleClass('is_visible')
+			helpers.toggleActionsPopup(button$.next().children())
 		
 		else
 			itemRow$ = button$.closest('._tableRow')
