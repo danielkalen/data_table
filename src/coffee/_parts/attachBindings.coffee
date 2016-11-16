@@ -7,7 +7,11 @@ DataTable::attachBindings = ()->
 	
 	SimplyBind('loading').of(@state)
 		.to('className.isVisible').of(@els.loadingMessage).transform (loading)-> if loading then 'is_visible' else ''
-		.and.to (loading)=> @state.noResults = false if loading
+		.and.to (loading)=>
+			if loading
+				@state.noResults = false
+			else
+				@state.noResults = !@visibleRows.length
 	
 	
 
@@ -25,7 +29,7 @@ DataTable::attachBindings = ()->
 				@processRow(row)
 				row.visible = true
 			
-			@state.noResults = rows.length is 0
+			@state.noResults = !rows.length
 		
 		.and.to (rows)=> if @hasBreakdownBar
 			for row in rows
@@ -39,6 +43,7 @@ DataTable::attachBindings = ()->
 		.to (rows)=>
 			@searchCriteria = ''
 			@currentPage = 1
+			@state.noResults = !rows.length
 
 	SimplyBind('availableRows', {updateOnBind:false, updateEvenIfSame:true}).of(@)
 		.to (rows)=> @calcPageCount(rows)
@@ -126,6 +131,7 @@ DataTable::attachBindings = ()->
 
 
 	SimplyBind('searchParam').of(@)
+		.transformSelf (searchParam)-> if searchParam then searchParam else 'Item'
 		.to('textContent.searchTerm').of(@els.noResultsMessage)
 		.and.to('textContent.searchTermSmall').of(@els.noResultsMessage)
 			.transform (searchTerm)-> searchTerm?.toLowerCase() or searchTerm

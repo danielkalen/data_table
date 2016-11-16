@@ -12,7 +12,7 @@ do ($=jQuery)->
 		@allRows = []
 		@largestBreakdownTotal = 0
 		@searchCriteria = ''
-		@searchParam = 'Item'
+		@searchParam = ''
 		@currentPage = 1
 
 
@@ -52,7 +52,6 @@ do ($=jQuery)->
 		@state.loading = true
 		@options.data().then (data)=>
 			@state.loading = false
-			@state.noResults = !data?.length
 			Promise.resolve(data)
 
 	DataTable::setData = (data)->
