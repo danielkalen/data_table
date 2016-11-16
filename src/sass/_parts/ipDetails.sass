@@ -1,5 +1,6 @@
 &-ipDetails
 	padding: 0 25px
+	position: relative
 
 	&-trigger
 		position: relative
@@ -7,7 +8,6 @@
 		top: 2px
 		width: 15px
 		height: 15px
-		background-color: lighten($grey-lighter, 13)
 		background-color: $black
 		box-sizing: border-box
 		border-radius: 50%
@@ -28,45 +28,58 @@
 	
 
 	&-content
+		$bgColor: $subberwhite
 		position: absolute
 		z-index: 10
 		+halign
 		top: 33px
 		display: block
-		padding: 6px 8px 5px
-		border-radius: 2px
-		background-color: $black
+		padding: 10px 10px 6px
+		border-radius: 3px
+		background-color: $bgColor
 		font-weight: 600
 		line-height: 1
 		font-size: 11.2px
 		letter-spacing: .4px
 		text-transform: uppercase
-		color: white
-		+arrow($side: "top", $align: "center", $size: 5px, $color: $black, $borderColor: "none", $borderSize: 3px)
+		color: $black
+		+arrow($side: "top", $align: "center", $size: 7px, $color: $bgColor, $borderColor: $subwhite, $borderSize: 3px)
+		box-shadow: 0px 4px 18px rgba(0,0,0,0.24)
 		opacity: 0
 		visibility: hidden
 		transition: opacity 0.20s linear 0.25s, visibility 0.20s linear 0.25s
-		.ready &
+		._isReady &
 			width: 200px
-			padding: 10px
 			box-sizing: border-box
+			padding: 0
 			font-size: 11px
 			text-align: left
 			text-transform: none
 
 
 		&-item
-			margin-top: 10px
-			&:first-child
-				margin-top: 0
+			display: table
+			table-layout: fixed
+			width: 100%
+			max-width: 100%
+			padding: 10px 8px 6px
+			border-bottom: 1px solid #cacaca
+			line-height: 1
+			box-sizing: border-box
+			&:last-child
+				border-bottom: 0
 			
 			&-label
-				display: inline
-				font-weight: 600
+				display: table-cell
+				font-weight: 700
+				text-align: left
 
 			&-value
-				display: inline
-				font-weight: 400
+				+ellipsis(100%)
+				width: 60%
+				display: table-cell
+				font-weight: 500
+				text-align: right
 
 
 
