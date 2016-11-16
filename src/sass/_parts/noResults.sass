@@ -9,6 +9,7 @@
 	cursor: default
 	opacity: 0
 	visibility: hidden
+	pointer-events: none
 	&.is_visible
 		opacity: 1
 		visibility: visible
@@ -24,7 +25,6 @@
 		top: 0
 		left: 0
 		+inheritSize
-		padding-bottom: 54px
 		background-color: white
 		opacity: 0.85
 		transition: opacity 0.25s, visibility 0.25s
@@ -34,7 +34,6 @@
 		position: absolute
 		z-index: 2
 		+valign
-		margin-top: 25px
 		width: 100%
 		text-align: center
 
