@@ -40,17 +40,17 @@ markup =
 
 	pagination: ()-> "
 		<div class='#{DataTable.defaults.baseClass}-pagination {{hasExtra}} {{isVisible}}'>
-			<div class='#{DataTable.defaults.baseClass}-pagination-item _back'>
+			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _back'>
 				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
 			</div>
 
 			<div class='#{DataTable.defaults.baseClass}-pagination-itemswrap _paginationItems'></div>
 
-			<div class='#{DataTable.defaults.baseClass}-pagination-item _extraIndicator'>
+			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _extraIndicator'>
 				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
 				<select class='#{DataTable.defaults.baseClass}-pagination-item-select'></select>
 			</div>
-			<div class='#{DataTable.defaults.baseClass}-pagination-item _next'>
+			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _next'>
 				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
 			</div>
 		</div>

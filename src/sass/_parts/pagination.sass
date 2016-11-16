@@ -6,6 +6,9 @@
 	&.is_visible
 		opacity: 1
 
+	&-itemswrap
+		float: left
+
 	&-item
 		position: relative
 		float: left
@@ -26,6 +29,11 @@
 		&.current &-text
 			font-weight: 400
 
+		&._extraIndicator
+			display: none
+			.has_extra &
+				display: block
+
 
 
 		&-text
@@ -37,22 +45,22 @@
 			font-size: 11px
 			line-height: 1
 			text-align: center
-			.back &,
-			.next &
+			._back &,
+			._next &
 				top: 53%
 
-			.back &:after,
-			.next &:after
+			._back &:after,
+			._next &:after
 				font-weight: 400
 				font-size: 15px
 				opacity: 0.3
 				// font-size: 9px
 				// opacity: 0.6
 
-			.back &:after
+			._back &:after
 				+icon('q', 'dtcons')
 				// +icon('o', 'dtcons')
-			.next &:after
+			._next &:after
 				+icon('r', 'dtcons')
 				// +icon('p', 'dtcons')
 

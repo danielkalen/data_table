@@ -1,6 +1,6 @@
 DataTable::calcPageCount = (rows)->
 	@pageCountReal = Math.ceil rows.length/@options.perPage
-	@pageCount = if @pageCountReal > 5 then 5 else @pageCountReal
+	@pageCount = if @pageCountReal > @options.pageCountMax then @options.pageCountMax else @pageCountReal
 
 
 
@@ -38,5 +38,40 @@ DataTable::sortRows = (rows)-> switch
 
 	else rows
 	
+
+
+DataTable::setVisiblePage = (targetPage)->
+	targetPage-- # Dec by 1 for array-index style
+	slice =
+		'start': targetPage*@options.perPage
+		'end': (targetPage*@options.perPage)+@options.perPage
+	
+	rowsToReveal = @availableRows[slice.start ... slice.end]
+	rowsToHide = @visibleRows.slice()
+
+	row.visible = false for row in rowsToHide
+	@visibleRows.length = 0
+	@visibleRows.push.apply @visibleRows, rowsToReveal
+
+
+
+
+DataTable::setPageIndicator = (targetPage)->
+	targetPage = 1 if targetPage is '...'
+	targetPage = if targetPage > @options.pageCountMax then @options.pageCountMax else targetPage-1 # 0-based index so we subtract 1
+	pageItems$ = @els.pagination.find('._paginationItem').slice(1,-1)
+	matchedPageEl$ = pageItems$.eq targetPage
+	
+	matchedPageEl$.addClass 'current'
+	pageItems$.not(matchedPageEl$).removeClass 'current'	
+
+
+
+
+
+
+
+
+
 
 

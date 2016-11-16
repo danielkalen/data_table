@@ -2,11 +2,13 @@ DataTable::attachBindings = ()->
 	## ==========================================================================
 	## State
 	## ========================================================================== 
+	SimplyBind('noResults').of(@state)
+		.to('className.isVisible').of(@els.noResultsMessage).transform (noResults)=> if noResults and not @state.loading then 'is_visible' else ''
+	
 	SimplyBind('loading').of(@state)
 		.to('className.isVisible').of(@els.loadingMessage).transform (loading)-> if loading then 'is_visible' else ''
+		.and.to (loading)=> @state.noResults = false if loading
 	
-	SimplyBind('noResults').of(@state)
-		.to('className.isVisible').of(@els.noResultsMessage).transform (noResults)-> if noResults then 'is_visible' else ''
 	
 
 
@@ -46,7 +48,7 @@ DataTable::attachBindings = ()->
 	## Pagination
 	## ========================================================================== 
 	SimplyBind('pageCount').of(@)
-		.to('innerHTML.pages').of(@els.pagination) # Render pagination
+		.to('innerHTML').of(@els.paginationItems) # Render pagination
 			.transform (count)->
 				paginationItems = ''
 				for value in [1..count]
@@ -54,58 +56,42 @@ DataTable::attachBindings = ()->
 
 				return paginationItems
 
-		.and.to('className.hasExtra').of(@els.pagination).transform ()=> if @pageCountReal > 5 then 'has_extra' else ''
 		.and.to('className.isVisible').of(@els.pagination).transform (count)-> if count > 1 then 'is_visible' else ''
 	
 
 	SimplyBind('pageCountReal').of(@)
 		.to('innerHTML').of(@els.paginationExtraSelect)
-			.transform (count)=>
-				options = '<option>...</option>'
-				options += "<option>#{index}</option>" for index in [6..count]
-				return options
+			.transform (realCount)=>
+				if realCount <= @options.pageCountMax then ''
+				else
+					options = '<option>...</option>'
+					options += "<option>#{index}</option>" for index in [(@options.pageCountMax+1)..realCount]
+					return options
+		
+		.and.to('className.hasExtra').of(@els.pagination).transform (realCount)=> if realCount > @options.pageCountMax then 'has_extra' else ''
 
 
 
 	# ==== Extra Indicator/Pages =================================================================================
-	SimplyBind('value', {'updateOnBind':false}).of(@els.paginationExtraSelect)
+	SimplyBind('value', updateOnBind:false).of(@els.paginationExtraSelect)
 		.to('innerHTML').of(@els.paginationExtraText)
 		.and.to('currentPage').of(@)
-			.transform (newValue)-> if newValue is '...' then 1 else parseFloat(newValue)
 
 
 
 
 	# ==== Current Page =================================================================================
 	SimplyBind('currentPage', updateEvenIfSame:true).of(@)
+		.transformSelf (currentPage)=>
+			currentPage = if currentPage is '...' then 1 else parseFloat(currentPage)
+			return if currentPage > @pageCountReal then @pageCountReal else currentPage
+		
 		.to('value').of(@els.paginationExtraSelect)
-			.transform (currentPage)=> if currentPage > @pageCountMax then currentPage else '...'
+			.transform (currentPage)=> if currentPage > @options.pageCountMax then currentPage else '...'
 		
-		# ==== Page visibility =================================================================================
 		.and.to (currentPage)=>
-			currentPage-- # Dec by 1 for array-index style
-			slice =
-				'start': currentPage*@options.perPage
-				'end': (currentPage*@options.perPage)+@options.perPage
-			
-			rowsToReveal = @availableRows[slice.start ... slice.end]
-			rowsToHide = @visibleRows.slice()
-
-			row.visible = false for row in rowsToHide
-			@visibleRows.length = 0
-			@visibleRows.push.apply @visibleRows, rowsToReveal
-			return
-		
-		
-		# ==== Pagination highlight =================================================================================
-		.and.to (currentPage)=>
-			currentPage = 1 if currentPage is '...'
-			currentPage = if currentPage > @pageCountMax then @pageCountMax else currentPage-1 # 0-based index so we subtract 1
-			pageItems$ = @els.pagination.find('._paginationItem').slice(1,-1) # Slice out the first & last buttons (Next/Prev buttons)
-			matchedPageEl$ = pageItems$.eq currentPage
-			
-			matchedPageEl$.addClass 'current'
-			pageItems$.not(matchedPageEl$).removeClass 'current'	
+			@setVisiblePage(currentPage)
+			@setPageIndicator(currentPage)
 
 
 

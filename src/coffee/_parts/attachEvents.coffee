@@ -9,9 +9,9 @@ DataTable::attachEvents = ()->
 	# ==== Pagination =================================================================================
 	@els.pagination.on 'click', '._paginationItem', (event)=>
 		$this = $(event.currentTarget)
-		isBack = $this.hasClass('back')
-		isNext = $this.hasClass('next')
-		isExtra = $this.hasClass('extra_indicator')
+		isBack = $this.hasClass('_back')
+		isNext = $this.hasClass('_next')
+		isExtra = $this.hasClass('_extraIndicator')
 
 		if isBack
 			@currentPage-- unless @currentPage is 1
