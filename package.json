@@ -14,18 +14,19 @@
     "simplywatch": "^2.2.0",
     "uglify-js": "^2.6.2"
   },
+  "sassFns": "node_modules/@danielkalen/sass-base/compiler-fns.js",
   "scripts": {
     "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
     "build": "npm run compile && npm run minify",
     "compile": "npm run compile:js && npm run compile:sass",
     "compile:js": "foreach -g 'src/coffee/*.coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js'",
-    "compile:sass": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed {{path}} --output dist/css/'",
-    "compile:sass:pretty": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions ./sass-fns.js -x --output-style nested {{path}} --output dist/css/'",
+    "compile:sass": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style compressed {{path}} --output dist/css/'",
+    "compile:sass:pretty": "foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style nested {{path}} --output dist/css/'",
     "minify": "closure-service dist/js/data_table.pretty.js > dist/js/data_table.js",
     "watch": "npm run watch:js & npm run watch:sass",
     "watch:js": "simplywatch 'src/coffee/*.coffee' -e 'coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js && uglifyjs dist/js/{{name}}.pretty.js -m -c keep_fargs,unused=false > dist/js/{{name}}.js'",
     "watch:sass": "simplywatch 'src/sass/*.sass' -e 'sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed {{path}} --output dist/css/'",
-    "takana": "takana -f $(pwd)/sass-fns.js $(pwd)/src/sass"
+    "takana": "takana -f $(pwd)/$npm_package_sassFns $(pwd)/src/sass"
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,7 @@
   },
   "homepage": "https://github.com/danielkalen/data_table#readme",
   "dependencies": {
-    "@danielkalen/sass-base": "^1.3.0",
+    "@danielkalen/sass-base": "^1.3.1",
     "@danielkalen/simplybind": "^1.7.1",
     "bluebird": "^3.4.6"
   }
