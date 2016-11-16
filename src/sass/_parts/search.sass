@@ -9,7 +9,7 @@ $selectWidth: 37px
 		display: block
 
 	&:before // icon
-		+icon('R')
+		+iconPseudo('R')
 		position: absolute
 		z-index: 3
 		+valign(54%)
@@ -29,7 +29,6 @@ $selectWidth: 37px
 	
 	
 	&-select_trigger
-		// +icon('R')
 		position: absolute
 		z-index: 4
 		+valign(54%)
@@ -39,47 +38,12 @@ $selectWidth: 37px
 		color: lighten($grey, 10)
 		cursor: pointer
 
-		// &:before
-		// 	content: ''
-		// 	position: absolute
-		// 	top: 0
-		// 	left: 0
-		// 	+inheritSize
-		// 	background-color: lighten($grey, 45)
-		// 	padding-right: 4px
-		// 	// padding: 1px
-
 		&:after
-			+icon('g')
+			+iconPseudo('g')
 			position: absolute
 			+valign(48%)
 			right: 0px
 			font-size: 12px
-
-		// &:after
-		// 	+icon('\25bc')
-		// 	// font-family: proxima
-		// 	position: absolute
-		// 	// +valign(47%)
-		// 	top: 47%
-		// 	right: 3px
-		// 	font-size: 6px
-		// 	+transform(scaleX(1.5) translateY(-47%))
-
-		// &:after,
-		// &:after
-		// 	+icon('')
-		// 	position: absolute
-		// 	font-size: 11px
-		// 	right: 0px
-		
-		// &:after
-		// 	content: '\e010'
-		// 	top: 5px
-		// &:after
-		// 	content: '\e013'
-		// 	bottom: 5px
-
 
 
 
@@ -95,7 +59,6 @@ $selectWidth: 37px
 		margin: 0 !important
 		padding: 0 !important
 		opacity: 0 !important
-		// visibility: hidden
 
 
 	&-input
