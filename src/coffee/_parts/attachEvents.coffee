@@ -1,12 +1,12 @@
 DataTable::attachEvents = ()->
 	# ==== Table head sorting listeners =================================================================================
-	@els.tableHeading.on 'click', 'th.is_sortable', (event)=> @sortBy event.currentTarget.dataset.slug
+	@els.tableHeading.on 'click', '._isSortable', (event)=> @sortBy event.currentTarget.dataset.slug
 
 
 
 
 	# ==== Action button event listeners =================================================================================
-	@els.tableBody.on 'click', '.data_table-actions-button', (event)=>
+	@els.tableBody.on 'click', '._actionButton', (event)=>
 		$button = $(event.currentTarget)
 		$itemRow = $button.closest('tr')
 		action = $button.data('action')
@@ -21,7 +21,7 @@ DataTable::attachEvents = ()->
 
 
 	# ==== Row expansion listeners =================================================================================
-	@els.tableBody.on 'click', '.data_table-body-row-cell-expand', (event)=>
+	@els.tableBody.on 'click', '.__expandButton', (event)=>
 		$button = $(event.currentTarget)
 		$row = $button.closest('tr')
 		rowID = $row.data 'row-id'
@@ -45,7 +45,7 @@ DataTable::attachEvents = ()->
 			matchedPageEl$.addClass('current').siblings().removeClass('current')
 		
 
-	@els.pagination.on 'click', '.data_table-pagination-item', (event)=> # Setting currentPage on click
+	@els.pagination.on 'click', '._paginationItem', (event)=> # Setting currentPage on click
 		$this = $(event.currentTarget)
 		isBack = $this.hasClass('back')
 		isNext = $this.hasClass('next')

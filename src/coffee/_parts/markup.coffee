@@ -52,7 +52,7 @@ markup =
 
 
 	paginationItem: ({value})-> "
-		<div class='#{DataTable.defaults.baseClass}-pagination-item'>
+		<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem'>
 			<div class='#{DataTable.defaults.baseClass}-pagination-item-text'>#{value}</div>
 		</div>
 	"
@@ -127,7 +127,7 @@ markup =
 	"
 
 	actionsItem: ({action, icon, label, color='grey'})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-button color_#{color}' data-action='#{action}' data-icon='#{icon}'>
+		<div class='#{DataTable.defaults.baseClass}-actions-button _actionButton color_#{color}' data-action='#{action}' data-icon='#{icon}'>
 			<div class='#{DataTable.defaults.baseClass}-actions-button-text'>#{label}</div>
 		</div>
 	"
