@@ -10,6 +10,20 @@
 	line-height: 1
 	border-bottom: 1px solid $divider
 	box-sizing: border-box
+
+
+	&-innerwrap
+		+ellipsis(100%)
+		display: block
+
+		._isBreakdownBar &,
+		._isIpDetails &,
+		._isButton &,
+			overflow: visible
+
+
+	@import 'body-cell.expandButton'
+
 	._tableRowDrilldown &
 		background-color: $subberwhite
 	&._isBreakdownBar,
@@ -21,7 +35,6 @@
 	.alignment---center &
 		justify-content: center
 	
-	@import 'body-cell.expandButton'
 
 
 	&._hasIcon
@@ -49,13 +62,3 @@
 
 	&._isBreakdownBar
 		cursor: help
-
-
-	&-innerwrap
-		+ellipsis(100%)
-		display: block
-
-		._isBreakdownBar &,
-		._isIpDetails &,
-		._isButton &,
-			overflow: visible
