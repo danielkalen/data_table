@@ -26,7 +26,21 @@ helpers.genHeaderCellStyle = (column)->
 	styleString = ''
 
 	if column.width
-		styleString += "width: #{column.width};"
+		styleString += "max-width: #{column.width};"
+
+	return if styleString then "style='#{styleString}'" else ''
+
+
+
+helpers.genCellStyle = (column)->
+	styleString = ''
+
+	if column.width
+		styleString += "max-width: #{column.width};"
+
+	if column.color
+		color = @colorMapping(column.color, column.colorType)
+		styleString += "style: #{column.style};"
 
 	return if styleString then "style='#{styleString}'" else ''
 
