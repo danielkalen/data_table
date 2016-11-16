@@ -21,7 +21,7 @@ DataTable::attachEvents = ()->
 
 
 	# ==== Row expansion listeners =================================================================================
-	@els.tableBody.on 'click', '.__expandButton', (event)=>
+	@els.tableBody.on 'click', '._expandButton', (event)=>
 		$button = $(event.currentTarget)
 		$row = $button.closest('tr')
 		rowID = $row.data 'row-id'
