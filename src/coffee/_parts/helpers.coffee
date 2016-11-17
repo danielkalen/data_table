@@ -77,7 +77,10 @@ helpers.genCellStyle = (column)->
 
 	if column.color
 		color = @colorMapping(column.color, column.colorType)
-		styleString += "style: #{column.style};"
+		styleString += "color: #{color};"
+
+	if column.customStyle
+		styleString += column.customStyle
 
 	return if styleString then "style='#{styleString}'" else ''
 
