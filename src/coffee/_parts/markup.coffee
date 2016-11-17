@@ -159,8 +159,8 @@ markup =
 		<div class='#{DataTable.defaults.baseClass}-actions-overlay'></div>
 	"
 
-	actionsItem: ({action, icon, label})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-popup-item _actionButton' data-action='#{action}'>
+	actionsItem: ({action, icon, label, customIconStyle=''})-> "
+		<div class='#{DataTable.defaults.baseClass}-actions-popup-item _actionButton' data-action='#{action}' style='#{customIconStyle}'>
 			<div class='#{DataTable.defaults.baseClass}-actions-popup-item-icon'>#{icon}</div>
 			<div class='#{DataTable.defaults.baseClass}-actions-popup-item-text'>#{label}</div>
 		</div>
