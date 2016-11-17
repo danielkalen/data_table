@@ -5551,9 +5551,9 @@
       return "<div class='" + DataTable.defaults.baseClass + "-actions-overlay'></div>";
     },
     actionsItem: function(arg) {
-      var action, icon, label;
-      action = arg.action, icon = arg.icon, label = arg.label;
-      return "<div class='" + DataTable.defaults.baseClass + "-actions-popup-item _actionButton' data-action='" + action + "'> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
+      var action, customIconStyle, icon, label, ref;
+      action = arg.action, icon = arg.icon, label = arg.label, customIconStyle = (ref = arg.customIconStyle) != null ? ref : '';
+      return "<div class='" + DataTable.defaults.baseClass + "-actions-popup-item _actionButton' data-action='" + action + "' style='" + customIconStyle + "'> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
     }
   };
   defaults = {
@@ -6569,7 +6569,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.0.1';
+  DataTable.version = '2.1.0';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
