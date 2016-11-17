@@ -99,6 +99,9 @@ helpers.genCellClassname = (column)->
 	if column.isLink
 		classString += ' _isLink'
 	
+	if column.noEllipsis
+		classString += ' _noEllipsis'
+	
 	if column.color
 		classString += ' _hasColor'
 	

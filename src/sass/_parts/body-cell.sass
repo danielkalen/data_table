@@ -13,8 +13,10 @@
 
 
 	&-innerwrap
-		+ellipsis(100%)
 		display: block
+
+		&:not(._noEllipsis)
+			+ellipsis(100%)
 
 		._isBreakdownBar &,
 		._isIpDetails &,
