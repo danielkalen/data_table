@@ -5667,7 +5667,10 @@
     }
     if (column.color) {
       color = this.colorMapping(column.color, column.colorType);
-      styleString += "style: " + column.style + ";";
+      styleString += "color: " + color + ";";
+    }
+    if (column.customStyle) {
+      styleString += column.customStyle;
     }
     if (styleString) {
       return "style='" + styleString + "'";
@@ -5686,6 +5689,9 @@
     }
     if (column.isLink) {
       classString += ' _isLink';
+    }
+    if (column.noEllipsis) {
+      classString += ' _noEllipsis';
     }
     if (column.color) {
       classString += ' _hasColor';
