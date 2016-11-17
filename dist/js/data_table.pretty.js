@@ -5486,8 +5486,10 @@
     loading: function() {
       return "<div class='" + DataTable.defaults.baseClass + "-loading {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-loading-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-loading-icon'></div> <div class='" + DataTable.defaults.baseClass + "-loading-text'>Loading</div> </div> </div>";
     },
-    noResults: function() {
-      return "<div class='" + DataTable.defaults.baseClass + "-noResults {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-noResults-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-noResults-icon'></div> <div class='" + DataTable.defaults.baseClass + "-noResults-text'> <div class='" + DataTable.defaults.baseClass + "-noResults-text-title'>No {{searchTerm}}s to Display</div> <div class='" + DataTable.defaults.baseClass + "-noResults-text-subtitle'>There are no matching {{searchTermSmall}}s for the search query you've typed.</div> </div> </div> </div>";
+    noResults: function(arg) {
+      var itemPluralLabel, itemSingleLabel, ref, ref1;
+      itemSingleLabel = (ref = arg.itemSingleLabel) != null ? ref : 'Item', itemPluralLabel = (ref1 = arg.itemPluralLabel) != null ? ref1 : itemSingleLabel + 's';
+      return "<div class='" + DataTable.defaults.baseClass + "-noResults {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-noResults-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-noResults-icon'></div> <div class='" + DataTable.defaults.baseClass + "-noResults-text'> <div class='" + DataTable.defaults.baseClass + "-noResults-text-title'>No " + itemSingleLabel + "s to Display</div> <div class='" + DataTable.defaults.baseClass + "-noResults-text-subtitle'>There are no matching " + itemPluralLabel + " for the search query you've typed.</div> </div> </div> </div>";
     },
     pagination: function() {
       return "<div class='" + DataTable.defaults.baseClass + "-pagination {{hasExtra}} {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _back'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-itemswrap _paginationItems'></div> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _extraIndicator'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> <select class='" + DataTable.defaults.baseClass + "-pagination-item-select'></select> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _next'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> </div>";
@@ -5887,7 +5889,7 @@
     this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.tableHeading = this.els.table.children().first().children();
     this.els.tableBody = this.els.table.children().last();
-    this.els.noResultsMessage = $(markup.noResults()).appendTo(this.els.tableOuterwrap);
+    this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.loadingMessage = $(markup.loading()).appendTo(this.els.tableOuterwrap);
     this.els.pagination = $(markup.pagination()).appendTo(this.els.tableOuterwrap);
     this.els.paginationItems = this.els.pagination.children('._paginationItems');
@@ -6557,15 +6559,6 @@
         return _this.currentPage = 1;
       };
     })(this));
-    SimplyBind('searchParam').of(this).transformSelf(function(searchParam) {
-      if (searchParam) {
-        return searchParam;
-      } else {
-        return 'Item';
-      }
-    }).to('textContent.searchTerm').of(this.els.noResultsMessage).and.to('textContent.searchTermSmall').of(this.els.noResultsMessage).transform(function(searchTerm) {
-      return (searchTerm != null ? searchTerm.toLowerCase() : void 0) || searchTerm;
-    });
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};

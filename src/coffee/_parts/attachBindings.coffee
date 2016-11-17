@@ -152,13 +152,6 @@ DataTable::attachBindings = ()->
 				@currentPage = 1
 
 
-	SimplyBind('searchParam').of(@)
-		.transformSelf (searchParam)-> if searchParam then searchParam else 'Item'
-		.to('textContent.searchTerm').of(@els.noResultsMessage)
-		.and.to('textContent.searchTermSmall').of(@els.noResultsMessage)
-			.transform (searchTerm)-> searchTerm?.toLowerCase() or searchTerm
-
-
 
 	Promise.resolve()
 

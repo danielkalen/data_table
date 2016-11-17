@@ -25,13 +25,13 @@ markup =
 	"
 
 
-	noResults: ()-> "
+	noResults: ({itemSingleLabel='Item', itemPluralLabel=itemSingleLabel+'s'})-> "
 		<div class='#{DataTable.defaults.baseClass}-noResults {{isVisible}}'>
 			<div class='#{DataTable.defaults.baseClass}-noResults-innerwrap'>
 				<div class='#{DataTable.defaults.baseClass}-noResults-icon'></div>
 				<div class='#{DataTable.defaults.baseClass}-noResults-text'>
-					<div class='#{DataTable.defaults.baseClass}-noResults-text-title'>No {{searchTerm}}s to Display</div>
-					<div class='#{DataTable.defaults.baseClass}-noResults-text-subtitle'>There are no matching {{searchTermSmall}}s for the search query you've typed.</div>
+					<div class='#{DataTable.defaults.baseClass}-noResults-text-title'>No #{itemSingleLabel}s to Display</div>
+					<div class='#{DataTable.defaults.baseClass}-noResults-text-subtitle'>There are no matching #{itemPluralLabel} for the search query you've typed.</div>
 				</div>
 			</div>
 		</div>
