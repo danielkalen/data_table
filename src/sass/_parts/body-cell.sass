@@ -14,9 +14,10 @@
 
 	&-innerwrap
 		display: block
-
-		&:not(._noEllipsis)
-			+ellipsis(100%)
+		+ellipsis(100%)
+		
+		._noEllipsis &
+			white-space: normal
 
 		._isBreakdownBar &,
 		._isIpDetails &,
