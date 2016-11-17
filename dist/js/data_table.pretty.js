@@ -5695,6 +5695,9 @@
     if (column.noEllipsis) {
       classString += ' _noEllipsis';
     }
+    if (column.showOverflow) {
+      classString += ' _showOverflow';
+    }
     if (column.color) {
       classString += ' _hasColor';
     }
@@ -6562,7 +6565,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.1.1';
+  DataTable.version = '2.1.2';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
