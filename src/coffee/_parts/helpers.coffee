@@ -102,6 +102,9 @@ helpers.genCellClassname = (column)->
 	if column.noEllipsis
 		classString += ' _noEllipsis'
 	
+	if column.showOverflow
+		classString += ' _showOverflow'
+	
 	if column.color
 		classString += ' _hasColor'
 	
