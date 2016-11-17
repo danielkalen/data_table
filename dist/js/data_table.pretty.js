@@ -6562,7 +6562,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.1.0';
+  DataTable.version = '2.1.1';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
