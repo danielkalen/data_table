@@ -114,7 +114,7 @@ DataTable::generateRowMarkup = (row, parentRow)->
 						when column.type is 'button' 		then @generateButton((column.action or cellValue), (column.buttonIcon or column.icon))
 						when column.type is 'actions' 		then @generateActions(column)
 						when column.isLink 					then "<a href='#{cellValue}' target='_blank'>#{cellValue}</a>"
-						else (if column.formatter then column.formatter(cellValue) else cellValue)
+						else (if column.formatter then column.formatter(cellValue, row) else cellValue)
 					
 			return rowCells
 
