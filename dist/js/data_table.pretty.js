@@ -5555,7 +5555,7 @@
     actionsItem: function(arg) {
       var action, customIconStyle, icon, label, ref;
       action = arg.action, icon = arg.icon, label = arg.label, customIconStyle = (ref = arg.customIconStyle) != null ? ref : '';
-      return "<div class='" + DataTable.defaults.baseClass + "-actions-popup-item _actionButton' data-action='" + action + "' style='" + customIconStyle + "'> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
+      return "<div class='" + DataTable.defaults.baseClass + "-actions-popup-item _actionButton _subActionButton' data-action='" + action + "' style='" + customIconStyle + "'> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + DataTable.defaults.baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
     }
   };
   defaults = {
@@ -6343,6 +6343,9 @@
           }) : void 0;
           if (dataItem == null) {
             dataItem = itemID;
+          }
+          if (button$.hasClass('_subActionButton')) {
+            helpers.toggleActionsPopup(button$.parent());
           }
           return _this.els.table.trigger("action." + action, dataItem);
         }
