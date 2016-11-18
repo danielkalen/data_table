@@ -1,11 +1,5 @@
 DataTable::processRow = (row)-> if row.processed then row else
-	row.el = $ @generateRow(row)
-	row.drilldownEls = row.el.children('._tableRowDrilldown').children()
-	row.breakdownBarEl = if @hasBreakdownBar then row.el.children('.is_breakdown_bar').children().children()
-	row.visible = false
-	row.drilldownOpen = false
-
-	row.el.data 'row', row
+	@generateRow(row)
 
 	SimplyBind('visible', updateEvenIfSame:true).of(row)
 		.to (isVisible, prevValue)=>
@@ -16,11 +10,6 @@ DataTable::processRow = (row)-> if row.processed then row else
 
 				if @hasBreakdownBar and not row.updatedBreakdownWidth and isVisible isnt prevValue
 					row.breakdownBarWidth = helpers.getBreakdownBarWidth(row, @largestBreakdownTotal)
-
-
-	SimplyBind('drilldownOpen').of(row)
-		.to('className.drilldownOpen').of(row.el)
-			.transform (drilldownOpen)-> if drilldownOpen then 'drilldown_is_open' else ''
 				
 
 	if @hasBreakdownBar and row.breakdownBarEl.length
@@ -63,11 +52,22 @@ DataTable::unprocessRow = (row)-> if row.processed
 
 
 
+DataTable::reRenderRow = (row)->
+	@generateRow(row)
 
 
 
 DataTable::generateRow = (row)->
-	output = @generateRowMarkup(row)
+	prevRowEl = row.el
+	newRowEl = row.el = $ @generateRowMarkup(row)
+	prevRowEl.replaceWith(newRowEl) if prevRowEl
+	
+	row.drilldownEls = row.el.children('._tableRowDrilldown').children()
+	row.breakdownBarEl = if @hasBreakdownBar then row.el.children('.isBreakdownBar').children().children()
+	row.visible = false unless prevRowEl
+	row.drilldownOpen = false
+
+	row.el.data 'row', row
 	
 	if row.drilldown
 		@els.table.addClass('isExpandingTable')
@@ -75,8 +75,10 @@ DataTable::generateRow = (row)->
 		if @hasBreakdownBar
 			row.drilldown.largestBreakdownTotal = Math.max.apply null, row.drilldown.map (subRow)-> subRow.breakdownBarTotal
 
-	return output
 
+	SimplyBind('drilldownOpen').of(row)
+		.to('className.drilldownOpen').of(row.el)
+			.transform (drilldownOpen)-> if drilldownOpen then 'drilldown_is_open' else ''
 
 
 
