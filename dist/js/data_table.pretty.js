@@ -6019,12 +6019,7 @@
     if (row.processed) {
       return row;
     } else {
-      row.el = $(this.generateRow(row));
-      row.drilldownEls = row.el.children('._tableRowDrilldown').children();
-      row.breakdownBarEl = this.hasBreakdownBar ? row.el.children('.is_breakdown_bar').children().children() : void 0;
-      row.visible = false;
-      row.drilldownOpen = false;
-      row.el.data('row', row);
+      this.generateRow(row);
       SimplyBind('visible', {
         updateEvenIfSame: true
       }).of(row).to((function(_this) {
@@ -6039,13 +6034,6 @@
           }
         };
       })(this));
-      SimplyBind('drilldownOpen').of(row).to('className.drilldownOpen').of(row.el).transform(function(drilldownOpen) {
-        if (drilldownOpen) {
-          return 'drilldown_is_open';
-        } else {
-          return '';
-        }
-      });
       if (this.hasBreakdownBar && row.breakdownBarEl.length) {
         SimplyBind('largestBreakdownTotal').of(this).to('updatedBreakdownWidth').of(row).transform(function() {
           if (row.visible) {
@@ -6093,9 +6081,23 @@
       return delete row.processed;
     }
   };
+  DataTable.prototype.reRenderRow = function(row) {
+    return this.generateRow(row);
+  };
   DataTable.prototype.generateRow = function(row) {
-    var output;
-    output = this.generateRowMarkup(row);
+    var newRowEl, prevRowEl;
+    prevRowEl = row.el;
+    newRowEl = row.el = $(this.generateRowMarkup(row));
+    if (prevRowEl) {
+      prevRowEl.replaceWith(newRowEl);
+    }
+    row.drilldownEls = row.el.children('._tableRowDrilldown').children();
+    row.breakdownBarEl = this.hasBreakdownBar ? row.el.children('.isBreakdownBar').children().children() : void 0;
+    if (!prevRowEl) {
+      row.visible = false;
+    }
+    row.drilldownOpen = false;
+    row.el.data('row', row);
     if (row.drilldown) {
       this.els.table.addClass('isExpandingTable');
       if (this.hasBreakdownBar) {
@@ -6104,7 +6106,13 @@
         }));
       }
     }
-    return output;
+    return SimplyBind('drilldownOpen').of(row).to('className.drilldownOpen').of(row.el).transform(function(drilldownOpen) {
+      if (drilldownOpen) {
+        return 'drilldown_is_open';
+      } else {
+        return '';
+      }
+    });
   };
   DataTable.prototype.generateRowMarkup = function(row, parentRow) {
     var isSub;
@@ -6565,7 +6573,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.1.3';
+  DataTable.version = '2.2.0';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
