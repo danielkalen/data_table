@@ -6155,7 +6155,7 @@
                     return "<a href='" + cellValue + "' target='_blank'>" + cellValue + "</a>";
                   default:
                     if (column.formatter) {
-                      return column.formatter(cellValue);
+                      return column.formatter(cellValue, row);
                     } else {
                       return cellValue;
                     }
@@ -6565,7 +6565,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.1.2';
+  DataTable.version = '2.1.3';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
