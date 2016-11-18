@@ -30,7 +30,7 @@ DataTable::attachEvents = ()->
 	@els.tableBody.on 'click', '._actionButton', (event)=>
 		button$ = $(event.currentTarget)
 		if button$.hasClass('_isMulti')
-			helpers.toggleActionsPopup(button$.next().children())
+			helpers.toggleActionsPopup button$.next().children()
 		
 		else
 			itemRow$ = button$.closest('._tableRow')
@@ -39,6 +39,9 @@ DataTable::attachEvents = ()->
 			itemIndex = itemRow$.data('index')
 			dataItem = if itemID then @allRows.find (row)=> helpers.compareValues(row[@options.uniqueID], itemID)
 			dataItem ?= itemID
+
+			if button$.hasClass('_subActionButton')
+				helpers.toggleActionsPopup button$.parent()
 
 			@els.table.trigger "action.#{action}", dataItem
 
