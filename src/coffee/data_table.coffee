@@ -37,7 +37,7 @@ do ($=jQuery)->
 
 		@els.tableOuterwrap.appendTo @container
 		@els.table.data 'DataTable', @
-		@els.table[0].style.minWidth = "#{@options.minWidth}" if @options.minWidth
+		@els.table[0].style.minWidth = "#{@options.minWidth}px" if @options.minWidth
 
 
 
