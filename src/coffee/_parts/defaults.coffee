@@ -1,6 +1,7 @@
 defaults = 
 	'perPage': 20
 	'pageCountMax': 10
+	'minWidth': 736
 	'columns': []
 	'search': []
 	'percentage': {}
