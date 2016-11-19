@@ -434,7 +434,7 @@
     this.els.tableOuterwrap.appendTo(this.container);
     this.els.table.data('DataTable', this);
     if (this.options.minWidth) {
-      this.els.table[0].style.minWidth = "" + this.options.minWidth;
+      this.els.table[0].style.minWidth = this.options.minWidth + "px";
     }
     Promise.bind(this).then(this.attachEvents).then(this.attachBindings).then(this.loadData);
     return this;
@@ -1107,7 +1107,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.2.0';
+  DataTable.version = '2.3.0';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
