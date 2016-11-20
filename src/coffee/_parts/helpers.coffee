@@ -64,6 +64,9 @@ helpers.genHeaderCellStyle = (column)->
 
 	if column.width
 		styleString += "max-width: #{column.width};"
+	
+	if column.grow >= 0
+		styleString += "flex-grow: #{column.grow};"
 
 	return if styleString then "style='#{styleString}'" else ''
 
@@ -81,6 +84,9 @@ helpers.genCellStyle = (column)->
 
 	if column.customStyle
 		styleString += column.customStyle
+	
+	if column.grow >= 0
+		styleString += "flex-grow: #{column.grow};"
 
 	return if styleString then "style='#{styleString}'" else ''
 
