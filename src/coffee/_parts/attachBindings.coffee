@@ -4,9 +4,11 @@ DataTable::attachBindings = ()->
 	## ========================================================================== 
 	SimplyBind('noResults').of(@state)
 		.to('className.isVisible').of(@els.noResultsMessage).transform (noResults)=> if noResults and not @state.loading then 'is_visible' else ''
+		.and.to('className.noResults').of(@els.tableOuterwrap).transform (noResults)=> if noResults and not @state.loading then '_noResults' else ''
 	
 	SimplyBind('loading').of(@state)
 		.to('className.isVisible').of(@els.loadingMessage).transform (loading)-> if loading then 'is_visible' else ''
+		.and.to('className.loading').of(@els.tableOuterwrap).transform (loading)=> if loading then '_loading' else ''
 		.and.to (loading)=>
 			if loading
 				@state.noResults = false

@@ -5476,7 +5476,7 @@
   var DataTable, defaults, helpers, markup;
   markup = {
     tableOuterwrap: function() {
-      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap'></div>";
+      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}}'></div>";
     },
     table: function(arg) {
       var alignment;
@@ -6417,6 +6417,14 @@
           return '';
         }
       };
+    })(this)).and.to('className.noResults').of(this.els.tableOuterwrap).transform((function(_this) {
+      return function(noResults) {
+        if (noResults && !_this.state.loading) {
+          return '_noResults';
+        } else {
+          return '';
+        }
+      };
     })(this));
     SimplyBind('loading').of(this.state).to('className.isVisible').of(this.els.loadingMessage).transform(function(loading) {
       if (loading) {
@@ -6424,7 +6432,15 @@
       } else {
         return '';
       }
-    }).and.to((function(_this) {
+    }).and.to('className.loading').of(this.els.tableOuterwrap).transform((function(_this) {
+      return function(loading) {
+        if (loading) {
+          return '_loading';
+        } else {
+          return '';
+        }
+      };
+    })(this)).and.to((function(_this) {
       return function(loading) {
         if (loading) {
           return _this.state.noResults = false;

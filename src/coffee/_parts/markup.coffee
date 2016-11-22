@@ -1,6 +1,6 @@
 markup =
 	tableOuterwrap: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-outerwrap'></div>
+		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}}'></div>
 	"
 
 	table: ({alignment})-> "
