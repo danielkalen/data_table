@@ -5990,7 +5990,7 @@
       case this.options.sortBy !== '-':
         return rows != null ? rows.slice().reverse() : void 0;
       case !this.options.columns[this.options.sortBy]:
-        customSort = this.options.column[this.options.sortBy].sortFn;
+        customSort = this.options.columns[this.options.sortBy].sortFn;
         rawValue = this.options.columns[this.options.sortBy].rawValueFormatter;
         return rows.slice().sort(customSort || (function(_this) {
           return function(a, b) {
@@ -6625,7 +6625,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.5.0';
+  DataTable.version = '2.5.1';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
