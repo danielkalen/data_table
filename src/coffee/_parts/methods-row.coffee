@@ -110,13 +110,13 @@ DataTable::generateRowMarkup = (row, parentRow)->
 					'extraClasses': helpers.genCellClassname(column)
 					'style': helpers.genCellStyle(column)
 					'value': do ()=> switch
-						when column.type is 'fields' 		then @generateInlineFields(cellValue)
-						when column.type is 'ipDetails' 	then @generateIpDetails(cellValue)
-						when column.type is 'breakdownBar' 	then @generateBreakdownBar(cellValue, row)
+						when column.type is 'fields' 		then @generateInlineFields(cellValue, row, column)
+						when column.type is 'ipDetails' 	then @generateIpDetails(cellValue, row, column)
+						when column.type is 'breakdownBar' 	then @generateBreakdownBar(cellValue, row, column)
 						when column.type is 'button' 		then @generateButton((column.action or cellValue), (column.buttonIcon or column.icon))
-						when column.type is 'actions' 		then @generateActions(column)
+						when column.type is 'actions' 		then @generateActions(column, row, column)
 						when column.isLink 					then "<a href='#{cellValue}' target='_blank'>#{cellValue}</a>"
-						else (if column.formatter then column.formatter(cellValue, row) else cellValue)
+						else (if column.formatter then column.formatter(cellValue, row, column) else cellValue)
 					
 			return rowCells
 

@@ -108,12 +108,12 @@ markup =
 
 
 
-	ipDetails: ({ipAddress})-> "
+	ipDetails: ({ipAddress, extra=''})-> "
 		<div class='#{DataTable.defaults.baseClass}-ipDetails _ipDetails' data-ip='#{ipAddress}'>
 			<div class='#{DataTable.defaults.baseClass}-ipDetails-trigger _ipDetails-trigger'></div>
 			<div class='#{DataTable.defaults.baseClass}-ipDetails-content'>Loading IP Details</div>
-			<div class='#{DataTable.defaults.baseClass}-ipDetails-country _ipDetails-country'></div>
 		</div>
+		#{extra}
 	"
 
 	ipDetailsItem: ({label, value})-> "

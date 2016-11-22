@@ -71,8 +71,8 @@ DataTable::generateActions = (column)->
 
 
 
-DataTable::generateIpDetails = (ipAddress)->
-	markup.ipDetails {ipAddress} # data attribute
+DataTable::generateIpDetails = (ipAddress, row, column)->
+	markup.ipDetails {ipAddress, extra:column.extraMarkup?(ipAddress, row)} # data attribute
 
 
 
