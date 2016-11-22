@@ -5983,18 +5983,24 @@
     return columnValue + " (" + percent + ")";
   };
   DataTable.prototype.sortRows = function(rows) {
+    var customSort, rawValue;
     switch (false) {
       case this.options.sortBy !== '+':
         return rows;
       case this.options.sortBy !== '-':
         return rows != null ? rows.slice().reverse() : void 0;
-      case !this.columns[this.options.sortBy]:
-        return rows.slice().sort((function(_this) {
+      case !this.options.columns[this.options.sortBy]:
+        customSort = this.options.column[this.options.sortBy].sortFn;
+        rawValue = this.options.columns[this.options.sortBy].rawValueFormatter;
+        return rows.slice().sort(customSort || (function(_this) {
           return function(a, b) {
+            var aValue, bValue;
+            aValue = rawValue ? rawValue(a[_this.options.sortBy]) : a[_this.options.sortBy];
+            bValue = rawValue ? rawValue(b[_this.options.sortBy]) : b[_this.options.sortBy];
             switch (false) {
-              case !(a[_this.options.sortBy] > b[_this.options.sortBy]):
+              case !(aValue > bValue):
                 return -1;
-              case !(a[_this.options.sortBy] < b[_this.options.sortBy]):
+              case !(aValue < bValue):
                 return 1;
               default:
                 return 0;
@@ -6602,12 +6608,14 @@
       updateEvenIfSame: true
     }).of(this).bothWays().chainTo((function(_this) {
       return function(searchCriteria) {
-        var ref, rowsToMakeAvailable;
+        var ref, rowsToMakeAvailable, targetColumn;
         rowsToMakeAvailable = _this.allRows;
-        if (searchCriteria && (_this.options.columns[_this.searchParam] || (((ref = _this.allRows[0]) != null ? ref[_this.searchParam] : void 0) != null))) {
+        targetColumn = _this.options.columns[_this.searchParam];
+        if (searchCriteria && (targetColumn || (((ref = _this.allRows[0]) != null ? ref[_this.searchParam] : void 0) != null))) {
           rowsToMakeAvailable = _this.allRows.filter(function(row) {
-            var ref1;
-            return (ref1 = row[_this.searchParam]) != null ? ref1.toString().toLowerCase().includes(searchCriteria.toLowerCase()) : void 0;
+            var rowValue;
+            rowValue = targetColumn.rawValueFormatter ? targetColumn.rawValueFormatter(row[_this.searchParam]) : row[_this.searchParam];
+            return rowValue != null ? rowValue.toString().toLowerCase().includes(searchCriteria.toLowerCase()) : void 0;
           });
         }
         _this.availableRows = rowsToMakeAvailable;
@@ -6617,7 +6625,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.4.0';
+  DataTable.version = '2.5.0';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
