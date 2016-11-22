@@ -6508,9 +6508,7 @@
         _this.currentPage = 1;
         return _this.state.noResults = !rows.length;
       };
-    })(this)).and.to('textContent.totalRows').of(this.els.pageStatus).transform(function(rows) {
-      return rows.length;
-    });
+    })(this));
     SimplyBind('availableRows', {
       updateOnBind: false,
       updateEvenIfSame: true
@@ -6518,7 +6516,9 @@
       return function(rows) {
         return _this.calcPageCount(rows);
       };
-    })(this));
+    })(this)).and.to('textContent.totalRows').of(this.els.pageStatus).transform(function(rows) {
+      return rows.length;
+    });
     SimplyBind('pageCount').of(this).to('innerHTML').of(this.els.paginationItems).transform(function(count) {
       var i, paginationItems, ref, value;
       paginationItems = '';
@@ -6617,7 +6617,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.3.2';
+  DataTable.version = '2.4.0';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
