@@ -24,6 +24,7 @@ do ($=jQuery)->
 		@els.tableBody = @els.table.children().last()
 		@els.noResultsMessage = $(markup.noResults(@options)).appendTo(@els.tableOuterwrap)
 		@els.loadingMessage = $(markup.loading()).appendTo(@els.tableOuterwrap)
+		@els.pageStatus = $(markup.pageStatus(@options)).appendTo(@els.tableOuterwrap)
 		@els.pagination = $(markup.pagination()).appendTo(@els.tableOuterwrap)
 		@els.paginationItems = @els.pagination.children('._paginationItems')
 		@els.paginationExtra = @els.pagination.children('._extraIndicator')

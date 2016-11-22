@@ -37,12 +37,16 @@ DataTable::attachBindings = ()->
 			
 			@state.noResults = !rows.length
 		
-		.and.to (rows)=> if @hasBreakdownBar
+		.and.to (rows)=>
+			return if not @hasBreakdownBar
 			for row in rows
 				if row.breakdownBarTotal > largestBreakdownTotal or not largestBreakdownTotal?
 					largestBreakdownTotal = row.breakdownBarTotal
 
 			@largestBreakdownTotal = largestBreakdownTotal or 0
+
+		.and.to('textContent.rowRange').of(@els.pageStatus)
+			.transform (rows)=> "#{@availableRows.indexOf(rows[0])+1}-#{@availableRows.indexOf(rows.slice(-1)[0])+1}"
 
 
 	SimplyBind('allRows').of(@)
@@ -52,8 +56,11 @@ DataTable::attachBindings = ()->
 			@currentPage = 1
 			@state.noResults = !rows.length
 
+
+
 	SimplyBind('availableRows', {updateOnBind:false, updateEvenIfSame:true}).of(@)
 		.to (rows)=> @calcPageCount(rows)
+		.and.to('textContent.totalRows').of(@els.pageStatus).transform (rows)-> rows.length
 
 
 

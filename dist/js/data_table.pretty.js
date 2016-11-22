@@ -5491,6 +5491,11 @@
       itemSingleLabel = (ref = arg.itemSingleLabel) != null ? ref : 'Item', itemPluralLabel = (ref1 = arg.itemPluralLabel) != null ? ref1 : itemSingleLabel + 's';
       return "<div class='" + DataTable.defaults.baseClass + "-noResults {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-noResults-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-noResults-icon'></div> <div class='" + DataTable.defaults.baseClass + "-noResults-text'> <div class='" + DataTable.defaults.baseClass + "-noResults-text-title'>No " + itemSingleLabel + "s to Display</div> <div class='" + DataTable.defaults.baseClass + "-noResults-text-subtitle'>There are no matching " + itemPluralLabel + " for the search query you've typed.</div> </div> </div> </div>";
     },
+    pageStatus: function(arg) {
+      var showPageStatus;
+      showPageStatus = arg.showPageStatus;
+      return "<div class='" + DataTable.defaults.baseClass + "-pageStatus " + (showPageStatus ? 'is_visible' : '') + "'> Showing {{rowRange}} of {{totalRows}} </div>";
+    },
     pagination: function() {
       return "<div class='" + DataTable.defaults.baseClass + "-pagination {{hasExtra}} {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _back'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-itemswrap _paginationItems'></div> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _extraIndicator'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> <select class='" + DataTable.defaults.baseClass + "-pagination-item-select'></select> </div> <div class='" + DataTable.defaults.baseClass + "-pagination-item _paginationItem _next'> <div class='" + DataTable.defaults.baseClass + "-pagination-item-text'></div> </div> </div>";
     },
@@ -5520,9 +5525,9 @@
       return "<div class='" + DataTable.defaults.baseClass + "-search " + ((search != null ? search.length : void 0) ? 'is_visible' : '') + "'> <select class='" + DataTable.defaults.baseClass + "-search-select'></select> <input class='" + DataTable.defaults.baseClass + "-search-input' /> <div class='" + DataTable.defaults.baseClass + "-search-selectTrigger'></div> </div>";
     },
     ipDetails: function(arg) {
-      var ipAddress;
-      ipAddress = arg.ipAddress;
-      return "<div class='" + DataTable.defaults.baseClass + "-ipDetails _ipDetails' data-ip='" + ipAddress + "'> <div class='" + DataTable.defaults.baseClass + "-ipDetails-trigger _ipDetails-trigger'></div> <div class='" + DataTable.defaults.baseClass + "-ipDetails-content'>Loading IP Details</div> <div class='" + DataTable.defaults.baseClass + "-ipDetails-country _ipDetails-country'></div> </div>";
+      var extra, ipAddress, ref;
+      ipAddress = arg.ipAddress, extra = (ref = arg.extra) != null ? ref : '';
+      return "<div class='" + DataTable.defaults.baseClass + "-ipDetails _ipDetails' data-ip='" + ipAddress + "'> <div class='" + DataTable.defaults.baseClass + "-ipDetails-trigger _ipDetails-trigger'></div> <div class='" + DataTable.defaults.baseClass + "-ipDetails-content'>Loading IP Details</div> </div> " + extra;
     },
     ipDetailsItem: function(arg) {
       var label, value;
@@ -5566,6 +5571,7 @@
     'search': [],
     'percentage': {},
     'baseClass': 'DataTable',
+    'showPageStatus': true,
     'sortBy': '',
     'alignment': 'left',
     'actions': false,
@@ -5901,6 +5907,7 @@
     this.els.tableBody = this.els.table.children().last();
     this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.loadingMessage = $(markup.loading()).appendTo(this.els.tableOuterwrap);
+    this.els.pageStatus = $(markup.pageStatus(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.pagination = $(markup.pagination()).appendTo(this.els.tableOuterwrap);
     this.els.paginationItems = this.els.pagination.children('._paginationItems');
     this.els.paginationExtra = this.els.pagination.children('._extraIndicator');
@@ -6160,20 +6167,20 @@
               'value': (function() {
                 switch (false) {
                   case column.type !== 'fields':
-                    return _this.generateInlineFields(cellValue);
+                    return _this.generateInlineFields(cellValue, row, column);
                   case column.type !== 'ipDetails':
-                    return _this.generateIpDetails(cellValue);
+                    return _this.generateIpDetails(cellValue, row, column);
                   case column.type !== 'breakdownBar':
-                    return _this.generateBreakdownBar(cellValue, row);
+                    return _this.generateBreakdownBar(cellValue, row, column);
                   case column.type !== 'button':
                     return _this.generateButton(column.action || cellValue, column.buttonIcon || column.icon);
                   case column.type !== 'actions':
-                    return _this.generateActions(column);
+                    return _this.generateActions(column, row, column);
                   case !column.isLink:
                     return "<a href='" + cellValue + "' target='_blank'>" + cellValue + "</a>";
                   default:
                     if (column.formatter) {
-                      return column.formatter(cellValue, row);
+                      return column.formatter(cellValue, row, column);
                     } else {
                       return cellValue;
                     }
@@ -6305,9 +6312,10 @@
     });
     return buttonMarkup + actionsMarkup;
   };
-  DataTable.prototype.generateIpDetails = function(ipAddress) {
+  DataTable.prototype.generateIpDetails = function(ipAddress, row, column) {
     return markup.ipDetails({
-      ipAddress: ipAddress
+      ipAddress: ipAddress,
+      extra: typeof column.extraMarkup === "function" ? column.extraMarkup(ipAddress, row) : void 0
     });
   };
   DataTable.prototype.attachEvents = function() {
@@ -6470,15 +6478,20 @@
     })(this)).and.to((function(_this) {
       return function(rows) {
         var i, largestBreakdownTotal, len, row;
-        if (_this.hasBreakdownBar) {
-          for (i = 0, len = rows.length; i < len; i++) {
-            row = rows[i];
-            if (row.breakdownBarTotal > largestBreakdownTotal || (typeof largestBreakdownTotal === "undefined" || largestBreakdownTotal === null)) {
-              largestBreakdownTotal = row.breakdownBarTotal;
-            }
-          }
-          return _this.largestBreakdownTotal = largestBreakdownTotal || 0;
+        if (!_this.hasBreakdownBar) {
+          return;
         }
+        for (i = 0, len = rows.length; i < len; i++) {
+          row = rows[i];
+          if (row.breakdownBarTotal > largestBreakdownTotal || (typeof largestBreakdownTotal === "undefined" || largestBreakdownTotal === null)) {
+            largestBreakdownTotal = row.breakdownBarTotal;
+          }
+        }
+        return _this.largestBreakdownTotal = largestBreakdownTotal || 0;
+      };
+    })(this)).and.to('textContent.rowRange').of(this.els.pageStatus).transform((function(_this) {
+      return function(rows) {
+        return (_this.availableRows.indexOf(rows[0]) + 1) + "-" + (_this.availableRows.indexOf(rows.slice(-1)[0]) + 1);
       };
     })(this));
     SimplyBind('allRows').of(this).transformSelf((function(_this) {
@@ -6495,7 +6508,9 @@
         _this.currentPage = 1;
         return _this.state.noResults = !rows.length;
       };
-    })(this));
+    })(this)).and.to('textContent.totalRows').of(this.els.pageStatus).transform(function(rows) {
+      return rows.length;
+    });
     SimplyBind('availableRows', {
       updateOnBind: false,
       updateEvenIfSame: true

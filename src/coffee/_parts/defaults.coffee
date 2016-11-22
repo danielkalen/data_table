@@ -6,6 +6,7 @@ defaults =
 	'search': []
 	'percentage': {}
 	'baseClass': 'DataTable'
+	'showPageStatus': true
 	'sortBy': ''
 	'alignment': 'left'
 	'actions': false

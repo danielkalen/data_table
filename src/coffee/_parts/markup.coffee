@@ -38,6 +38,13 @@ markup =
 	"
 
 
+	pageStatus: ({showPageStatus})-> "
+		<div class='#{DataTable.defaults.baseClass}-pageStatus #{if showPageStatus then 'is_visible' else ''}'>
+			Showing {{rowRange}} of {{totalRows}}
+		</div>
+	"
+
+
 	pagination: ()-> "
 		<div class='#{DataTable.defaults.baseClass}-pagination {{hasExtra}} {{isVisible}}'>
 			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _back'>
