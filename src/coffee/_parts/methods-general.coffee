@@ -31,8 +31,10 @@ DataTable::sortRows = (rows)-> switch
 	when @options.sortBy is '+' then rows
 	when @options.sortBy is '-' then rows?.slice().reverse()
 	when @options.columns[@options.sortBy]
+		customSort = @options.column[@options.sortBy].sortFn
 		rawValue = @options.columns[@options.sortBy].rawValueFormatter
-		rows.slice().sort (a,b)=>
+		
+		rows.slice().sort customSort or (a,b)=>
 			aValue = if rawValue then rawValue(a[@options.sortBy]) else a[@options.sortBy]
 			bValue = if rawValue then rawValue(b[@options.sortBy]) else b[@options.sortBy]
 			switch
