@@ -153,9 +153,12 @@ DataTable::attachBindings = ()->
 		.to('searchCriteria', updateEvenIfSame:true).of(@).bothWays()
 			.chainTo (searchCriteria)=>
 				rowsToMakeAvailable = @allRows
+				targetColumn = @options.columns[@searchParam]
 
-				if searchCriteria and (@options.columns[@searchParam] or @allRows[0]?[@searchParam]?)
-					rowsToMakeAvailable = @allRows.filter (row)=> row[@searchParam]?.toString().toLowerCase().includes searchCriteria.toLowerCase()
+				if searchCriteria and (targetColumn or @allRows[0]?[@searchParam]?)
+					rowsToMakeAvailable = @allRows.filter (row)=>
+						rowValue = if targetColumn.rawValueFormatter then targetColumn.rawValueFormatter(row[@searchParam]) else row[@searchParam]
+						return rowValue?.toString().toLowerCase().includes searchCriteria.toLowerCase()
 				
 				@availableRows = rowsToMakeAvailable
 				@currentPage = 1
