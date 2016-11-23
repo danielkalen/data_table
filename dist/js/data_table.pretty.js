@@ -6614,7 +6614,7 @@
         if (searchCriteria && (targetColumn || (((ref = _this.allRows[0]) != null ? ref[_this.searchParam] : void 0) != null))) {
           rowsToMakeAvailable = _this.allRows.filter(function(row) {
             var rowValue;
-            rowValue = targetColumn.rawValueFormatter ? targetColumn.rawValueFormatter(row[_this.searchParam]) : row[_this.searchParam];
+            rowValue = (targetColumn != null ? targetColumn.rawValueFormatter : void 0) ? targetColumn.rawValueFormatter(row[_this.searchParam]) : row[_this.searchParam];
             return rowValue != null ? rowValue.toString().toLowerCase().includes(searchCriteria.toLowerCase()) : void 0;
           });
         }
@@ -6625,7 +6625,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.5.1';
+  DataTable.version = '2.5.2';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
