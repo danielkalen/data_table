@@ -157,7 +157,7 @@ DataTable::attachBindings = ()->
 
 				if searchCriteria and (targetColumn or @allRows[0]?[@searchParam]?)
 					rowsToMakeAvailable = @allRows.filter (row)=>
-						rowValue = if targetColumn.rawValueFormatter then targetColumn.rawValueFormatter(row[@searchParam]) else row[@searchParam]
+						rowValue = if targetColumn?.rawValueFormatter then targetColumn.rawValueFormatter(row[@searchParam]) else row[@searchParam]
 						return rowValue?.toString().toLowerCase().includes searchCriteria.toLowerCase()
 				
 				@availableRows = rowsToMakeAvailable
