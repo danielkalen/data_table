@@ -1,6 +1,6 @@
 markup =
-	tableOuterwrap: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}}'></div>
+	tableOuterwrap: ({hasMinWidth})-> "
+		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}} #{if hasMinWidth then '_hasMinWidth' else ''}'></div>
 	"
 
 	table: ({alignment})-> "

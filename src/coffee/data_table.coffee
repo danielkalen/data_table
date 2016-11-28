@@ -19,7 +19,7 @@ do ($=jQuery)->
 
 		# ==== Markup =================================================================================
 		@els = {}
-		@els.tableOuterwrap = $(markup.tableOuterwrap())
+		@els.tableOuterwrap = $(markup.tableOuterwrap {hasMinWidth:@options.minWidth})
 		@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
 		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()
@@ -41,8 +41,6 @@ do ($=jQuery)->
 		@els.table.data 'DataTable', @
 		@els.table[0].style.minWidth = "#{@options.minWidth}px" if @options.minWidth
 
-
-		# @sortBy = @options.sortBy if @options.columns[@options.sortBy]
 
 		# ==== Events & Bindings =================================================================================
 		Promise.bind(@)

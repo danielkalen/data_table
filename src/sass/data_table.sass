@@ -18,23 +18,26 @@ $grey-lighter: #d1d1d1
 		width: 100%
 		font-size: 13.2px
 
-		&-search + &
-			margin-top: 25px
-
-		&-outerwrap
-			position: relative
-			overflow: scroll
-			overflow-y: hidden
-			-webkit-overflow-scrolling: touch
-			+clearfix
-			&._noResults,
-			&._loading,
-				padding-bottom: 70px
-
 		&.alignment---left
 			text-align: left
 		&.alignment---center
 			text-align: center
+		
+		&-search + &
+			margin-top: 25px
+
+
+		&-outerwrap
+			position: relative
+			+clearfix
+			&._hasMinWidth
+				overflow: scroll
+				overflow-y: hidden
+				-webkit-overflow-scrolling: touch
+			&._noResults,
+			&._loading,
+				padding-bottom: 70px
+
 
 
 		@import '_parts/heading'

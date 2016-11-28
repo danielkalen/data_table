@@ -2,8 +2,10 @@
 (function($) {
   var DataTable, defaults, helpers, markup;
   markup = {
-    tableOuterwrap: function() {
-      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}}'></div>";
+    tableOuterwrap: function(arg) {
+      var hasMinWidth;
+      hasMinWidth = arg.hasMinWidth;
+      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}} " + (hasMinWidth ? '_hasMinWidth' : '') + "'></div>";
     },
     table: function(arg) {
       var alignment;
@@ -93,7 +95,7 @@
   defaults = {
     'perPage': 20,
     'pageCountMax': 10,
-    'minWidth': 736,
+    'minWidth': 0,
     'columns': [],
     'search': [],
     'percentage': {},
@@ -434,7 +436,9 @@
     this.sortDirection = -1;
     this.currentPage = 1;
     this.els = {};
-    this.els.tableOuterwrap = $(markup.tableOuterwrap());
+    this.els.tableOuterwrap = $(markup.tableOuterwrap({
+      hasMinWidth: this.options.minWidth
+    }));
     this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.tableHeading = this.els.table.children().first().children();
     this.els.tableBody = this.els.table.children().last();
