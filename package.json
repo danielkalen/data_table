@@ -27,12 +27,13 @@
     "build": "npm run compile && npm run minify",
     "compile": "npm run compile:js && npm run compile:sass",
     "compile:js": "foreach -g 'src/coffee/*.coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js'",
-    "compile:sass": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style compressed {{path}} --output dist/css/ && cp dist/css/{{name}}.css dist/css/{{name}}.scss'",
-    "compile:sass:pretty": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style nested {{path}} --output dist/css/ && cp dist/css/{{name}}.css dist/css/{{name}}.scss'",
+    "compile:sass": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style compressed {{path}} --output dist/css/ && npm run cssToScss -s'",
+    "compile:sass:pretty": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style nested {{path}} --output dist/css/ && npm run cssToScss -s'",
+    "cssToScss": "cp dist/css/data_table.css dist/css/data_table.scss",
     "minify": "closure-service dist/js/data_table.pretty.js > dist/js/data_table.js",
     "watch": "npm run watch:js & npm run watch:sass",
     "watch:js": "simplywatch 'src/coffee/*.coffee' -e 'coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js && uglifyjs dist/js/{{name}}.pretty.js -m -c keep_fargs,unused=false > dist/js/{{name}}.js'",
-    "watch:sass": "simplywatch 'src/sass/*.sass' -e 'sass' -x 'node-sass --functions ./sass-fns.js -x --output-style compressed {{path}} --output dist/css/'",
+    "watch:sass": "fontsDir=dist/fonts simplywatch 'src/sass/*.sass' -e 'sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style compressed {{path}} --output dist/css/ && npm run cssToScss -s'",
     "takana": "fontsDir=dist/fonts takana -f $(pwd)/$npm_package_sassFns $(pwd)/src/sass"
   },
   "repository": {
