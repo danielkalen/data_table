@@ -426,7 +426,7 @@
     this.largestBreakdownTotal = 0;
     this.searchCriteria = '';
     this.searchParam = '';
-    this.sortBy = '';
+    this.sortBy = this.options.sortBy ? this.options.sortBy : '';
     this.sortDirection = -1;
     this.currentPage = 1;
     this.els = {};
@@ -450,9 +450,6 @@
     this.els.table.data('DataTable', this);
     if (this.options.minWidth) {
       this.els.table[0].style.minWidth = this.options.minWidth + "px";
-    }
-    if (this.options.columns[this.options.sortBy]) {
-      this.sortBy = this.options.sortBy;
     }
     Promise.bind(this).then(this.attachEvents).then(this.attachBindings).then(this.loadData);
     return this;
@@ -1038,11 +1035,14 @@
     SimplyBind('allRows').of(this).to((function(_this) {
       return function(rows) {
         _this.searchCriteria = '';
-        if (_this.sortBy !== _this.options.sortBy) {
-          _this.sortBy = '';
-        }
         _this.currentPage = 1;
-        return _this.state.noResults = !rows.length;
+        _this.state.noResults = !rows.length;
+        if (_this.sortBy === _this.options.sortBy) {
+          _this.sortBy = '';
+          return _this.sortBy = _this.options.sortBy;
+        } else {
+          return _this.sortBy = '';
+        }
       };
     })(this));
     SimplyBind('availableRows', {
@@ -1153,23 +1153,27 @@
       };
     })(this));
     SimplyBind('sortBy', {
-      updateEvenIfSame: true
+      updateEvenIfSame: true,
+      updateOnBind: false
     }).of(this).to((function(_this) {
       return function(currentSort, prevSort) {
         var targetColumn;
-        if (currentSort === prevSort && prevSort) {
-          _this.sortDirection *= -1;
-        } else {
-          _this.sortDirection = -1;
+        if (currentSort || prevSort) {
+          if (currentSort === prevSort && prevSort) {
+            _this.sortDirection *= -1;
+          } else {
+            _this.sortDirection = -1;
+          }
+          targetColumn = currentSort ? currentSort : null;
+          _this.availableRows = _this.sortRows(_this.availableRows, targetColumn);
+          return _this.currentPage = 1;
         }
-        targetColumn = currentSort ? currentSort : null;
-        _this.availableRows = _this.sortRows(_this.availableRows, targetColumn);
-        return _this.currentPage = 1;
       };
     })(this));
     if (this.els.tableHeading.children('._isSortable').length) {
       SimplyBind('sortBy', {
-        updateEvenIfSame: true
+        updateEvenIfSame: true,
+        updateOnBind: true
       }).of(this).to('multi:className.currentSort').of(this.els.tableHeading.children('._isSortable')).transform(function(current, prev, el) {
         if (current === el.children[0].textContent) {
           return '_currentSort';

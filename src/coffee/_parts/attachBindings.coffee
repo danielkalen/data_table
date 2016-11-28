@@ -52,9 +52,13 @@ DataTable::attachBindings = ()->
 	SimplyBind('allRows').of(@)
 		.to (rows)=>
 			@searchCriteria = ''
-			@sortBy = '' unless @sortBy is @options.sortBy
 			@currentPage = 1
 			@state.noResults = !rows.length
+			if @sortBy is @options.sortBy
+				@sortBy = ''
+				@sortBy = @options.sortBy
+			else
+				@sortBy = ''
 
 
 
@@ -177,8 +181,8 @@ DataTable::attachBindings = ()->
 	## ==========================================================================
 	## Sorting
 	## ========================================================================== 
-	SimplyBind('sortBy', {updateEvenIfSame:true}).of(@)
-		.to (currentSort, prevSort)=>
+	SimplyBind('sortBy', {updateEvenIfSame:true, updateOnBind:false}).of(@)
+		.to (currentSort, prevSort)=> if currentSort or prevSort
 			if currentSort is prevSort and prevSort
 				@sortDirection *= -1
 			else
@@ -190,7 +194,7 @@ DataTable::attachBindings = ()->
 
 	
 	if @els.tableHeading.children('._isSortable').length
-		SimplyBind('sortBy', {updateEvenIfSame:true}).of(@)
+		SimplyBind('sortBy', {updateEvenIfSame:true, updateOnBind:true}).of(@)
 			.to('multi:className.currentSort').of(@els.tableHeading.children('._isSortable'))
 				.transform (current, prev, el)-> if current is el.children[0].textContent then '_currentSort' else ''
 
