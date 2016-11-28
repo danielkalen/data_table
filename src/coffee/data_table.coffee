@@ -1,5 +1,4 @@
 do ($=jQuery)->
-	import 'node_modules/bluebird/js/browser/bluebird.js'
 	import '_parts/markup.coffee'
 	import '_parts/defaults.coffee'
 	import '_parts/helpers.coffee'
