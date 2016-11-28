@@ -1,6 +1,10 @@
 markup =
-	tableOuterwrap: ({hasMinWidth})-> "
-		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}} #{if hasMinWidth then '_hasMinWidth' else ''}'></div>
+	tableOuterwrap: ({minWidth, hasMobile, cellsHavePadding})-> "
+		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}}
+			#{if minWidth then '_hasMinWidth' else ''}
+			#{if hasMobile then '{{mobileVersion}}' else ''}
+			#{if cellsHavePadding then '_cellsHavePadding' else ''}
+		'></div>
 	"
 
 	table: ({alignment})-> "
@@ -94,8 +98,8 @@ markup =
 	"
 	
 
-	rowCell: ({extraClasses='', label, slug, value, style=''})-> "
-		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}' #{style}>
+	rowCell: ({extraClasses='', label, column, slug, value, style=''})-> "
+		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}' data-column='#{column}' #{style}>
 			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap' title='#{label}'>#{value}</div>
 		</div>
 	"

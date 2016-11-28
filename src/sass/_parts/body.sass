@@ -6,6 +6,9 @@
 		align-items: stretch
 		align-content: stretch
 		width: 100%
+		._mobileVersion &
+			flex-direction: column
+			border-bottom: 3px solid $highlightColor
 
 		&-drilldown
 			display: none
@@ -16,6 +19,8 @@
 			width: 100%
 			.drilldown_is_open &
 				display: flex
+			._mobileVersion &
+				display: none
 
 
 		@import 'body-cell'

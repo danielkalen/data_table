@@ -12,42 +12,39 @@
 	box-sizing: border-box
 	.alignment---left &
 		padding-left: 0
+	._mobileVersion &
+		width: 100%
+		max-width: none !important
+		justify-content: space-between !important
+		padding: 12px 0px 8px
+		&:before
+			content: attr(data-column)
+			display: block
+			font-weight: 700
+			font-size: 13.2px
+			padding-right: 30px
 
-
-	&-innerwrap
-		display: block
-		+ellipsis(100%)
-		
-		._noEllipsis &,
-		._isFields &
-			white-space: normal
-		
-		._showOverflow &
-			overflow: visible
-
-		._isBreakdownBar &,
-		._isIpDetails &,
-		._isButton &,
-			overflow: visible
+	._mobileVersion._cellsHavePadding &
+		padding: 12px 15px 8px
 		
 
 
 	@import 'body-cell.expandButton'
+	.alignment---center &,
+	&._alwaysCenter
+		justify-content: center
+	&._alwaysCenter
+		text-align: center
+
 
 	._tableRowDrilldown &
 		background-color: $subberwhite
 	&._isBreakdownBar,
 	&._isFields,
-		justify-content: flex-start !important
+		justify-content: flex-start
 	&._isButton
 		max-width: 70px
 
-	.alignment---center &,
-	&._alwaysCenter
-		justify-content: center
-	
-	&._alwaysCenter
-		text-align: center
 	
 
 
@@ -72,3 +69,23 @@
 
 	&._isBreakdownBar
 		cursor: help
+
+
+
+
+
+	&-innerwrap
+		display: block
+		+ellipsis(100%)
+		
+		._noEllipsis &,
+		._isFields &
+			white-space: normal
+		
+		._showOverflow &
+			overflow: visible
+
+		._isBreakdownBar &,
+		._isIpDetails &,
+		._isButton &,
+			overflow: visible

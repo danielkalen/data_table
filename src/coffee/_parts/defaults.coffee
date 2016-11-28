@@ -2,6 +2,9 @@ defaults =
 	'perPage': 20
 	'pageCountMax': 10
 	'minWidth': 0
+	'mobileWidth': 736
+	'cellsHavePadding': false
+	'hasMobile': true
 	'columns': []
 	'search': []
 	'percentage': {}

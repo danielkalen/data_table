@@ -19,7 +19,7 @@ do ($=jQuery)->
 
 		# ==== Markup =================================================================================
 		@els = {}
-		@els.tableOuterwrap = $(markup.tableOuterwrap {hasMinWidth:@options.minWidth})
+		@els.tableOuterwrap = $(markup.tableOuterwrap @options)
 		@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
 		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()

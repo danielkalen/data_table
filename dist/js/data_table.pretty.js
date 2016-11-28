@@ -3,9 +3,9 @@
   var DataTable, defaults, helpers, markup;
   markup = {
     tableOuterwrap: function(arg) {
-      var hasMinWidth;
-      hasMinWidth = arg.hasMinWidth;
-      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}} " + (hasMinWidth ? '_hasMinWidth' : '') + "'></div>";
+      var cellsHavePadding, hasMobile, minWidth;
+      minWidth = arg.minWidth, hasMobile = arg.hasMobile, cellsHavePadding = arg.cellsHavePadding;
+      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}} " + (minWidth ? '_hasMinWidth' : '') + " " + (hasMobile ? '{{mobileVersion}}' : '') + " " + (cellsHavePadding ? '_cellsHavePadding' : '') + " '></div>";
     },
     table: function(arg) {
       var alignment;
@@ -44,9 +44,9 @@
       return "<div class='" + DataTable.defaults.baseClass + "-body-row _tableRow {{drilldownOpen}}' data-row-id='" + rowID + "'> <div class='" + DataTable.defaults.baseClass + "-body-row-cell _expandButton'> <div class='" + DataTable.defaults.baseClass + "-body-row-cell-expand'></div> </div> " + cells + " <div class='" + DataTable.defaults.baseClass + "-body-row-drilldown _tableRowDrilldown'> " + drilldown + " </div> </div>";
     },
     rowCell: function(arg) {
-      var extraClasses, label, ref, ref1, slug, style, value;
-      extraClasses = (ref = arg.extraClasses) != null ? ref : '', label = arg.label, slug = arg.slug, value = arg.value, style = (ref1 = arg.style) != null ? ref1 : '';
-      return "<div class='" + DataTable.defaults.baseClass + "-body-row-cell __" + slug + " " + extraClasses + "' data-slug='" + slug + "' " + style + "> <div class='" + DataTable.defaults.baseClass + "-body-row-cell-innerwrap' title='" + label + "'>" + value + "</div> </div>";
+      var column, extraClasses, label, ref, ref1, slug, style, value;
+      extraClasses = (ref = arg.extraClasses) != null ? ref : '', label = arg.label, column = arg.column, slug = arg.slug, value = arg.value, style = (ref1 = arg.style) != null ? ref1 : '';
+      return "<div class='" + DataTable.defaults.baseClass + "-body-row-cell __" + slug + " " + extraClasses + "' data-slug='" + slug + "' data-column='" + column + "' " + style + "> <div class='" + DataTable.defaults.baseClass + "-body-row-cell-innerwrap' title='" + label + "'>" + value + "</div> </div>";
     },
     searchField: function(arg) {
       var search;
@@ -96,6 +96,9 @@
     'perPage': 20,
     'pageCountMax': 10,
     'minWidth': 0,
+    'mobileWidth': 736,
+    'cellsHavePadding': false,
+    'hasMobile': true,
     'columns': [],
     'search': [],
     'percentage': {},
@@ -436,9 +439,7 @@
     this.sortDirection = -1;
     this.currentPage = 1;
     this.els = {};
-    this.els.tableOuterwrap = $(markup.tableOuterwrap({
-      hasMinWidth: this.options.minWidth
-    }));
+    this.els.tableOuterwrap = $(markup.tableOuterwrap(this.options));
     this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.tableHeading = this.els.table.children().first().children();
     this.els.tableBody = this.els.table.children().last();
@@ -707,6 +708,7 @@
             }
             rowCells += markup.rowCell({
               'label': typeof cellValue === 'string' ? cellValue : '',
+              'column': columnName,
               'slug': column.slug,
               'extraClasses': helpers.genCellClassname(column),
               'style': helpers.genCellStyle(column),
@@ -1003,6 +1005,23 @@
         }
       };
     })(this));
+    if (this.options.hasMobile) {
+      this.windowWidth = window.innerWidth;
+      SimplyBind(0).ofEvent('resize').of(window).to((function(_this) {
+        return function() {
+          return _this.windowWidth = window.innerWidth;
+        };
+      })(this));
+      SimplyBind('windowWidth').of(this).to('className.mobileVersion').of(this.els.tableOuterwrap).transform((function(_this) {
+        return function(windowWidth) {
+          if (windowWidth <= _this.options.mobileWidth) {
+            return '_mobileVersion';
+          } else {
+            return '';
+          }
+        };
+      })(this));
+    }
     SimplyBind(this.visibleRows, {
       trackArrayChildren: false
     }).to((function(_this) {

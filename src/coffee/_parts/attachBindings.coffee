@@ -15,7 +15,17 @@ DataTable::attachBindings = ()->
 			else
 				@state.noResults = !@visibleRows.length
 	
-	
+
+	if @options.hasMobile
+		@windowWidth = window.innerWidth
+		
+		SimplyBind(0).ofEvent('resize').of(window)
+			.to ()=> @windowWidth = window.innerWidth
+
+		SimplyBind('windowWidth').of(@)
+			.to('className.mobileVersion').of(@els.tableOuterwrap)
+				.transform (windowWidth)=> if windowWidth <= @options.mobileWidth then '_mobileVersion' else ''
+
 
 
 

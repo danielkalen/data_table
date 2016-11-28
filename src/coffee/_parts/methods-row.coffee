@@ -106,6 +106,7 @@ DataTable::generateRowMarkup = (row, parentRow)->
 
 				rowCells += markup.rowCell
 					'label': if typeof cellValue is 'string' then cellValue else ''
+					'column': columnName
 					'slug': column.slug
 					'extraClasses': helpers.genCellClassname(column)
 					'style': helpers.genCellStyle(column)
