@@ -27,16 +27,16 @@ DataTable::calcPercentageString = (columnValue, columnName, row)->
 
 
 
-DataTable::sortRows = (rows)-> switch
-	when @options.sortBy is '+' then rows
-	when @options.sortBy is '-' then rows?.slice().reverse()
-	when @options.columns[@options.sortBy]
-		customSort = @options.columns[@options.sortBy].sortFn
-		rawValue = @options.columns[@options.sortBy].rawValueFormatter
+DataTable::sortRows = (rows, targetColumn=@options.sortBy)-> switch
+	when targetColumn is '+' then rows
+	when targetColumn is '-' then rows?.slice().reverse()
+	when @options.columns[targetColumn]
+		customSort = @options.columns[targetColumn].sortFn
+		rawValue = @options.columns[targetColumn].rawValueFormatter
 		
 		rows.slice().sort customSort or (a,b)=>
-			aValue = if rawValue then rawValue(a[@options.sortBy]) else a[@options.sortBy]
-			bValue = if rawValue then rawValue(b[@options.sortBy]) else b[@options.sortBy]
+			aValue = if rawValue then rawValue(a[targetColumn]) else a[targetColumn]
+			bValue = if rawValue then rawValue(b[targetColumn]) else b[targetColumn]
 			switch
 				when aValue > bValue then -1
 				when aValue < bValue then 1
