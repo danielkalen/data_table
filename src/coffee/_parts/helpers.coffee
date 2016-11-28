@@ -116,6 +116,7 @@ helpers.genCellClassname = (column)->
 	
 	if column.type is 'button' or column.type is 'actions'
 		classString += ' _isButton'
+		column.alwaysCenter = true
 	
 	if column.type is 'breakdownBar'
 		classString += ' _isBreakdownBar'
@@ -125,6 +126,9 @@ helpers.genCellClassname = (column)->
 	
 	if column.type is 'fields'
 		classString += ' _isFields'
+	
+	if column.alwaysCenter
+		classString += ' _alwaysCenter'
 
 	return classString
 

@@ -243,6 +243,7 @@
     }
     if (column.type === 'button' || column.type === 'actions') {
       classString += ' _isButton';
+      column.alwaysCenter = true;
     }
     if (column.type === 'breakdownBar') {
       classString += ' _isBreakdownBar';
@@ -252,6 +253,9 @@
     }
     if (column.type === 'fields') {
       classString += ' _isFields';
+    }
+    if (column.alwaysCenter) {
+      classString += ' _alwaysCenter';
     }
     return classString;
   };

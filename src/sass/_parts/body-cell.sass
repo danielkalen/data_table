@@ -31,8 +31,6 @@
 		._isButton &,
 			overflow: visible
 		
-		._isIpDetails &,
-			text-align: center
 
 
 	@import 'body-cell.expandButton'
@@ -45,8 +43,12 @@
 	&._isButton
 		max-width: 70px
 
-	.alignment---center &
+	.alignment---center &,
+	&._alwaysCenter
 		justify-content: center
+	
+	&._alwaysCenter
+		text-align: center
 	
 
 
