@@ -38,8 +38,8 @@ DataTable::sortRows = (rows, targetColumn=@options.sortBy)-> switch
 			aValue = if rawValue then rawValue(a[targetColumn]) else a[targetColumn]
 			bValue = if rawValue then rawValue(b[targetColumn]) else b[targetColumn]
 			switch
-				when aValue > bValue then -1
-				when aValue < bValue then 1
+				when aValue > bValue then @sortDirection
+				when aValue < bValue then @sortDirection * -1
 				else 0
 
 	else rows

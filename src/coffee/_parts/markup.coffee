@@ -4,7 +4,7 @@ markup =
 	"
 
 	table: ({alignment})-> "
-		<div class='#{DataTable.defaults.baseClass} alignment---#{alignment}'>
+		<div class='#{DataTable.defaults.baseClass} alignment---#{alignment} sortDirection---{{sortDirection}}'>
 			<div class='#{DataTable.defaults.baseClass}-heading'>
 				<div class='#{DataTable.defaults.baseClass}-heading-row'>
 					<div class='#{DataTable.defaults.baseClass}-heading-row-cell _expandButton'></div>

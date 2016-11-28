@@ -50,9 +50,9 @@ DataTable::attachBindings = ()->
 
 
 	SimplyBind('allRows').of(@)
-		.transformSelf (allRows)=> if @options.sortBy then @sortRows(allRows) else allRows
 		.to (rows)=>
 			@searchCriteria = ''
+			@sortBy = '' unless @sortBy is @options.sortBy
 			@currentPage = 1
 			@state.noResults = !rows.length
 
@@ -162,6 +162,46 @@ DataTable::attachBindings = ()->
 				
 				@availableRows = rowsToMakeAvailable
 				@currentPage = 1
+
+
+
+
+
+
+
+
+
+
+
+
+	## ==========================================================================
+	## Sorting
+	## ========================================================================== 
+	SimplyBind('sortBy', {updateEvenIfSame:true}).of(@)
+		.to (currentSort, prevSort)=>
+			if currentSort is prevSort and prevSort
+				@sortDirection *= -1
+			else
+				@sortDirection = -1
+
+			targetColumn = if currentSort then currentSort else null
+			@availableRows = @sortRows(@availableRows, targetColumn)
+			@currentPage = 1
+
+	
+	if @els.tableHeading.children('._isSortable').length
+		SimplyBind('sortBy', {updateEvenIfSame:true}).of(@)
+			.to('multi:className.currentSort').of(@els.tableHeading.children('._isSortable'))
+				.transform (current, prev, el)-> if current is el.children[0].textContent then '_currentSort' else ''
+
+
+
+
+	SimplyBind('sortDirection').of(@)
+		.to('className.sortDirection').of(@els.table)
+			.transform (sortDirection)-> if sortDirection is -1 then 'desc' else 'asc'
+
+
 
 
 

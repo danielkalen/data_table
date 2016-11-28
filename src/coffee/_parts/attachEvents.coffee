@@ -1,11 +1,4 @@
 DataTable::attachEvents = ()->
-	# ==== Table head sorting listeners =================================================================================
-	@els.tableHeading.on 'click', '._isSortable', (event)=> @sortBy event.currentTarget.dataset.slug
-
-
-
-
-
 	# ==== Pagination =================================================================================
 	@els.pagination.on 'click', '._paginationItem', (event)=>
 		$this = $(event.currentTarget)
@@ -23,6 +16,13 @@ DataTable::attachEvents = ()->
 		else if not isExtra
 			pageNumber = parseFloat $this.children().html()
 			@currentPage = pageNumber
+
+
+
+
+	# ==== Sorting =================================================================================
+	@els.tableHeading.on 'click', '._isSortable', (event)=>
+		@sortBy = event.currentTarget.children[0].textContent
 
 
 

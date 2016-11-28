@@ -12,6 +12,8 @@ do ($=jQuery)->
 		@largestBreakdownTotal = 0
 		@searchCriteria = ''
 		@searchParam = ''
+		@sortBy = ''
+		@sortDirection = -1
 		@currentPage = 1
 
 
@@ -40,6 +42,7 @@ do ($=jQuery)->
 		@els.table[0].style.minWidth = "#{@options.minWidth}px" if @options.minWidth
 
 
+		@sortBy = @options.sortBy if @options.columns[@options.sortBy]
 
 		# ==== Events & Bindings =================================================================================
 		Promise.bind(@)

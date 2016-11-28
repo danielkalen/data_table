@@ -26,3 +26,33 @@
 
 			&._noLabel
 				opacity: 0
+
+			&._isSortable
+				position: relative
+				cursor: pointer
+				
+			&._isSortable &-text
+				position: relative
+				
+				&:after
+					+icon('')
+					position: absolute
+					+valign(40%)
+					right: -15px
+					display: none
+					opacity: 0.4
+					font-size: 13px
+			
+					.sortDirection---desc &
+						content: 's'
+					.sortDirection---asc &
+						content: 't'
+				
+
+			&._currentSort &-text:after
+				display: block
+
+
+
+			&-text
+				display: inline-block

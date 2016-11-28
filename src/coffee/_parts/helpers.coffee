@@ -97,7 +97,7 @@ helpers.genCellClassname = (column)->
 	classString = ''
 	
 	if column.sortable
-		classString += ' _isSortable'
+		classString += ' _isSortable {{currentSort}}'
 	
 	if column.noLabel
 		classString += ' _noLabel'
