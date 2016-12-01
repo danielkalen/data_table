@@ -1,4 +1,5 @@
 DataTable::attachBindings = ()->
+	SimplyBind.settings.trackArrayChildren = false
 	## ==========================================================================
 	## State
 	## ========================================================================== 
@@ -35,7 +36,7 @@ DataTable::attachBindings = ()->
 	## ==========================================================================
 	## Rows array rendering/processing
 	## ========================================================================== 
-	SimplyBind(@visibleRows, trackArrayChildren:false)
+	SimplyBind(@visibleRows)
 		.to (rows, prevRows)=>
 			if prevRows?.length
 				for row in prevRows
@@ -59,16 +60,15 @@ DataTable::attachBindings = ()->
 			.transform (rows)=> "#{@availableRows.indexOf(rows[0])+1}-#{@availableRows.indexOf(rows.slice(-1)[0])+1}"
 
 
-	SimplyBind('allRows').of(@)
-		.to (rows)=>
-			@searchCriteria = ''
-			@currentPage = 1
-			@state.noResults = !rows.length
-			if @sortBy is @options.sortBy
-				@sortBy = ''
-				@sortBy = @options.sortBy
-			else
-				@sortBy = ''
+	SimplyBind('allRows').of(@).to (rows)=>
+		@searchCriteria = ''
+		@currentPage = 1
+		@state.noResults = !rows.length
+		if @sortBy is @options.sortBy
+			@sortBy = ''
+			@sortBy = @options.sortBy
+		else
+			@sortBy = ''
 
 
 
@@ -191,7 +191,7 @@ DataTable::attachBindings = ()->
 	## ==========================================================================
 	## Sorting
 	## ========================================================================== 
-	SimplyBind('sortBy', {updateEvenIfSame:true, updateOnBind:false}).of(@)
+	SimplyBind('sortBy', {updateEvenIfSame:true, updateOnBind:false}, true).of(@)
 		.to (currentSort, prevSort)=> if currentSort or prevSort
 			if currentSort is prevSort and prevSort
 				@sortDirection *= -1
@@ -204,7 +204,7 @@ DataTable::attachBindings = ()->
 
 	
 	if @els.tableHeading.children('._isSortable').length
-		SimplyBind('sortBy', {updateEvenIfSame:true, updateOnBind:true}).of(@)
+		SimplyBind('sortBy', updateOnBind:true).of(@)
 			.to('multi:className.currentSort').of(@els.tableHeading.children('._isSortable'))
 				.transform (current, prev, el)-> if current is el.children[0].textContent then '_currentSort' else ''
 
