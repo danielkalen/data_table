@@ -965,6 +965,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.attachBindings = function() {
+    SimplyBind.settings.trackArrayChildren = false;
     SimplyBind('noResults').of(this.state).to('className.isVisible').of(this.els.noResultsMessage).transform((function(_this) {
       return function(noResults) {
         if (noResults && !_this.state.loading) {
@@ -1022,9 +1023,7 @@
         };
       })(this));
     }
-    SimplyBind(this.visibleRows, {
-      trackArrayChildren: false
-    }).to((function(_this) {
+    SimplyBind(this.visibleRows).to((function(_this) {
       return function(rows, prevRows) {
         var i, j, len, len1, row;
         if (prevRows != null ? prevRows.length : void 0) {
@@ -1182,7 +1181,7 @@
     SimplyBind('sortBy', {
       updateEvenIfSame: true,
       updateOnBind: false
-    }).of(this).to((function(_this) {
+    }, true).of(this).to((function(_this) {
       return function(currentSort, prevSort) {
         var targetColumn;
         if (currentSort || prevSort) {
@@ -1199,7 +1198,6 @@
     })(this));
     if (this.els.tableHeading.children('._isSortable').length) {
       SimplyBind('sortBy', {
-        updateEvenIfSame: true,
         updateOnBind: true
       }).of(this).to('multi:className.currentSort').of(this.els.tableHeading.children('._isSortable')).transform(function(current, prev, el) {
         if (current === el.children[0].textContent) {
@@ -1219,7 +1217,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.6.0';
+  DataTable.version = '2.6.1';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
