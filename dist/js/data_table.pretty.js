@@ -1030,7 +1030,7 @@
     });
     if (this.options.hasMobile) {
       this.windowWidth = window.innerWidth;
-      SimplyBind(0).ofEvent('resize').of(window).to((function(_this) {
+      SimplyBind('event:resize').of(window).to((function(_this) {
         return function() {
           return _this.windowWidth = window.innerWidth;
         };
@@ -1244,7 +1244,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.7.0';
+  DataTable.version = '2.7.1';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
