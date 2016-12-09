@@ -25,7 +25,7 @@ DataTable::attachBindings = ()->
 	if @options.hasMobile
 		@windowWidth = window.innerWidth
 		
-		SimplyBind(0).ofEvent('resize').of(window)
+		SimplyBind('event:resize').of(window)
 			.to ()=> @windowWidth = window.innerWidth
 
 		SimplyBind('windowWidth').of(@)
