@@ -1,4 +1,4 @@
-&-noResults
+&-error
 	position: absolute
 	z-index: 900
 	top: 0
@@ -13,11 +13,6 @@
 	&.is_visible
 		opacity: 1
 		visibility: visible
-		._loading &,
-		._error &,
-		.no_content &
-			opacity: 0
-			visibility: hidden
 
 	&:before // White overlay
 		content: ''

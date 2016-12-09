@@ -5,7 +5,7 @@ do ($=jQuery)->
 
 	DataTable = (@container, options={})->
 		@options = $.extend {}, DataTable.defaults, options
-		@state = 'loading':true, 'noResults':false
+		@state = 'loading':true, 'noResults':false, 'error':false
 		@visibleRows = []
 		@availableRows = []
 		@allRows = []
@@ -25,6 +25,7 @@ do ($=jQuery)->
 		@els.tableBody = @els.table.children().last()
 		@els.noResultsMessage = $(markup.noResults(@options)).appendTo(@els.tableOuterwrap)
 		@els.loadingMessage = $(markup.loading()).appendTo(@els.tableOuterwrap)
+		@els.errorMessage = $(markup.error()).appendTo(@els.tableOuterwrap)
 		@els.pageStatus = $(markup.pageStatus(@options)).appendTo(@els.tableOuterwrap)
 		@els.pagination = $(markup.pagination()).appendTo(@els.tableOuterwrap)
 		@els.paginationItems = @els.pagination.children('._paginationItems')
@@ -54,9 +55,11 @@ do ($=jQuery)->
 
 	DataTable::fetchData = ()->
 		@state.loading = true
-		@options.data().then (data)=>
-			@state.loading = false
-			Promise.resolve(data)
+		@options.data()
+			.then (data)=>
+				@state.loading = false
+				Promise.resolve(data)
+			.catch (err)=> @state.error = err
 
 	DataTable::setData = (data)->
 		@allRows = data if Array.isArray(data)

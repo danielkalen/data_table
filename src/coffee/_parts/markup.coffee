@@ -1,6 +1,6 @@
 markup =
 	tableOuterwrap: ({minWidth, hasMobile, cellsHavePadding})-> "
-		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}}
+		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}} {{hasError}}
 			#{if minWidth then '_hasMinWidth' else ''}
 			#{if hasMobile then '{{mobileVersion}}' else ''}
 			#{if cellsHavePadding then '_cellsHavePadding' else ''}
@@ -36,6 +36,19 @@ markup =
 				<div class='#{DataTable.defaults.baseClass}-noResults-text'>
 					<div class='#{DataTable.defaults.baseClass}-noResults-text-title'>No #{itemSingleLabel}s to Display</div>
 					<div class='#{DataTable.defaults.baseClass}-noResults-text-subtitle'>There are no matching #{itemPluralLabel} for the search query you've typed.</div>
+				</div>
+			</div>
+		</div>
+	"
+
+
+	error: ()-> "
+		<div class='#{DataTable.defaults.baseClass}-error {{isVisible}}'>
+			<div class='#{DataTable.defaults.baseClass}-error-innerwrap'>
+				<div class='#{DataTable.defaults.baseClass}-error-icon'></div>
+				<div class='#{DataTable.defaults.baseClass}-error-text'>
+					<div class='#{DataTable.defaults.baseClass}-error-text-title'>A Fatal Error has Occured</div>
+					<div class='#{DataTable.defaults.baseClass}-error-text-subtitle'>Report the following to the admin:<br />\"{{errorMessage}}\"</div>
 				</div>
 			</div>
 		</div>

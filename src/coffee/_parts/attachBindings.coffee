@@ -15,6 +15,11 @@ DataTable::attachBindings = ()->
 				@state.noResults = false
 			else
 				@state.noResults = !@visibleRows.length
+
+	SimplyBind('error').of(@state)
+		.to('textContent.errorMessage').of(@els.errorMessage)
+		.and.to('className.isVisible').of(@els.errorMessage).transform (hasError)-> if hasError then 'is_visible' else ''
+		.and.to('className.hasError').of(@els.tableOuterwrap).transform (hasError)-> if hasError then '_error' else ''
 	
 
 	if @options.hasMobile
@@ -42,9 +47,12 @@ DataTable::attachBindings = ()->
 				for row in prevRows
 					row.visible = false
 			
-			for row in rows
-				@processRow(row)
-				row.visible = true
+			try
+				for row in rows
+					@processRow(row)
+					row.visible = true
+			catch err
+				@state.error = err
 			
 			@state.noResults = !rows.length
 		

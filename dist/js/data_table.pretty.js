@@ -5,7 +5,7 @@
     tableOuterwrap: function(arg) {
       var cellsHavePadding, hasMobile, minWidth;
       minWidth = arg.minWidth, hasMobile = arg.hasMobile, cellsHavePadding = arg.cellsHavePadding;
-      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}} " + (minWidth ? '_hasMinWidth' : '') + " " + (hasMobile ? '{{mobileVersion}}' : '') + " " + (cellsHavePadding ? '_cellsHavePadding' : '') + " '></div>";
+      return "<div class='" + DataTable.defaults.baseClass + "-outerwrap {{loading}} {{noResults}} {{hasError}} " + (minWidth ? '_hasMinWidth' : '') + " " + (hasMobile ? '{{mobileVersion}}' : '') + " " + (cellsHavePadding ? '_cellsHavePadding' : '') + " '></div>";
     },
     table: function(arg) {
       var alignment;
@@ -19,6 +19,9 @@
       var itemPluralLabel, itemSingleLabel, ref, ref1;
       itemSingleLabel = (ref = arg.itemSingleLabel) != null ? ref : 'Item', itemPluralLabel = (ref1 = arg.itemPluralLabel) != null ? ref1 : itemSingleLabel + 's';
       return "<div class='" + DataTable.defaults.baseClass + "-noResults {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-noResults-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-noResults-icon'></div> <div class='" + DataTable.defaults.baseClass + "-noResults-text'> <div class='" + DataTable.defaults.baseClass + "-noResults-text-title'>No " + itemSingleLabel + "s to Display</div> <div class='" + DataTable.defaults.baseClass + "-noResults-text-subtitle'>There are no matching " + itemPluralLabel + " for the search query you've typed.</div> </div> </div> </div>";
+    },
+    error: function() {
+      return "<div class='" + DataTable.defaults.baseClass + "-error {{isVisible}}'> <div class='" + DataTable.defaults.baseClass + "-error-innerwrap'> <div class='" + DataTable.defaults.baseClass + "-error-icon'></div> <div class='" + DataTable.defaults.baseClass + "-error-text'> <div class='" + DataTable.defaults.baseClass + "-error-text-title'>A Fatal Error has Occured</div> <div class='" + DataTable.defaults.baseClass + "-error-text-subtitle'>Report the following to the admin:<br />\"{{errorMessage}}\"</div> </div> </div> </div>";
     },
     pageStatus: function(arg) {
       var showPageStatus;
@@ -427,7 +430,8 @@
     this.options = $.extend({}, DataTable.defaults, options);
     this.state = {
       'loading': true,
-      'noResults': false
+      'noResults': false,
+      'error': false
     };
     this.visibleRows = [];
     this.availableRows = [];
@@ -445,6 +449,7 @@
     this.els.tableBody = this.els.table.children().last();
     this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.loadingMessage = $(markup.loading()).appendTo(this.els.tableOuterwrap);
+    this.els.errorMessage = $(markup.error()).appendTo(this.els.tableOuterwrap);
     this.els.pageStatus = $(markup.pageStatus(this.options)).appendTo(this.els.tableOuterwrap);
     this.els.pagination = $(markup.pagination()).appendTo(this.els.tableOuterwrap);
     this.els.paginationItems = this.els.pagination.children('._paginationItems');
@@ -469,6 +474,10 @@
       return function(data) {
         _this.state.loading = false;
         return Promise.resolve(data);
+      };
+    })(this))["catch"]((function(_this) {
+      return function(err) {
+        return _this.state.error = err;
       };
     })(this));
   };
@@ -1006,6 +1015,19 @@
         }
       };
     })(this));
+    SimplyBind('error').of(this.state).to('textContent.errorMessage').of(this.els.errorMessage).and.to('className.isVisible').of(this.els.errorMessage).transform(function(hasError) {
+      if (hasError) {
+        return 'is_visible';
+      } else {
+        return '';
+      }
+    }).and.to('className.hasError').of(this.els.tableOuterwrap).transform(function(hasError) {
+      if (hasError) {
+        return '_error';
+      } else {
+        return '';
+      }
+    });
     if (this.options.hasMobile) {
       this.windowWidth = window.innerWidth;
       SimplyBind(0).ofEvent('resize').of(window).to((function(_this) {
@@ -1025,17 +1047,22 @@
     }
     SimplyBind(this.visibleRows).to((function(_this) {
       return function(rows, prevRows) {
-        var i, j, len, len1, row;
+        var err, error, i, j, len, len1, row;
         if (prevRows != null ? prevRows.length : void 0) {
           for (i = 0, len = prevRows.length; i < len; i++) {
             row = prevRows[i];
             row.visible = false;
           }
         }
-        for (j = 0, len1 = rows.length; j < len1; j++) {
-          row = rows[j];
-          _this.processRow(row);
-          row.visible = true;
+        try {
+          for (j = 0, len1 = rows.length; j < len1; j++) {
+            row = rows[j];
+            _this.processRow(row);
+            row.visible = true;
+          }
+        } catch (error) {
+          err = error;
+          _this.state.error = err;
         }
         return _this.state.noResults = !rows.length;
       };
