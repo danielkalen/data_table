@@ -1045,7 +1045,7 @@
         };
       })(this));
     }
-    SimplyBind(this.visibleRows).to((function(_this) {
+    SimplyBind('array:visibleRows').of(this).to((function(_this) {
       return function(rows, prevRows) {
         var err, error, i, j, len, len1, row;
         if (prevRows != null ? prevRows.length : void 0) {
@@ -1244,7 +1244,7 @@
     return Promise.resolve();
   };
   DataTable.prototype.sortBy = function(column) {};
-  DataTable.version = '2.7.1';
+  DataTable.version = '2.7.2';
   DataTable.helpers = helpers;
   DataTable.markup = markup;
   DataTable.defaults = defaults;
