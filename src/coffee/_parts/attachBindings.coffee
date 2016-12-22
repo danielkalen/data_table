@@ -41,7 +41,7 @@ DataTable::attachBindings = ()->
 	## ==========================================================================
 	## Rows array rendering/processing
 	## ========================================================================== 
-	SimplyBind(@visibleRows)
+	SimplyBind('array:visibleRows').of(@)
 		.to (rows, prevRows)=>
 			if prevRows?.length
 				for row in prevRows
