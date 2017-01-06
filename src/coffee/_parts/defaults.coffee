@@ -5,6 +5,7 @@ defaults =
 	'mobileWidth': 736
 	'cellsHavePadding': false
 	'hasMobile': true
+	'loadOnInit': true
 	'columns': []
 	'search': []
 	'percentage': {}

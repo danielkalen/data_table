@@ -50,7 +50,7 @@ do ($=jQuery)->
 		Promise.bind(@)
 			.then(@attachEvents)
 			.then(@attachBindings)
-			.then(@loadData)
+			.then ()-> if @options.loadOnInit then @loadData()
 
 		return @
 
