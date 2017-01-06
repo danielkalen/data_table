@@ -97,10 +97,10 @@ DataTable::attachBindings = ()->
 	## ========================================================================== 
 	SimplyBind('pageCount').of(@)
 		.to('innerHTML').of(@els.paginationItems) # Render pagination
-			.transform (count)->
+			.transform (count)=>
 				paginationItems = ''
 				for value in [1..count]
-					paginationItems += markup.paginationItem({value}) unless value is 0
+					paginationItems += markup.paginationItem(@markupArgs {value}) unless value is 0
 
 				return paginationItems
 

@@ -14,106 +14,106 @@ markup =
 					<div class='#{DataTable.defaults.baseClass}-heading-row-cell _expandButton'></div>
 				</div>
 			</div>
-			<div class='#{DataTable.defaults.baseClass}-body'></div>
+			<div class='#{baseClass}-body'></div>
 		</div>
 	"
 
 
-	loading: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-loading {{isVisible}}'>
-			<div class='#{DataTable.defaults.baseClass}-loading-innerwrap'>
-				<div class='#{DataTable.defaults.baseClass}-loading-icon'></div>
-				<div class='#{DataTable.defaults.baseClass}-loading-text'>Loading</div>
+	loading: ({baseClass})-> "
+		<div class='#{baseClass}-loading {{isVisible}}'>
+			<div class='#{baseClass}-loading-innerwrap'>
+				<div class='#{baseClass}-loading-icon'></div>
+				<div class='#{baseClass}-loading-text'>Loading</div>
 			</div>
 		</div>
 	"
 
 
-	noResults: ({itemSingleLabel='Item', itemPluralLabel=itemSingleLabel+'s'})-> "
-		<div class='#{DataTable.defaults.baseClass}-noResults {{isVisible}}'>
-			<div class='#{DataTable.defaults.baseClass}-noResults-innerwrap'>
-				<div class='#{DataTable.defaults.baseClass}-noResults-icon'></div>
-				<div class='#{DataTable.defaults.baseClass}-noResults-text'>
-					<div class='#{DataTable.defaults.baseClass}-noResults-text-title'>No #{itemSingleLabel}s to Display</div>
-					<div class='#{DataTable.defaults.baseClass}-noResults-text-subtitle'>There are no matching #{itemPluralLabel} for the search query you've typed.</div>
+	noResults: ({baseClass, itemSingleLabel='Item', itemPluralLabel=itemSingleLabel+'s'})-> "
+		<div class='#{baseClass}-noResults {{isVisible}}'>
+			<div class='#{baseClass}-noResults-innerwrap'>
+				<div class='#{baseClass}-noResults-icon'></div>
+				<div class='#{baseClass}-noResults-text'>
+					<div class='#{baseClass}-noResults-text-title'>No #{itemSingleLabel}s to Display</div>
+					<div class='#{baseClass}-noResults-text-subtitle'>There are no matching #{itemPluralLabel} for the search query you've typed.</div>
 				</div>
 			</div>
 		</div>
 	"
 
 
-	error: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-error {{isVisible}}'>
-			<div class='#{DataTable.defaults.baseClass}-error-innerwrap'>
-				<div class='#{DataTable.defaults.baseClass}-error-icon'></div>
-				<div class='#{DataTable.defaults.baseClass}-error-text'>
-					<div class='#{DataTable.defaults.baseClass}-error-text-title'>A Fatal Error has Occured</div>
-					<div class='#{DataTable.defaults.baseClass}-error-text-subtitle'>Report the following to the admin:<br />\"{{errorMessage}}\"</div>
+	error: ({baseClass})-> "
+		<div class='#{baseClass}-error {{isVisible}}'>
+			<div class='#{baseClass}-error-innerwrap'>
+				<div class='#{baseClass}-error-icon'></div>
+				<div class='#{baseClass}-error-text'>
+					<div class='#{baseClass}-error-text-title'>A Fatal Error has Occured</div>
+					<div class='#{baseClass}-error-text-subtitle'>Report the following to the admin:<br />\"{{errorMessage}}\"</div>
 				</div>
 			</div>
 		</div>
 	"
 
 
-	pageStatus: ({showPageStatus})-> "
-		<div class='#{DataTable.defaults.baseClass}-pageStatus #{if showPageStatus then 'is_visible' else ''}'>
+	pageStatus: ({baseClass, showPageStatus})-> "
+		<div class='#{baseClass}-pageStatus #{if showPageStatus then 'is_visible' else ''}'>
 			Showing {{rowRange}} of {{totalRows}}
 		</div>
 	"
 
 
-	pagination: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-pagination {{hasExtra}} {{isVisible}}'>
-			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _back'>
-				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
+	pagination: ({baseClass})-> "
+		<div class='#{baseClass}-pagination {{hasExtra}} {{isVisible}}'>
+			<div class='#{baseClass}-pagination-item _paginationItem _back'>
+				<div class='#{baseClass}-pagination-item-text'></div>
 			</div>
 
-			<div class='#{DataTable.defaults.baseClass}-pagination-itemswrap _paginationItems'></div>
+			<div class='#{baseClass}-pagination-itemswrap _paginationItems'></div>
 
-			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _extraIndicator'>
-				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
-				<select class='#{DataTable.defaults.baseClass}-pagination-item-select'></select>
+			<div class='#{baseClass}-pagination-item _paginationItem _extraIndicator'>
+				<div class='#{baseClass}-pagination-item-text'></div>
+				<select class='#{baseClass}-pagination-item-select'></select>
 			</div>
-			<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem _next'>
-				<div class='#{DataTable.defaults.baseClass}-pagination-item-text'></div>
+			<div class='#{baseClass}-pagination-item _paginationItem _next'>
+				<div class='#{baseClass}-pagination-item-text'></div>
 			</div>
 		</div>
 	"
 
 
-	paginationItem: ({value})-> "
-		<div class='#{DataTable.defaults.baseClass}-pagination-item _paginationItem'>
-			<div class='#{DataTable.defaults.baseClass}-pagination-item-text'>#{value}</div>
+	paginationItem: ({baseClass, value})-> "
+		<div class='#{baseClass}-pagination-item _paginationItem'>
+			<div class='#{baseClass}-pagination-item-text'>#{value}</div>
 		</div>
 	"
 
 
 
-	headingCell: ({extraClasses='', slug, icon='', label, style=''})-> "
-		<div class='#{DataTable.defaults.baseClass}-heading-row-cell #{extraClasses} __#{slug}' data-slug='#{slug}' data-icon='#{icon}' #{style}>
-			<div class='#{DataTable.defaults.baseClass}-heading-row-cell-text'>#{label}</div>
+	headingCell: ({baseClass, extraClasses='', slug, icon='', label, style=''})-> "
+		<div class='#{baseClass}-heading-row-cell #{extraClasses} __#{slug}' data-slug='#{slug}' data-icon='#{icon}' #{style}>
+			<div class='#{baseClass}-heading-row-cell-text'>#{label}</div>
 		</div>
 	"
 
 
-	row: ({rowID, cells, drilldown=''})-> "
-		<div class='#{DataTable.defaults.baseClass}-body-row _tableRow {{drilldownOpen}}' data-row-id='#{rowID}'>
-			<div class='#{DataTable.defaults.baseClass}-body-row-cell _expandButton'>
-				<div class='#{DataTable.defaults.baseClass}-body-row-cell-expand'></div>
+	row: ({baseClass, rowID, cells, drilldown=''})-> "
+		<div class='#{baseClass}-body-row _tableRow {{drilldownOpen}}' data-row-id='#{rowID}'>
+			<div class='#{baseClass}-body-row-cell _expandButton'>
+				<div class='#{baseClass}-body-row-cell-expand'></div>
 			</div>
 			
 			#{cells}
 			
-			<div class='#{DataTable.defaults.baseClass}-body-row-drilldown _tableRowDrilldown'>
+			<div class='#{baseClass}-body-row-drilldown _tableRowDrilldown'>
 				#{drilldown}
 			</div>
 		</div>
 	"
 	
 
-	rowCell: ({extraClasses='', label, column, slug, value, style=''})-> "
-		<div class='#{DataTable.defaults.baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}' data-column='#{column}' #{style}>
-			<div class='#{DataTable.defaults.baseClass}-body-row-cell-innerwrap' title='#{label}'>#{value}</div>
+	rowCell: ({baseClass, extraClasses='', label, column, slug, value, style=''})-> "
+		<div class='#{baseClass}-body-row-cell __#{slug} #{extraClasses}' data-slug='#{slug}' data-column='#{column}' #{style}>
+			<div class='#{baseClass}-body-row-cell-innerwrap' title='#{label}'>#{value}</div>
 		</div>
 	"
 
@@ -121,72 +121,72 @@ markup =
 
 
 
-	searchField: ({search})-> "
-		<div class='#{DataTable.defaults.baseClass}-search #{if search?.length then 'is_visible' else ''}'>
-			<select class='#{DataTable.defaults.baseClass}-search-select'></select>
-			<input class='#{DataTable.defaults.baseClass}-search-input' />
-			<div class='#{DataTable.defaults.baseClass}-search-selectTrigger'></div>
+	searchField: ({baseClass, search})-> "
+		<div class='#{baseClass}-search #{if search?.length then 'is_visible' else ''}'>
+			<select class='#{baseClass}-search-select'></select>
+			<input class='#{baseClass}-search-input' />
+			<div class='#{baseClass}-search-selectTrigger'></div>
 		</div>
 	"
 	
 
 
 
-	ipDetails: ({ipAddress, extra=''})-> "
-		<div class='#{DataTable.defaults.baseClass}-ipDetails _ipDetails' data-ip='#{ipAddress}'>
-			<div class='#{DataTable.defaults.baseClass}-ipDetails-trigger _ipDetails-trigger'></div>
-			<div class='#{DataTable.defaults.baseClass}-ipDetails-content'>Loading IP Details</div>
+	ipDetails: ({baseClass, ipAddress, extra=''})-> "
+		<div class='#{baseClass}-ipDetails _ipDetails' data-ip='#{ipAddress}'>
+			<div class='#{baseClass}-ipDetails-trigger _ipDetails-trigger'></div>
+			<div class='#{baseClass}-ipDetails-content'>Loading IP Details</div>
 		</div>
 		#{extra}
 	"
 
-	ipDetailsItem: ({label, value})-> "
-		<div class='#{DataTable.defaults.baseClass}-ipDetails-content-item'>
-			<div class='#{DataTable.defaults.baseClass}-ipDetails-content-item-label'>#{label}: </div>
-			<div class='#{DataTable.defaults.baseClass}-ipDetails-content-item-value'>#{value}</div>
+	ipDetailsItem: ({baseClass, label, value})-> "
+		<div class='#{baseClass}-ipDetails-content-item'>
+			<div class='#{baseClass}-ipDetails-content-item-label'>#{label}: </div>
+			<div class='#{baseClass}-ipDetails-content-item-value'>#{value}</div>
 		</div>
 	"
 	
 
 
 
-	fields: ({fields})-> "
-		<div class='#{DataTable.defaults.baseClass}-fieldGroup'>#{fields}</div>
+	fields: ({baseClass, fields})-> "
+		<div class='#{baseClass}-fieldGroup'>#{fields}</div>
 	"
 
-	fieldsItem: ({label,value})-> "
-		<div class='#{DataTable.defaults.baseClass}-fieldGroup-item'>
-			<div class='#{DataTable.defaults.baseClass}-fieldGroup-item-label'>#{label}: </div>
-			<div class='#{DataTable.defaults.baseClass}-fieldGroup-item-value'>#{value}</div>
+	fieldsItem: ({baseClass, label,value})-> "
+		<div class='#{baseClass}-fieldGroup-item'>
+			<div class='#{baseClass}-fieldGroup-item-label'>#{label}: </div>
+			<div class='#{baseClass}-fieldGroup-item-value'>#{value}</div>
 		</div>
 	"
 	
 
 
 
-	button: ({action, icon='', isMulti})-> "
-		<div class='#{DataTable.defaults.baseClass}-button _actionButton #{if isMulti then '_isMulti' else ''}' data-action='#{action}'>
-			<div class='#{DataTable.defaults.baseClass}-button-icon'>#{icon}</div>
+	button: ({baseClass, action, icon='', isMulti})-> "
+		<div class='#{baseClass}-button _actionButton #{if isMulti then '_isMulti' else ''}' data-action='#{action}'>
+			<div class='#{baseClass}-button-icon'>#{icon}</div>
 		</div>
 	"
 	
 
 
 
-	actions: ({actions})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions'>
-			<div class='#{DataTable.defaults.baseClass}-actions-popup'>#{actions}</div>
+	actions: ({baseClass, ctions})-> "
+		<div class='#{baseClass}-actions'>
+			<div class='#{baseClass}-actions-popup'>#{actions}</div>
 		</div>
 	"
 
-	actionsOverlay: ()-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-overlay'></div>
+	actionsOverlay: ({baseClass})-> "
+		<div class='#{baseClass}-actions-overlay'></div>
 	"
 
-	actionsItem: ({action, icon, label, customIconStyle=''})-> "
-		<div class='#{DataTable.defaults.baseClass}-actions-popup-item _actionButton _subActionButton' data-action='#{action}' style='#{customIconStyle}'>
-			<div class='#{DataTable.defaults.baseClass}-actions-popup-item-icon'>#{icon}</div>
-			<div class='#{DataTable.defaults.baseClass}-actions-popup-item-text'>#{label}</div>
+	actionsItem: ({baseClass, action, icon, label, customIconStyle=''})-> "
+		<div class='#{baseClass}-actions-popup-item _actionButton _subActionButton' data-action='#{action}' style='#{customIconStyle}'>
+			<div class='#{baseClass}-actions-popup-item-icon'>#{icon}</div>
+			<div class='#{baseClass}-actions-popup-item-text'>#{label}</div>
 		</div>
 	"
 

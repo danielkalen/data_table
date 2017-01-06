@@ -24,10 +24,10 @@ do ($=jQuery)->
 		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()
 		@els.noResultsMessage = $(markup.noResults(@options)).appendTo(@els.tableOuterwrap)
-		@els.loadingMessage = $(markup.loading()).appendTo(@els.tableOuterwrap)
-		@els.errorMessage = $(markup.error()).appendTo(@els.tableOuterwrap)
+		@els.loadingMessage = $(markup.loading(@options)).appendTo(@els.tableOuterwrap)
+		@els.errorMessage = $(markup.error(@options)).appendTo(@els.tableOuterwrap)
 		@els.pageStatus = $(markup.pageStatus(@options)).appendTo(@els.tableOuterwrap)
-		@els.pagination = $(markup.pagination()).appendTo(@els.tableOuterwrap)
+		@els.pagination = $(markup.pagination(@options)).appendTo(@els.tableOuterwrap)
 		@els.paginationItems = @els.pagination.children('._paginationItems')
 		@els.paginationExtra = @els.pagination.children('._extraIndicator')
 		@els.paginationExtraSelect = @els.paginationExtra.children('select')
@@ -68,6 +68,10 @@ do ($=jQuery)->
 		@unprocessRow(row) for row in @allRows if @allRows.length
 		@fetchData().then (data)=> @setData(data)
 
+
+	DataTable::markupArgs = (argsObject={})->
+		argsObject.baseClass = @options.baseClass
+		return argsObject
 
 
 

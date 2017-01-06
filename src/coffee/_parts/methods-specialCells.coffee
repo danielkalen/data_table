@@ -4,7 +4,7 @@ DataTable::generateBreakdownBar = (breakdown, rowObj, columnEntity)->
 	
 	return 'N/A' unless total
 	
-	markup.breakdownBar
+	markup.breakdownBar @markupArgs
 		'total': total
 		'totalFormatted': if columnEntity.valueFormat then columnEntity.valueFormat(total) else total
 		'bars': do ()->
@@ -32,11 +32,11 @@ DataTable::generateBreakdownBar = (breakdown, rowObj, columnEntity)->
 
 
 DataTable::generateInlineFields = (dataFields)->
-	markup.fields 'fields': do ()->
+	markup.fields @markupArgs 'fields': do ()->
 		return '' unless typeof dataFields is 'object'
 		
 		output = for label,value of dataFields
-			markup.fieldsItem {label,value}
+			markup.fieldsItem @markupArgs {label,value}
 
 
 		return output.join('')
@@ -47,7 +47,7 @@ DataTable::generateInlineFields = (dataFields)->
 
 
 DataTable::generateButton = (action, icon, isMulti)->
-	markup.button({action, icon, isMulti})
+	markup.button(@markupArgs {action, icon, isMulti})
 
 
 
@@ -56,11 +56,11 @@ DataTable::generateButton = (action, icon, isMulti)->
 DataTable::generateActions = (column)->
 	column.actions ?= 'multiActions'
 	buttonMarkup = @generateButton(column.actions, (column.buttonIcon or column.icon), true)
-	actionsMarkup = markup.actions 'actions': do ()=>
+	actionsMarkup = markup.actions @markupArgs 'actions': do ()=>
 		return '' unless @options.actions
 		
 		output = for action in @options.actions
-			markup.actionsItem(action)
+			markup.actionsItem(@markupArgs action)
 
 		return output.join('')
 
@@ -72,7 +72,7 @@ DataTable::generateActions = (column)->
 
 
 DataTable::generateIpDetails = (ipAddress, row, column)->
-	markup.ipDetails {ipAddress, extra:column.extraMarkup?(ipAddress, row)} # data attribute
+	markup.ipDetails @markupArgs {ipAddress, extra:column.extraMarkup?(ipAddress, row)} # data attribute
 
 
 

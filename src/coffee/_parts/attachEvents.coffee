@@ -79,11 +79,11 @@ DataTable::attachEvents = ()->
 
 
 		unless isLoaded			
-			@options.ipDataFetcher(ipAddress).then (ipDetails)->
+			@options.ipDataFetcher(ipAddress).then (ipDetails)=>
 				return unless ipDetails
 				
 				output = for label,value of ipDetails 
-					markup.ipDetailsItem({label,value})
+					markup.ipDetailsItem(@markupArgs {label,value})
 
 				content$.html output.join('')
 				wrapper$.addClass '_isReady'

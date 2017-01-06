@@ -87,7 +87,7 @@ DataTable::generateRow = (row)->
 DataTable::generateRowMarkup = (row, parentRow)->
 	isSub = !!parentRow
 	
-	markup.row
+	markup.row @markupArgs
 		'rowID': if isSub then parentRow[@options.uniqueID] else row[@options.uniqueID]
 		'drilldown': if isSub then '' else if row.drilldown then do ()=>
 			drilldownMarkups = ''
@@ -104,7 +104,7 @@ DataTable::generateRowMarkup = (row, parentRow)->
 					cellValue = @calcPercentageString(cellValue, columnName, row)
 
 
-				rowCells += markup.rowCell
+				rowCells += markup.rowCell @markupArgs
 					'label': if typeof cellValue is 'string' then cellValue else ''
 					'column': columnName
 					'slug': column.slug
@@ -134,7 +134,9 @@ DataTable::generateHeadingColumns = ()->
 	Object.keys(@options.columns)
 		.map (label)=>
 			column = @options.columns[label]
-			markup.headingCell
+			@els.globalStyles[0].innerHTML += "{{#{column.slug}}}\n"
+
+			markup.headingCell @markupArgs
 				'slug': column.slug
 				'icon': column.icon
 				'label': column.label
