@@ -36,6 +36,15 @@ DataTable::attachBindings = ()->
 
 
 
+	## ==========================================================================
+	## Column visibility
+	## ========================================================================== 
+	for l,column of @options.columns then do (column)=>
+		SimplyBind('hidden').of(column)
+			.to("innerHTML.#{column.slug}").of(@els.globalStyles)
+				.transform (isHidden)=> if isHidden then "#{@tableID} .__#{column.slug} {display:none}" else ''
+
+
 
 
 	## ==========================================================================

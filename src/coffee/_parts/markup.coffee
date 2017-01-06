@@ -1,17 +1,17 @@
 markup =
-	tableOuterwrap: ({minWidth, hasMobile, cellsHavePadding})-> "
-		<div class='#{DataTable.defaults.baseClass}-outerwrap {{loading}} {{noResults}} {{hasError}}
+	tableOuterwrap: ({ID, baseClass, minWidth, hasMobile, cellsHavePadding})-> "
+		<div id='#{baseClass}-#{ID}' class='#{baseClass}-outerwrap {{loading}} {{noResults}} {{hasError}}
 			#{if minWidth then '_hasMinWidth' else ''}
 			#{if hasMobile then '{{mobileVersion}}' else ''}
 			#{if cellsHavePadding then '_cellsHavePadding' else ''}
 		'></div>
 	"
 
-	table: ({alignment})-> "
-		<div class='#{DataTable.defaults.baseClass} alignment---#{alignment} sortDirection---{{sortDirection}}'>
-			<div class='#{DataTable.defaults.baseClass}-heading'>
-				<div class='#{DataTable.defaults.baseClass}-heading-row'>
-					<div class='#{DataTable.defaults.baseClass}-heading-row-cell _expandButton'></div>
+	table: ({baseClass, alignment})-> "
+		<div class='#{baseClass} alignment---#{alignment} sortDirection---{{sortDirection}}'>
+			<div class='#{baseClass}-heading'>
+				<div class='#{baseClass}-heading-row'>
+					<div class='#{baseClass}-heading-row-cell _expandButton'></div>
 				</div>
 			</div>
 			<div class='#{baseClass}-body'></div>

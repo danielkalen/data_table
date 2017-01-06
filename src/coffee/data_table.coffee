@@ -6,6 +6,8 @@ do ($=jQuery)->
 	DataTable = (@container, options={})->
 		@options = $.extend {}, DataTable.defaults, options
 		@state = 'loading':true, 'noResults':false, 'error':false
+		@ID = ++currentID
+		@tableID = "\##{@options.baseClass}-#{@ID}"
 		@visibleRows = []
 		@availableRows = []
 		@allRows = []
@@ -19,7 +21,7 @@ do ($=jQuery)->
 
 		# ==== Markup =================================================================================
 		@els = {}
-		@els.tableOuterwrap = $(markup.tableOuterwrap @options)
+		@els.tableOuterwrap = $(markup.tableOuterwrap $.extend({@ID}, @options))
 		@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
 		@els.tableHeading = @els.table.children().first().children()
 		@els.tableBody = @els.table.children().last()
@@ -35,6 +37,7 @@ do ($=jQuery)->
 		@els.searchField = $(markup.searchField(@options)).insertBefore(@els.table)
 		@els.searchParam = @els.searchField.children('select')
 		@els.searchCriteria = @els.searchField.children('input')
+		@els.globalStyles = $('<style />').prependTo(@els.tableOuterwrap)
 
 		@els.tableHeading.append(@generateHeadingColumns())
 
@@ -83,6 +86,7 @@ do ($=jQuery)->
 	import '_parts/attachBindings.coffee'
 	import '_parts/userActionMethods.coffee'
 
+	currentID = 0
 	DataTable.version = import '../../.version.coffee'
 	DataTable.helpers = helpers
 	DataTable.markup = markup
