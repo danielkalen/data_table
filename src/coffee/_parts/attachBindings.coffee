@@ -187,9 +187,15 @@ DataTable::attachBindings = ()->
 				targetColumn = @options.columns[@searchParam]
 
 				if searchCriteria and (targetColumn or @allRows[0]?[@searchParam]?)
-					rowsToMakeAvailable = @allRows.filter (row)=>
+					rowsToMakeAvailable = rowsToMakeAvailable.filter (row)=>
 						rowValue = if targetColumn?.rawValueFormatter then targetColumn.rawValueFormatter(row[@searchParam]) else row[@searchParam]
 						return rowValue?.toString().toLowerCase().includes searchCriteria.toLowerCase()
+
+				if @options.rowFilter
+					rowsToMakeAvailable = rowsToMakeAvailable.filter (row)=>
+						rowClone = $.extend({}, row)
+						rowClone[name] = column.rawValueFormatter(rowClone[name]) for name,column of @options.columns when column.rawValueFormatter
+						return @options.rowFilter(rowClone)
 				
 				@availableRows = rowsToMakeAvailable
 				@currentPage = 1
