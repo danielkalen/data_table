@@ -32,7 +32,7 @@ DataTable::generateBreakdownBar = (breakdown, rowObj, columnEntity)->
 
 
 DataTable::generateInlineFields = (dataFields)->
-	markup.fields @markupArgs 'fields': do ()->
+	markup.fields @markupArgs 'fields': do ()=>
 		return '' unless typeof dataFields is 'object'
 		
 		output = for label,value of dataFields

@@ -173,7 +173,7 @@ markup =
 
 
 
-	actions: ({baseClass, ctions})-> "
+	actions: ({baseClass, actions})-> "
 		<div class='#{baseClass}-actions'>
 			<div class='#{baseClass}-actions-popup'>#{actions}</div>
 		</div>
