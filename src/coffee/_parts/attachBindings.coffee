@@ -20,6 +20,7 @@ DataTable::attachBindings = ()->
 		.to('textContent.errorMessage').of(@els.errorMessage)
 		.and.to('className.isVisible').of(@els.errorMessage).transform (hasError)-> if hasError then 'is_visible' else ''
 		.and.to('className.hasError').of(@els.tableOuterwrap).transform (hasError)-> if hasError then '_error' else ''
+		.and.to (err)-> console.error(err) if err
 	
 
 	if @options.hasMobile
