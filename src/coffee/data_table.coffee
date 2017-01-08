@@ -1,10 +1,11 @@
 do ($=jQuery)->
+	import * as extend from 'extend'
 	import '_parts/markup.coffee'
 	import '_parts/defaults.coffee'
 	import '_parts/helpers.coffee'
 
 	DataTable = (@container, options={})->
-		@options = $.extend {}, DataTable.defaults, options
+		@options = extend {}, DataTable.defaults, options
 		@state = 'loading':true, 'noResults':false, 'error':false
 		@ID = ++currentID
 		@tableID = "\##{@options.baseClass}-#{@ID}"
@@ -79,9 +80,7 @@ do ($=jQuery)->
 
 
 
-	import '_parts/methods-general.coffee'
-	import '_parts/methods-row.coffee'
-	import '_parts/methods-specialCells.coffee'
+	import '_parts/methods'
 	import '_parts/attachEvents.coffee'
 	import '_parts/attachBindings.coffee'
 	import '_parts/userActionMethods.coffee'
