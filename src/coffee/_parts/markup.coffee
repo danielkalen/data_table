@@ -179,8 +179,8 @@ markup =
 		</div>
 	"
 
-	actionsOverlay: ({baseClass})-> "
-		<div class='#{baseClass}-actions-overlay'></div>
+	actionsOverlay: ()-> "
+		<div class='#{DataTable.defaults.baseClass}-actions-overlay'></div>
 	"
 
 	actionsItem: ({baseClass, action, icon, label, customIconStyle=''})-> "
