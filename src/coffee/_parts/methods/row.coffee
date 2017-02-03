@@ -12,7 +12,7 @@ DataTable::processRow = (row)-> if row.processed then row else
 					row.breakdownBarWidth = helpers.getBreakdownBarWidth(row, @largestBreakdownTotal)
 				
 
-	if @hasBreakdownBar and row.breakdownBarEl.length
+	if @hasBreakdownBar and row.breakdownBarEl?.length
 		SimplyBind('largestBreakdownTotal').of(@)
 			.to('updatedBreakdownWidth').of(row)
 				.transform ()-> if row.visible then true else false
@@ -27,6 +27,7 @@ DataTable::processRow = (row)-> if row.processed then row else
 						width = helpers.getBreakdownBarWidth(row.drilldown[index], row.drilldown.largestBreakdownTotal)
 						$(drilldownEl).children('.is_breakdown_bar').children().children()[0]?.style.width = width+'%'
 					return
+				.condition ()-> row.drilldown
 					
 			.conditionAll ()-> row.visible
 
@@ -59,26 +60,34 @@ DataTable::reRenderRow = (row)->
 
 DataTable::generateRow = (row)->
 	prevRowEl = row.el
-	newRowEl = row.el = $ @generateRowMarkup(row)
+	newRowEl = row.el = $(@generateRowMarkup(row)).data('row', row)
 	prevRowEl.replaceWith(newRowEl) if prevRowEl
 	
-	row.drilldownEls = row.el.children('._tableRowDrilldown').children()
-	row.breakdownBarEl = if @hasBreakdownBar then row.el.children('.isBreakdownBar').children().children()
+	row.expandButton = row.el.children().first() if row.drilldown
+	row.drilldownEls = row.el.children('._tableRowDrilldown').children() if row.drilldown
+	row.breakdownBarEl = row.el.children('.isBreakdownBar').children().children() if @hasBreakdownBar
 	row.visible = false unless prevRowEl
-	row.drilldownOpen = false
-
-	row.el.data 'row', row
 	
 	if row.drilldown
-		@els.table.addClass('isExpandingTable')
-
 		if @hasBreakdownBar
-			row.drilldown.largestBreakdownTotal = Math.max.apply null, row.drilldown.map (subRow)-> subRow.breakdownBarTotal
+			row.drilldown.largestBreakdownTotal = Math.max row.drilldown.map((subRow)-> subRow.breakdownBarTotal)...
 
+		SimplyBind('drilldownOpen').of(row)
+			.to('className.drilldownState').of(row.el)
+				.transform (drilldownOpen)-> if drilldownOpen then 'hasDrilldown drilldownIsOpen' else 'hasDrilldown'
 
-	SimplyBind('drilldownOpen').of(row)
-		.to('className.drilldownOpen').of(row.el)
-			.transform (drilldownOpen)-> if drilldownOpen then 'drilldown_is_open' else ''
+		SimplyBind('visible').of(row)
+			.once.to ()->
+				SimplyBind ()->
+					if not row.drilldownOpen then setTimeout ()->
+						rowHeight = row.el.height()
+						buttonHeight = row.expandButton.height()
+						row.expandButton[0].style.top = "#{rowHeight/2 - buttonHeight/2}px"
+
+				.updateOn('event:resize', throttle:300).of(window)
+			.condition (visible)-> visible
+
+	return row
 
 
 

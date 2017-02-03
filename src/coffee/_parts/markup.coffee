@@ -10,9 +10,7 @@ markup =
 	table: ({baseClass, alignment})-> "
 		<div class='#{baseClass} alignment---#{alignment} sortDirection---{{sortDirection}}'>
 			<div class='#{baseClass}-heading'>
-				<div class='#{baseClass}-heading-row'>
-					<div class='#{baseClass}-heading-row-cell _expandButton'></div>
-				</div>
+				<div class='#{baseClass}-heading-row'></div>
 			</div>
 			<div class='#{baseClass}-body'></div>
 		</div>
@@ -97,9 +95,9 @@ markup =
 
 
 	row: ({baseClass, rowID, cells, drilldown=''})-> "
-		<div class='#{baseClass}-body-row _tableRow {{drilldownOpen}}' data-row-id='#{rowID}'>
-			<div class='#{baseClass}-body-row-cell _expandButton'>
-				<div class='#{baseClass}-body-row-cell-expand'></div>
+		<div class='#{baseClass}-body-row _tableRow {{drilldownState}}' data-row-id='#{rowID}'>
+			<div class='#{baseClass}-body-row-expandDrilldown _expandDrilldown'>
+				<div class='#{baseClass}-body-row-expandDrilldown-icon'></div>
 			</div>
 			
 			#{cells}

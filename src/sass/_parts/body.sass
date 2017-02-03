@@ -1,5 +1,6 @@
 &-body
 	&-row
+		position: relative
 		display: flex
 		flex-direction: row
 		flex-wrap: wrap
@@ -17,10 +18,11 @@
 			align-items: stretch
 			align-content: stretch
 			width: 100%
-			.drilldown_is_open &
+			.drilldownIsOpen &
 				display: flex
 			._mobileVersion &
 				display: none
 
 
 		@import 'body-cell'
+		@import 'body-expandDrilldown'

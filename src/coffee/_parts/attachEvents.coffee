@@ -51,16 +51,11 @@ DataTable::attachEvents = ()->
 
 
 	# ==== Row expansion listeners =================================================================================
-	@els.tableBody.on 'click', '._expandButton', (event)=>
+	@els.tableBody.on 'click', '._expandDrilldown', (event)=>
 		button$ = $(event.currentTarget)
-		row$ = button$.closest('tr')
-		rowID = row$.data 'row-id'
-
-		row$.siblings('.is_sub')
-			.filter ()-> @dataset.rowId is rowID
-			.toggleClass 'is_hidden'
-
-		row$.toggleClass 'expanded'
+		itemRow = button$.parent().data('row')
+		
+		itemRow.drilldownOpen = !itemRow.drilldownOpen
 
 
 
