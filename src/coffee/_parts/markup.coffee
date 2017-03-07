@@ -155,7 +155,7 @@ markup =
 	fieldsItem: ({baseClass, label,value})-> "
 		<div class='#{baseClass}-fieldGroup-item'>
 			<div class='#{baseClass}-fieldGroup-item-label'>#{label}: </div>
-			<div class='#{baseClass}-fieldGroup-item-value'>#{value}</div>
+			<div class='#{baseClass}-fieldGroup-item-value'>#{escHTML value}</div>
 		</div>
 	"
 	

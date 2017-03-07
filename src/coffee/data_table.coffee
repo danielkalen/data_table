@@ -1,5 +1,6 @@
 do ($=jQuery)->
 	import * as extend from 'extend'
+	import * as escHTML from 'escape-html'
 	import '_parts/markup.coffee'
 	import '_parts/defaults.coffee'
 	import '_parts/helpers.coffee'
