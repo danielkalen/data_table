@@ -3,6 +3,10 @@
   "version": "2.8.0",
   "description": "Tiny library for displaying database-fetched data in an HTML table with front-end pagination",
   "main": "dist/js/data_table.js",
+  "browser": {
+    "./debug": "dist/js/data_table.debug.js",
+    "./src": "src/coffee/data_table.coffee"
+  },
   "dependencies": {
     "@danielkalen/sass-base": "^1.3.2",
     "extend": "^3.0.0"
@@ -27,13 +31,13 @@
     "postversion": "echo \\'$(json -f package.json version)\\' > .version.coffee && npm run build",
     "build": "npm run compile && npm run minify",
     "compile": "npm run compile:js && npm run compile:sass",
-    "compile:js": "foreach -g 'src/coffee/*.coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js'",
+    "compile:js": "foreach -g 'src/coffee/*.coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.debug.js'",
     "compile:sass": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style compressed {{path}} --output dist/css/ && npm run cssToScss -s'",
-    "compile:sass:pretty": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style nested {{path}} --output dist/css/ && npm run cssToScss -s'",
+    "compile:sass:debug": "fontsDir=dist/fonts foreach -g 'src/sass/*.sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style nested {{path}} --output dist/css/ && npm run cssToScss -s'",
     "cssToScss": "cp dist/css/data_table.css dist/css/data_table.scss",
-    "minify": "closure-service dist/js/data_table.pretty.js > dist/js/data_table.js",
+    "minify": "closure-service dist/js/data_table.debug.js > dist/js/data_table.js",
     "watch": "npm run watch:js & npm run watch:sass",
-    "watch:js": "simplywatch 'src/coffee/*.coffee' -e 'coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.pretty.js && uglifyjs dist/js/{{name}}.pretty.js -m -c keep_fargs,unused=false > dist/js/{{name}}.js'",
+    "watch:js": "simplywatch 'src/coffee/*.coffee' -e 'coffee' -x 'simplyimport -i {{path}} | coffee -b -s -c > dist/js/{{name}}.debug.js && uglifyjs dist/js/{{name}}.debug.js -m -c keep_fargs,unused=false > dist/js/{{name}}.js'",
     "watch:sass": "fontsDir=dist/fonts simplywatch 'src/sass/*.sass' -e 'sass' -x 'node-sass --functions $(pwd)/$npm_package_sassFns -x --output-style compressed {{path}} --output dist/css/ && npm run cssToScss -s'",
     "takana": "fontsDir=dist/fonts takana -f $(pwd)/$npm_package_sassFns $(pwd)/src/sass"
   },
