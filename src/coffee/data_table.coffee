@@ -4,6 +4,8 @@ do ($=jQuery)->
 	import '_parts/markup.coffee'
 	import '_parts/defaults.coffee'
 	import '_parts/helpers.coffee'
+	if not window.SimplyBind
+		SimplyBind = import '@danielkalen/simplybind/debug'
 
 	DataTable = (@container, options={})->
 		@options = extend {}, DataTable.defaults, options
