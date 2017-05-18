@@ -78,7 +78,7 @@ DataTable::attachBindings = ()->
 			.transform (rows)=> "#{@availableRows.indexOf(rows[0])+1}-#{@availableRows.indexOf(rows.slice(-1)[0])+1}"
 
 
-	SimplyBind('allRows').of(@).to (rows)=>
+	SimplyBind('array:allRows').of(@).to (rows)=>
 		@searchCriteria = ''
 		@currentPage = 1
 		@state.noResults = !rows.length
