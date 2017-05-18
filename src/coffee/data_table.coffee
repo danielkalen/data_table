@@ -9,7 +9,7 @@ do ($=jQuery)->
 
 	DataTable = (@container, options={})->
 		@options = extend {}, DataTable.defaults, options
-		@state = 'loading':true, 'noResults':false, 'error':false
+		@state = 'loading':false, 'noResults':false, 'error':false
 		@ID = ++currentID
 		@tableID = "\##{@options.baseClass}-#{@ID}"
 		@visibleRows = []
