@@ -93,4 +93,13 @@ do ($=jQuery)->
 	DataTable.helpers = helpers
 	DataTable.markup = markup
 	DataTable.defaults = defaults
-	window.DataTable = DataTable
+
+	### istanbul ignore next ###
+	if module?.exports?
+		module.exports = DataTable
+	else if typeof define is 'function' and define.amd
+		define ['data_table'], ()-> DataTable
+	else
+		@DataTable = DataTable
+
+
