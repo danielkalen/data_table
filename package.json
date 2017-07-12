@@ -8,24 +8,18 @@
     "./src": "src/coffee/data_table.coffee"
   },
   "dependencies": {
-    "@danielkalen/sass-base": "^1.3.2",
+    "@danielkalen/sass-base": "^1.5.2",
+    "@danielkalen/simplybind": "^1.15.8",
+    "bluebird": "^3.5.0",
     "escape-html": "^1.0.3",
     "extend": "^3.0.0"
   },
-  "peerDependencies": {
-    "@danielkalen/simplybind": "*",
-    "bluebird": "*"
-  },
   "devDependencies": {
-    "closure-compiler-service": "^0.6.1",
-    "coffee-script": "^1.10.0",
-    "foreach-cli": "^1.6.1",
-    "fsevents": "^1.0.15",
-    "json": "^9.0.4",
+    "google-closure-compiler-js": "^20170626.0.0",
     "node-sass": "^4.5.0",
-    "simplyimport": "^3.2.5",
-    "simplywatch": "^2.4.4",
-    "uglify-js": "^2.6.2"
+    "simplyimport": "^4.0.0-s7",
+    "simplywatch": "^3.0.0-l2",
+    "uglify-js": "^3.0.24"
   },
   "sassFns": "node_modules/@danielkalen/sass-base/compiler-fns.js",
   "scripts": {
