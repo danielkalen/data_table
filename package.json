@@ -5,7 +5,12 @@
   "main": "dist/js/data_table.js",
   "browser": {
     "./debug": "dist/js/data_table.debug.js",
-    "./dist/js/data_table.js": "src/coffee/data_table.coffee"
+    "./dist/js/data_table.js": "src/coffee/index.coffee"
+  },
+  "browserify": {
+    "transform": [
+      "simplyimport/compat"
+    ]
   },
   "dependencies": {
     "@danielkalen/sass-base": "^1.5.2",
@@ -15,27 +20,24 @@
     "extend": "^3.0.0"
   },
   "devDependencies": {
-    "google-closure-compiler-js": "^20170626.0.0",
-    "node-sass": "^4.5.0",
+    "chalk": "^2.0.1",
+    "coffee-script": "^1.12.6",
+    "fs-jetpack": "^1.1.0",
+    "node-sass": "^4.5.3",
+    "promise-break": "^0.1.1",
     "sass-module-importer": "github:danielkalen/sass-module-importer",
     "simplyimport": "^4.0.0-s7",
     "simplywatch": "^3.0.0-l2",
-    "uglify-js": "^3.0.24"
+    "smart-extend": "^1.7.2"
   },
   "sassFns": "node_modules/@danielkalen/sass-base/compiler-fns.js",
   "sassImporter": "node_modules/sass-module-importer/lib/index.js",
-  "sassOpts": "--functions $PWD/$npm_package_sassFns --importer $PWD/$npm_package_sassImporter -x",
   "scripts": {
     "postversion": "npm run build && git add . && git commit -a -m '[Build]'",
     "postpublish": "git push",
-    "build": "npm run compile && npm run minify",
-    "compile": "npm run compile:js && npm run compile:js:debug && npm run compile:sass && npm run compile:sass:debug",
-    "compile:js": "simplyimport bundle src/coffee/index.coffee --umd DataTable > dist/js/dataTable.js",
-    "compile:js:debug": "simplyimport bundle src/coffee/index.coffee --umd DataTable -d > dist/js/dataTable.debug.js",
-    "compile:sass": "fontsDir=dist/fonts node-sass \"$npm_package_sassOpts\" --output-style compressed --output dist/css/dataTable.css src/coffee/index.sass",
-    "compile:sass:debug": "fontsDir=dist/fonts node-sass \"$npm_package_sassOpts\" --output-style nested --output dist/css/dataTable.debug.css src/coffee/index.sass",
-    "minify": "closure-service dist/js/data_table.debug.js > dist/js/data_table.js",
-    "watch": "npm run watch:js & npm run watch:sass",
+    "build": "cake install:build; cake -d build && cake build && cp -r build/* dist/",
+    "compile": "cake -d build",
+    "watch": "cake install; cake -d watch",
     "watch:js": "simplywatch 'src/coffee/*.coffee' -e 'coffee' -x 'npm run compile:js:debug -s'",
     "watch:sass": "fontsDir=dist/fonts simplywatch 'src/sass/*.sass' -e 'sass' -x 'npm run compile:sass:debug -s'",
     "takana": "fontsDir=dist/fonts takana -f $(pwd)/$npm_package_sassFns $(pwd)/src/sass"
