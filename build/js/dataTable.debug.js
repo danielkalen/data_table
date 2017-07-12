@@ -3160,7 +3160,7 @@ DataTable.prototype.sortBy = function(column) {};
 
 currentID = 0;
 
-DataTable.version = "2.8.4";
+DataTable.version = "2.9.0";
 
 DataTable.helpers = helpers;
 
