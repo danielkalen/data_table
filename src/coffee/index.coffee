@@ -60,11 +60,13 @@ DataTable = (@container, options={})->
 
 DataTable::fetchData = ()->
 	@state.loading = true
-	@options.data()
+	Promise.resolve()
+		.then @options.data
 		.then (data)=>
-			@state.loading = false
-			Promise.resolve(data)
-		.catch (err)=> @state.error = err
+			@state.loading = @state.error = false
+			return data
+		.catch (err)=>
+			@state.error = err
 
 DataTable::setData = (data)->
 	@allRows = data if Array.isArray(data)
