@@ -61,7 +61,7 @@ DataTable = (@container, options={})->
 DataTable::fetchData = ()->
 	@state.loading = true
 	Promise.resolve()
-		.then @options.data
+		.then ()=> @options.data.call(@)
 		.then (data)=>
 			@state.loading = @state.error = false
 			return data
