@@ -194,7 +194,7 @@ DataTable::attachBindings = ()->
 
 				if @options.rowFilter
 					rowsToMakeAvailable = rowsToMakeAvailable.filter (row)=>
-						rowClone = $.extend({}, row)
+						rowClone = extend.clone(row)
 						rowClone[name] = column.rawValueFormatter(rowClone[name]) for name,column of @options.columns when column.rawValueFormatter
 						return @options.rowFilter(rowClone)
 				

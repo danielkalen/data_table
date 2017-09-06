@@ -21,11 +21,7 @@ DataTable::generateHeadingColumns = ()->
 
 DataTable::updateColumns = (updatedColumns)->
 	updatedColumns = helpers.normalizeColumns(updatedColumns)
-
-	# if Object.keys(updatedColumns).length > Object.keys(@options.columns.length)
-	# 	@options.columns = extend({}, @options.columns, updatedColumns)
-
-	extend(true, @options.columns, updatedColumns)
+	extend.deep(@options.columns, updatedColumns)
 	@currentPage = @currentPage
 
 

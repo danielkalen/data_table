@@ -1,12 +1,12 @@
 SimplyBind = import '@danielkalen/simplybind'
-extend = import 'extend'
+extend = import 'smart-extend'
 escHTML = import 'escape-html'
 import './parts/markup'
 import './parts/defaults'
 import './parts/helpers'
 
 DataTable = (@container, options={})->
-	@options = extend {}, DataTable.defaults, options
+	@options = extend.clone.deepOnly('columns')(DataTable.defaults, options)
 	@state = 'loading':false, 'noResults':false, 'error':false
 	@ID = ++currentID
 	@tableID = "\##{@options.baseClass}-#{@ID}"
@@ -23,7 +23,7 @@ DataTable = (@container, options={})->
 
 	# ==== Markup =================================================================================
 	@els = {}
-	@els.tableOuterwrap = $(markup.tableOuterwrap $.extend({@ID}, @options))
+	@els.tableOuterwrap = $(markup.tableOuterwrap extend({@ID}, @options))
 	@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
 	@els.tableHeading = @els.table.children().first().children()
 	@els.tableBody = @els.table.children().last()
@@ -75,6 +75,9 @@ DataTable::loadData = ()->
 	@unprocessRow(row) for row in @allRows if @allRows.length
 	@fetchData().then (data)=> @setData(data)
 
+DataTable::refresh: ()->
+	@availableRows = @availableRows
+	@currentPage = @currentPage
 
 DataTable::markupArgs = (argsObject={})->
 	argsObject.baseClass = @options.baseClass
