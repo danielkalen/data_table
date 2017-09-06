@@ -1,4 +1,4 @@
-(function (require) {
+(function (require, global) {
 require = (function (cache, modules, cx) {
 return function (r) {
 if (!modules[r]) throw new Error(r + ' is not a module');
@@ -7,85 +7,1433 @@ exports: {}
 }, cache[r].exports = modules[r].call(cx, require, cache[r], cache[r].exports)));
 };
 })({}, {
-3: function (require, module, exports) {
-/*!
- * escape-html
- * Copyright(c) 2012-2013 TJ Holowaychuk
- * Copyright(c) 2015 Andreas Lubbe
- * Copyright(c) 2015 Tiancheng "Timothy" Gu
- * MIT Licensed
- */
+0: function (require, module, exports) {
+var DataTable, SimplyBind, currentID, escHTML, extend;
 
-'use strict';
+SimplyBind = require(1);
 
-/**
- * Module variables.
- * @private
- */
+extend = require(2);
 
-var matchHtmlRegExp = /["'&<>]/;
+escHTML = require(3);
 
-/**
- * Module exports.
- * @public
- */
+var markup;
 
-module.exports = escapeHtml;
-
-/**
- * Escape special characters in the given string of html.
- *
- * @param  {string} string The string to escape for inserting into HTML
- * @return {string}
- * @public
- */
-
-function escapeHtml(string) {
-  var str = '' + string;
-  var match = matchHtmlRegExp.exec(str);
-
-  if (!match) {
-    return str;
+markup = {
+  tableOuterwrap: function(arg) {
+    var ID, baseClass, cellsHavePadding, hasMobile, minWidth;
+    ID = arg.ID, baseClass = arg.baseClass, minWidth = arg.minWidth, hasMobile = arg.hasMobile, cellsHavePadding = arg.cellsHavePadding;
+    return "<div id='" + baseClass + "-" + ID + "' class='" + baseClass + "-outerwrap {{loading}} {{noResults}} {{hasError}} " + (minWidth ? '_hasMinWidth' : '') + " " + (hasMobile ? '{{mobileVersion}}' : '') + " " + (cellsHavePadding ? '_cellsHavePadding' : '') + " '></div>";
+  },
+  table: function(arg) {
+    var alignment, baseClass;
+    baseClass = arg.baseClass, alignment = arg.alignment;
+    return "<div class='" + baseClass + " alignment---" + alignment + " sortDirection---{{sortDirection}}'> <div class='" + baseClass + "-heading'> <div class='" + baseClass + "-heading-row'></div> </div> <div class='" + baseClass + "-body'></div> </div>";
+  },
+  loading: function(arg) {
+    var baseClass;
+    baseClass = arg.baseClass;
+    return "<div class='" + baseClass + "-loading {{isVisible}}'> <div class='" + baseClass + "-loading-innerwrap'> <div class='" + baseClass + "-loading-icon'></div> <div class='" + baseClass + "-loading-text'>Loading</div> </div> </div>";
+  },
+  noResults: function(arg) {
+    var baseClass, itemPluralLabel, itemSingleLabel, ref, ref1;
+    baseClass = arg.baseClass, itemSingleLabel = (ref = arg.itemSingleLabel) != null ? ref : 'Item', itemPluralLabel = (ref1 = arg.itemPluralLabel) != null ? ref1 : itemSingleLabel + 's';
+    return "<div class='" + baseClass + "-noResults {{isVisible}}'> <div class='" + baseClass + "-noResults-innerwrap'> <div class='" + baseClass + "-noResults-icon'></div> <div class='" + baseClass + "-noResults-text'> <div class='" + baseClass + "-noResults-text-title'>No " + itemSingleLabel + "s to Display</div> <div class='" + baseClass + "-noResults-text-subtitle'>There are no matching " + itemPluralLabel + " for the search query you've typed.</div> </div> </div> </div>";
+  },
+  error: function(arg) {
+    var baseClass;
+    baseClass = arg.baseClass;
+    return "<div class='" + baseClass + "-error {{isVisible}}'> <div class='" + baseClass + "-error-innerwrap'> <div class='" + baseClass + "-error-icon'></div> <div class='" + baseClass + "-error-text'> <div class='" + baseClass + "-error-text-title'>A Fatal Error has Occured</div> <div class='" + baseClass + "-error-text-subtitle'>Report the following to the admin:<br />\"{{errorMessage}}\"</div> </div> </div> </div>";
+  },
+  pageStatus: function(arg) {
+    var baseClass, showPageStatus;
+    baseClass = arg.baseClass, showPageStatus = arg.showPageStatus;
+    return "<div class='" + baseClass + "-pageStatus " + (showPageStatus ? 'is_visible' : '') + "'> Showing {{rowRange}} of {{totalRows}} </div>";
+  },
+  pagination: function(arg) {
+    var baseClass;
+    baseClass = arg.baseClass;
+    return "<div class='" + baseClass + "-pagination {{hasExtra}} {{isVisible}}'> <div class='" + baseClass + "-pagination-item _paginationItem _back'> <div class='" + baseClass + "-pagination-item-text'></div> </div> <div class='" + baseClass + "-pagination-itemswrap _paginationItems'></div> <div class='" + baseClass + "-pagination-item _paginationItem _extraIndicator'> <div class='" + baseClass + "-pagination-item-text'></div> <select class='" + baseClass + "-pagination-item-select'></select> </div> <div class='" + baseClass + "-pagination-item _paginationItem _next'> <div class='" + baseClass + "-pagination-item-text'></div> </div> </div>";
+  },
+  paginationItem: function(arg) {
+    var baseClass, value;
+    baseClass = arg.baseClass, value = arg.value;
+    return "<div class='" + baseClass + "-pagination-item _paginationItem'> <div class='" + baseClass + "-pagination-item-text'>" + value + "</div> </div>";
+  },
+  headingCell: function(arg) {
+    var baseClass, extraClasses, icon, label, ref, ref1, ref2, slug, style;
+    baseClass = arg.baseClass, extraClasses = (ref = arg.extraClasses) != null ? ref : '', slug = arg.slug, icon = (ref1 = arg.icon) != null ? ref1 : '', label = arg.label, style = (ref2 = arg.style) != null ? ref2 : '';
+    return "<div class='" + baseClass + "-heading-row-cell " + extraClasses + " __" + slug + "' data-slug='" + slug + "' data-icon='" + icon + "' " + style + "> <div class='" + baseClass + "-heading-row-cell-text'>" + label + "</div> </div>";
+  },
+  row: function(arg) {
+    var baseClass, cells, drilldown, ref, rowID;
+    baseClass = arg.baseClass, rowID = arg.rowID, cells = arg.cells, drilldown = (ref = arg.drilldown) != null ? ref : '';
+    return "<div class='" + baseClass + "-body-row _tableRow {{drilldownState}}' data-row-id='" + rowID + "'> <div class='" + baseClass + "-body-row-expandDrilldown _expandDrilldown'> <div class='" + baseClass + "-body-row-expandDrilldown-icon'></div> </div> " + cells + " <div class='" + baseClass + "-body-row-drilldown _tableRowDrilldown'> " + drilldown + " </div> </div>";
+  },
+  rowCell: function(arg) {
+    var baseClass, column, extraClasses, label, ref, ref1, slug, style, value;
+    baseClass = arg.baseClass, extraClasses = (ref = arg.extraClasses) != null ? ref : '', label = arg.label, column = arg.column, slug = arg.slug, value = arg.value, style = (ref1 = arg.style) != null ? ref1 : '';
+    return "<div class='" + baseClass + "-body-row-cell __" + slug + " " + extraClasses + "' data-slug='" + slug + "' data-column='" + column + "' " + style + "> <div class='" + baseClass + "-body-row-cell-innerwrap' title='" + label + "'>" + value + "</div> </div>";
+  },
+  searchField: function(arg) {
+    var baseClass, search;
+    baseClass = arg.baseClass, search = arg.search;
+    return "<div class='" + baseClass + "-search " + ((search != null ? search.length : void 0) ? 'is_visible' : '') + "'> <select class='" + baseClass + "-search-select'></select> <input class='" + baseClass + "-search-input' /> <div class='" + baseClass + "-search-selectTrigger'></div> </div>";
+  },
+  ipDetails: function(arg) {
+    var baseClass, extra, ipAddress, ref;
+    baseClass = arg.baseClass, ipAddress = arg.ipAddress, extra = (ref = arg.extra) != null ? ref : '';
+    return "<div class='" + baseClass + "-ipDetails _ipDetails' data-ip='" + ipAddress + "'> <div class='" + baseClass + "-ipDetails-trigger _ipDetails-trigger'></div> <div class='" + baseClass + "-ipDetails-content'>Loading IP Details</div> </div> " + extra;
+  },
+  ipDetailsItem: function(arg) {
+    var baseClass, label, value;
+    baseClass = arg.baseClass, label = arg.label, value = arg.value;
+    return "<div class='" + baseClass + "-ipDetails-content-item'> <div class='" + baseClass + "-ipDetails-content-item-label'>" + label + ": </div> <div class='" + baseClass + "-ipDetails-content-item-value'>" + value + "</div> </div>";
+  },
+  fields: function(arg) {
+    var baseClass, fields;
+    baseClass = arg.baseClass, fields = arg.fields;
+    return "<div class='" + baseClass + "-fieldGroup'>" + fields + "</div>";
+  },
+  fieldsItem: function(arg) {
+    var baseClass, label, value;
+    baseClass = arg.baseClass, label = arg.label, value = arg.value;
+    return "<div class='" + baseClass + "-fieldGroup-item'> <div class='" + baseClass + "-fieldGroup-item-label'>" + label + ": </div> <div class='" + baseClass + "-fieldGroup-item-value'>" + (escHTML(value)) + "</div> </div>";
+  },
+  button: function(arg) {
+    var action, baseClass, icon, isMulti, ref;
+    baseClass = arg.baseClass, action = arg.action, icon = (ref = arg.icon) != null ? ref : '', isMulti = arg.isMulti;
+    return "<div class='" + baseClass + "-button _actionButton " + (isMulti ? '_isMulti' : '') + "' data-action='" + action + "'> <div class='" + baseClass + "-button-icon'>" + icon + "</div> </div>";
+  },
+  actions: function(arg) {
+    var actions, baseClass;
+    baseClass = arg.baseClass, actions = arg.actions;
+    return "<div class='" + baseClass + "-actions'> <div class='" + baseClass + "-actions-popup'>" + actions + "</div> </div>";
+  },
+  actionsOverlay: function() {
+    return "<div class='" + DataTable.defaults.baseClass + "-actions-overlay'></div>";
+  },
+  actionsItem: function(arg) {
+    var action, baseClass, customIconStyle, icon, label, ref;
+    baseClass = arg.baseClass, action = arg.action, icon = arg.icon, label = arg.label, customIconStyle = (ref = arg.customIconStyle) != null ? ref : '';
+    return "<div class='" + baseClass + "-actions-popup-item _actionButton _subActionButton' data-action='" + action + "' style='" + customIconStyle + "'> <div class='" + baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
   }
+};
 
-  var escape;
-  var html = '';
-  var index = 0;
-  var lastIndex = 0;
+;
 
-  for (index = match.index; index < str.length; index++) {
-    switch (str.charCodeAt(index)) {
-      case 34: // "
-        escape = '&quot;';
-        break;
-      case 38: // &
-        escape = '&amp;';
-        break;
-      case 39: // '
-        escape = '&#39;';
-        break;
-      case 60: // <
-        escape = '&lt;';
-        break;
-      case 62: // >
-        escape = '&gt;';
-        break;
-      default:
-        continue;
-    }
+var defaults;
 
-    if (lastIndex !== index) {
-      html += str.substring(lastIndex, index);
-    }
-
-    lastIndex = index + 1;
-    html += escape;
+defaults = {
+  'perPage': 20,
+  'pageCountMax': 10,
+  'minWidth': 0,
+  'mobileWidth': 736,
+  'cellsHavePadding': false,
+  'hasMobile': true,
+  'loadOnInit': true,
+  'columns': [],
+  'search': [],
+  'percentage': {},
+  'baseClass': 'DataTable',
+  'showPageStatus': true,
+  'sortBy': '',
+  'alignment': 'left',
+  'actions': false,
+  'ipDataFetcher': function(ipAddress) {
+    return new Promise(function(resolve) {
+      return $.get("http://ipinfo.io/" + ipAddress, resolve, 'JSON');
+    });
   }
+};
 
-  return lastIndex !== index
-    ? html + str.substring(lastIndex, index)
-    : html;
-}
+;
+
+var helpers;
+
+helpers = {};
+
+helpers.compareValues = function(valueA, valueB) {
+  switch (false) {
+    case typeof valueA !== typeof valueB:
+      return valueA === valueB;
+    case typeof valueA !== 'string':
+      return valueA === '' + valueB;
+    case typeof valueA !== 'number':
+      return valueA === parseFloat(valueB);
+  }
+};
+
+helpers.toggleActionsPopup = function(actionsPopup$) {
+  var isOpen, overlay$;
+  isOpen = actionsPopup$.data('isOpen');
+  if (isOpen) {
+    actionsPopup$.data('overlay').remove();
+    actionsPopup$.removeClass('is_visible');
+  } else {
+    actionsPopup$.data('overlay', overlay$ = $(markup.actionsOverlay()));
+    actionsPopup$.addClass('is_visible');
+    overlay$.appendTo(document.body).one('click', function() {
+      return helpers.toggleActionsPopup(actionsPopup$);
+    });
+  }
+  return actionsPopup$.data('isOpen', !isOpen);
+};
+
+helpers.getBreakdownTotal = function(breakdown, breakdownKeys) {
+  switch (false) {
+    case breakdownKeys.length !== 0:
+      return 0;
+    default:
+      return breakdownKeys.map(function(breakdownItem) {
+        return breakdown[breakdownItem];
+      }).reduce(function(a, b) {
+        return a + b;
+      });
+  }
+};
+
+helpers.normalizeColumns = function(columns) {
+  var column, i, j, label, len, len1, output, ref;
+  if (!Array.isArray(columns)) {
+    output = columns;
+  } else {
+    output = {};
+    if (typeof columns[0] === 'string') {
+      for (i = 0, len = columns.length; i < len; i++) {
+        label = columns[i];
+        output[label] = {
+          label: label
+        };
+      }
+    } else if ((ref = columns[0]) != null ? ref.label : void 0) {
+      for (j = 0, len1 = columns.length; j < len1; j++) {
+        column = columns[j];
+        output[column.label] = column;
+      }
+    }
+  }
+  for (label in output) {
+    column = output[label];
+    if (column.label == null) {
+      column.label = label;
+    }
+    if (column.slug == null) {
+      column.slug = column.label.toLowerCase().replace(/\W/g, '_');
+    }
+    if (column.type == null) {
+      column.type = 'text';
+    }
+  }
+  return output;
+};
+
+helpers.getBreakdownBarWidth = function(row, largest) {
+  return (row.breakdownBarTotal / largest) * (100 - 18);
+};
+
+helpers.genHeaderCellStyle = function(column) {
+  var styleString;
+  styleString = '';
+  if (column.width) {
+    styleString += "max-width: " + column.width + ";";
+  }
+  if (column.grow >= 0) {
+    styleString += "flex-grow: " + column.grow + ";";
+  }
+  if (styleString) {
+    return "style='" + styleString + "'";
+  } else {
+    return '';
+  }
+};
+
+helpers.genCellStyle = function(column) {
+  var color, styleString;
+  styleString = '';
+  if (column.width) {
+    styleString += "max-width: " + column.width + ";";
+  }
+  if (column.color) {
+    color = this.colorMapping(column.color, column.colorType);
+    styleString += "color: " + color + ";";
+  }
+  if (column.customStyle) {
+    styleString += column.customStyle;
+  }
+  if (column.grow >= 0) {
+    styleString += "flex-grow: " + column.grow + ";";
+  }
+  if (styleString) {
+    return "style='" + styleString + "'";
+  } else {
+    return '';
+  }
+};
+
+helpers.genCellClassname = function(column) {
+  var classString;
+  classString = '';
+  if (column.sortable) {
+    classString += ' _isSortable {{currentSort}}';
+  }
+  if (column.noLabel) {
+    classString += ' _noLabel';
+  }
+  if (column.isLink) {
+    classString += ' _isLink';
+  }
+  if (column.noEllipsis) {
+    classString += ' _noEllipsis';
+  }
+  if (column.showOverflow) {
+    classString += ' _showOverflow';
+  }
+  if (column.color) {
+    classString += ' _hasColor';
+  }
+  if (column.type === 'button' || column.type === 'actions') {
+    classString += ' _isButton';
+    column.alwaysCenter = true;
+  }
+  if (column.type === 'breakdownBar') {
+    classString += ' _isBreakdownBar';
+  }
+  if (column.type === 'ipDetails') {
+    classString += ' _isIpDetails';
+  }
+  if (column.type === 'fields') {
+    classString += ' _isFields';
+  }
+  if (column.alwaysCenter) {
+    classString += ' _alwaysCenter';
+  }
+  return classString;
+};
+
+helpers.colorMapping = function(value, colorType) {
+  if (colorType == null) {
+    colorType = 'name';
+  }
+  switch (colorType) {
+    case 'browser':
+      switch (false) {
+        case !value.includes('Firefox'):
+          return this.colorMapping('orange');
+        case !value.includes('Chrome'):
+          return this.colorMapping('green');
+        case !value.includes('Safari'):
+          return this.colorMapping('blue');
+        case !value.includes('Mobile Safari'):
+          return this.colorMapping('blue');
+        case !value.includes('IE'):
+          return this.colorMapping('lightblue');
+        case !value.includes('Edge'):
+          return this.colorMapping('lightblue');
+        case !value.includes('Opera'):
+          return this.colorMapping('red');
+        case !value.includes('Android'):
+          return this.colorMapping('lightgreen');
+        default:
+          return 'unknown';
+      }
+      break;
+    case 'platform':
+      switch (value) {
+        case 'Mac OS X':
+          return this.colorMapping('black');
+        case 'Windows':
+          return this.colorMapping('lightblue');
+        case 'Windows Phone':
+          return this.colorMapping('purple');
+        case 'Linux':
+          return this.colorMapping('darkyellow');
+        case 'iOS':
+          return this.colorMapping('black');
+        case 'Android':
+          return this.colorMapping("lightgreen");
+        default:
+          return 'unknown';
+      }
+      break;
+    case 'satisfaction':
+      switch (value) {
+        case 'Excellent':
+          return this.colorMapping('green');
+        case 'Normal':
+          return this.colorMapping('yellow');
+        case 'Poor':
+          return this.colorMapping('red');
+        default:
+          return 'unknown';
+      }
+      break;
+    case 'name':
+      switch (value) {
+        case 'orange':
+          return '#ee6f0e';
+        case 'green':
+          return '#00ad09';
+        case 'blue':
+          return '#4788f3';
+        case 'yellow':
+          return '#eab71e';
+        case 'red':
+          return '#cc4820';
+        case 'black':
+          return '#181818';
+        case 'purple':
+          return '#a020ba';
+        case 'lightblue':
+          return '#0cb3ee';
+        case 'lightgreen':
+          return '#78c257';
+        case 'darkyellow':
+          return '#e8ac01';
+      }
+      break;
+    default:
+      return value;
+  }
+};
+
+helpers.iconMapping = function(value, iconType) {
+  switch (iconType) {
+    case 'browser':
+      switch (false) {
+        case !value.includes('Firefox'):
+          return '#';
+        case !value.includes('Chrome'):
+          return '%';
+        case !value.includes('Safari'):
+          return '$';
+        case !value.includes('Mobile Safari'):
+          return '$';
+        case !value.includes('IE'):
+          return '&';
+        case !value.includes('Edge'):
+          return '&';
+        case !value.includes('Opera'):
+          return '"';
+        case !value.includes('Android'):
+          return '&#039;';
+        default:
+          return '4';
+      }
+      break;
+    case 'device':
+      switch (value) {
+        case 'Desktop':
+          return '!';
+        case 'Tablet':
+          return '7';
+        case 'Mobile':
+          return '6';
+        default:
+          return '4';
+      }
+      break;
+    case 'platform':
+      switch (value) {
+        case 'Mac OS X':
+          return '*';
+        case 'Windows':
+          return ')';
+        case 'Windows Phone':
+          return ')';
+        case 'Linux':
+          return '+';
+        case 'iOS':
+          return '*';
+        case 'Android':
+          return "&#039;";
+        default:
+          return '4';
+      }
+      break;
+    case 'satisfaction':
+      switch (value) {
+        case 'Excellent':
+          return '[';
+        case 'Normal':
+          return '@';
+        case 'Poor':
+          return '?';
+        default:
+          return '4';
+      }
+      break;
+    default:
+      return '4';
+  }
+};
+
+;
+
+DataTable = function(container, options) {
+  this.container = container;
+  if (options == null) {
+    options = {};
+  }
+  this.options = extend.clone.deepOnly('columns')(DataTable.defaults, options);
+  this.state = {
+    'loading': false,
+    'noResults': false,
+    'error': false
+  };
+  this.ID = ++currentID;
+  this.tableID = "\#" + this.options.baseClass + "-" + this.ID;
+  this.visibleRows = [];
+  this.availableRows = [];
+  this.allRows = [];
+  this.largestBreakdownTotal = 0;
+  this.searchCriteria = '';
+  this.searchParam = '';
+  this.sortBy = this.options.sortBy ? this.options.sortBy : '';
+  this.sortDirection = -1;
+  this.currentPage = 1;
+  this.els = {};
+  this.els.tableOuterwrap = $(markup.tableOuterwrap(extend({
+    ID: this.ID
+  }, this.options)));
+  this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
+  this.els.tableHeading = this.els.table.children().first().children();
+  this.els.tableBody = this.els.table.children().last();
+  this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
+  this.els.loadingMessage = $(markup.loading(this.options)).appendTo(this.els.tableOuterwrap);
+  this.els.errorMessage = $(markup.error(this.options)).appendTo(this.els.tableOuterwrap);
+  this.els.pageStatus = $(markup.pageStatus(this.options)).appendTo(this.els.tableOuterwrap);
+  this.els.pagination = $(markup.pagination(this.options)).appendTo(this.els.tableOuterwrap);
+  this.els.paginationItems = this.els.pagination.children('._paginationItems');
+  this.els.paginationExtra = this.els.pagination.children('._extraIndicator');
+  this.els.paginationExtraSelect = this.els.paginationExtra.children('select');
+  this.els.paginationExtraText = this.els.paginationExtraSelect.prev();
+  this.els.searchField = $(markup.searchField(this.options)).insertBefore(this.els.table);
+  this.els.searchParam = this.els.searchField.children('select');
+  this.els.searchCriteria = this.els.searchField.children('input');
+  this.els.globalStyles = $('<style />').prependTo(this.els.tableOuterwrap);
+  this.els.tableHeading.append(this.generateHeadingColumns());
+  this.els.tableOuterwrap.appendTo(this.container);
+  this.els.table.data('DataTable', this);
+  if (this.options.minWidth) {
+    this.els.table[0].style.minWidth = this.options.minWidth + "px";
+  }
+  Promise.bind(this).then(this.attachEvents).then(this.attachBindings).then(function() {
+    if (this.options.loadOnInit) {
+      return this.loadData();
+    }
+  });
+  return this;
+};
+
+DataTable.prototype.fetchData = function() {
+  this.state.loading = true;
+  return Promise.resolve().then((function(_this) {
+    return function() {
+      return _this.options.data.call(_this);
+    };
+  })(this)).then((function(_this) {
+    return function(data) {
+      _this.state.loading = _this.state.error = false;
+      return data;
+    };
+  })(this))["catch"]((function(_this) {
+    return function(err) {
+      return _this.state.error = err;
+    };
+  })(this));
+};
+
+DataTable.prototype.setData = function(data) {
+  if (Array.isArray(data)) {
+    return this.allRows = data;
+  }
+};
+
+DataTable.prototype.loadData = function() {
+  var i, len, ref, row;
+  if (this.allRows.length) {
+    ref = this.allRows;
+    for (i = 0, len = ref.length; i < len; i++) {
+      row = ref[i];
+      this.unprocessRow(row);
+    }
+  }
+  return this.fetchData().then((function(_this) {
+    return function(data) {
+      return _this.setData(data);
+    };
+  })(this));
+};
+
+DataTable.prototype.refresh = function() {
+  this.availableRows = this.availableRows;
+  return this.currentPage = this.currentPage;
+};
+
+DataTable.prototype.markupArgs = function(argsObject) {
+  if (argsObject == null) {
+    argsObject = {};
+  }
+  argsObject.baseClass = this.options.baseClass;
+  return argsObject;
+};
+
+DataTable.prototype.calcPageCount = function(rows) {
+  this.pageCountReal = Math.ceil(rows.length / this.options.perPage);
+  return this.pageCount = this.pageCountReal > this.options.pageCountMax ? this.options.pageCountMax : this.pageCountReal;
+};
+
+DataTable.prototype.calcPercentageString = function(columnValue, columnName, row) {
+  var columnA, columnB, formula, mathOperator, percent, percentageValue;
+  formula = this.options.percentage[columnName];
+  columnA = formula[0];
+  columnB = formula[2];
+  mathOperator = formula[1];
+  percentageValue = (function() {
+    switch (mathOperator) {
+      case '*':
+        return row[columnA] * row[columnB];
+      case '/':
+        return row[columnA] / row[columnB];
+      case '+':
+        return row[columnA] + row[columnB];
+      case '-':
+        return row[columnA] - row[columnB];
+    }
+  })();
+  if (percentageValue === 2e308) {
+    percentageValue = 0;
+  }
+  percent = convertToPercent(percentageValue);
+  return columnValue + " (" + percent + ")";
+};
+
+DataTable.prototype.sortRows = function(rows, targetColumn) {
+  var customSort, rawValue;
+  if (targetColumn == null) {
+    targetColumn = this.options.sortBy;
+  }
+  switch (false) {
+    case targetColumn !== '+':
+      return rows;
+    case targetColumn !== '-':
+      return rows != null ? rows.slice().reverse() : void 0;
+    case !this.options.columns[targetColumn]:
+      customSort = this.options.columns[targetColumn].sortFn;
+      rawValue = this.options.columns[targetColumn].rawValueFormatter;
+      return rows.slice().sort(customSort || (function(_this) {
+        return function(a, b) {
+          var aValue, bValue;
+          aValue = rawValue ? rawValue(a[targetColumn]) : a[targetColumn];
+          bValue = rawValue ? rawValue(b[targetColumn]) : b[targetColumn];
+          switch (false) {
+            case !(aValue > bValue):
+              return _this.sortDirection;
+            case !(aValue < bValue):
+              return _this.sortDirection * -1;
+            default:
+              return 0;
+          }
+        };
+      })(this));
+    default:
+      return rows;
+  }
+};
+
+DataTable.prototype.setVisiblePage = function(targetPage) {
+  var i, len, row, rowsToHide, rowsToReveal, slice;
+  targetPage--;
+  slice = {
+    'start': targetPage * this.options.perPage,
+    'end': (targetPage * this.options.perPage) + this.options.perPage
+  };
+  rowsToReveal = this.availableRows.slice(slice.start, slice.end);
+  rowsToHide = this.visibleRows.slice();
+  for (i = 0, len = rowsToHide.length; i < len; i++) {
+    row = rowsToHide[i];
+    row.visible = false;
+  }
+  this.visibleRows.length = 0;
+  return this.visibleRows.push.apply(this.visibleRows, rowsToReveal);
+};
+
+DataTable.prototype.setPageIndicator = function(targetPage) {
+  var matchedPageEl$, pageItems$;
+  if (targetPage === '...') {
+    targetPage = 1;
+  }
+  targetPage = targetPage > this.options.pageCountMax ? this.options.pageCountMax : targetPage - 1;
+  pageItems$ = this.els.pagination.find('._paginationItem').slice(1, -1);
+  matchedPageEl$ = pageItems$.eq(targetPage);
+  matchedPageEl$.addClass('current');
+  return pageItems$.not(matchedPageEl$).removeClass('current');
+};
+
+;
+
+DataTable.prototype.generateHeadingColumns = function() {
+  var column, label;
+  this.options.columns = helpers.normalizeColumns(this.options.columns);
+  if ((function() {
+    var ref, results;
+    ref = this.options.columns;
+    results = [];
+    for (label in ref) {
+      column = ref[label];
+      results.push(column.type === 'breakdownBar');
+    }
+    return results;
+  }).call(this)) {
+    this.hasBreakdownBar = true;
+  }
+  return Object.keys(this.options.columns).map((function(_this) {
+    return function(label) {
+      column = _this.options.columns[label];
+      _this.els.globalStyles[0].innerHTML += "{{" + column.slug + "}}\n";
+      return markup.headingCell(_this.markupArgs({
+        'slug': column.slug,
+        'icon': column.icon,
+        'label': column.label,
+        'style': helpers.genHeaderCellStyle(column),
+        'extraClasses': helpers.genCellClassname(column)
+      }));
+    };
+  })(this)).join('');
+};
+
+DataTable.prototype.updateColumns = function(updatedColumns) {
+  updatedColumns = helpers.normalizeColumns(updatedColumns);
+  extend.deep(this.options.columns, updatedColumns);
+  return this.currentPage = this.currentPage;
+};
+
+;
+
+DataTable.prototype.processRow = function(row) {
+  var ref;
+  if (row.processed) {
+    return row;
+  } else {
+    this.generateRow(row);
+    SimplyBind('visible', {
+      updateEvenIfSame: true
+    }).of(row).to((function(_this) {
+      return function(isVisible, prevValue) {
+        if (!isVisible) {
+          return row.el.detach();
+        } else {
+          row.el.appendTo(_this.els.tableBody);
+          if (_this.hasBreakdownBar && !row.updatedBreakdownWidth && isVisible !== prevValue) {
+            return row.breakdownBarWidth = helpers.getBreakdownBarWidth(row, _this.largestBreakdownTotal);
+          }
+        }
+      };
+    })(this));
+    if (this.hasBreakdownBar && ((ref = row.breakdownBarEl) != null ? ref.length : void 0)) {
+      SimplyBind('largestBreakdownTotal').of(this).to('updatedBreakdownWidth').of(row).transform(function() {
+        if (row.visible) {
+          return true;
+        } else {
+          return false;
+        }
+      }).and.to('breakdownBarWidth').of(row).transform((function(_this) {
+        return function() {
+          return helpers.getBreakdownBarWidth(row, _this.largestBreakdownTotal);
+        };
+      })(this)).chainTo('width').of(row.breakdownBarEl[0].style).transform(function(width) {
+        return width + '%';
+      }).and.to((function(_this) {
+        return function() {
+          var drilldownEl, i, index, len, ref1, ref2, width;
+          ref1 = row.drilldownEls;
+          for (index = i = 0, len = ref1.length; i < len; index = ++i) {
+            drilldownEl = ref1[index];
+            width = helpers.getBreakdownBarWidth(row.drilldown[index], row.drilldown.largestBreakdownTotal);
+            if ((ref2 = $(drilldownEl).children('.is_breakdown_bar').children().children()[0]) != null) {
+              ref2.style.width = width + '%';
+            }
+          }
+        };
+      })(this)).condition(function() {
+        return row.drilldown;
+      }).conditionAll(function() {
+        return row.visible;
+      });
+    }
+    row.processed = true;
+    return row;
+  }
+};
+
+DataTable.prototype.unprocessRow = function(row) {
+  if (row.processed) {
+    SimplyBind.unBindAll(row, true);
+    if (this.hasBreakdownBar && row.breakdownBarEl[0]) {
+      SimplyBind.unBindAll(row.breakdownBarEl[0].style);
+    }
+    row.el.remove();
+    delete row.el;
+    delete row.drilldownEls;
+    delete row.visible;
+    delete row.breakdownBarEl;
+    return delete row.processed;
+  }
+};
+
+DataTable.prototype.reRenderRow = function(row) {
+  return this.generateRow(row);
+};
+
+DataTable.prototype.generateRow = function(row) {
+  var newRowEl, prevRowEl;
+  prevRowEl = row.el;
+  newRowEl = row.el = $(this.generateRowMarkup(row)).data('row', row);
+  if (prevRowEl) {
+    prevRowEl.replaceWith(newRowEl);
+  }
+  if (row.drilldown) {
+    row.expandButton = row.el.children().first();
+  }
+  if (row.drilldown) {
+    row.drilldownEls = row.el.children('._tableRowDrilldown').children();
+  }
+  if (this.hasBreakdownBar) {
+    row.breakdownBarEl = row.el.children('.isBreakdownBar').children().children();
+  }
+  if (!prevRowEl) {
+    row.visible = false;
+  }
+  if (row.drilldown) {
+    if (this.hasBreakdownBar) {
+      row.drilldown.largestBreakdownTotal = Math.max.apply(Math, row.drilldown.map(function(subRow) {
+        return subRow.breakdownBarTotal;
+      }));
+    }
+    SimplyBind('drilldownOpen').of(row).to('className.drilldownState').of(row.el).transform(function(drilldownOpen) {
+      if (drilldownOpen) {
+        return 'hasDrilldown drilldownIsOpen';
+      } else {
+        return 'hasDrilldown';
+      }
+    });
+    SimplyBind('visible').of(row).once.to(function() {
+      return SimplyBind(function() {
+        if (!row.drilldownOpen) {
+          return setTimeout(function() {
+            var buttonHeight, rowHeight;
+            rowHeight = row.el.height();
+            buttonHeight = row.expandButton.height();
+            return row.expandButton[0].style.top = (rowHeight / 2 - buttonHeight / 2) + "px";
+          });
+        }
+      }).updateOn('event:resize', {
+        throttle: 300
+      }).of(window);
+    }).condition(function(visible) {
+      return visible;
+    });
+  }
+  return row;
+};
+
+DataTable.prototype.generateRowMarkup = function(row, parentRow) {
+  var isSub;
+  isSub = !!parentRow;
+  return markup.row(this.markupArgs({
+    'rowID': isSub ? parentRow[this.options.uniqueID] : row[this.options.uniqueID],
+    'drilldown': isSub ? '' : row.drilldown ? (function(_this) {
+      return function() {
+        var drilldownMarkups, drilldownRow, i, len, ref;
+        drilldownMarkups = '';
+        ref = row.drilldown;
+        for (i = 0, len = ref.length; i < len; i++) {
+          drilldownRow = ref[i];
+          drilldownMarkups += _this.generateRowMarkup(drilldownRow, row);
+        }
+        return drilldownMarkups;
+      };
+    })(this)() : void 0,
+    'cells': (function(_this) {
+      return function() {
+        var cellValue, column, columnName, ref, rowCells;
+        rowCells = '';
+        ref = _this.options.columns;
+        for (columnName in ref) {
+          column = ref[columnName];
+          cellValue = row[columnName];
+          if (_this.options.percentage[columnName]) {
+            cellValue = _this.calcPercentageString(cellValue, columnName, row);
+          }
+          rowCells += markup.rowCell(_this.markupArgs({
+            'label': typeof cellValue === 'string' ? cellValue : '',
+            'column': columnName,
+            'slug': column.slug,
+            'extraClasses': helpers.genCellClassname(column),
+            'style': helpers.genCellStyle(column),
+            'value': (function() {
+              switch (false) {
+                case column.type !== 'fields':
+                  return _this.generateInlineFields(cellValue, row, column);
+                case column.type !== 'ipDetails':
+                  return _this.generateIpDetails(cellValue, row, column);
+                case column.type !== 'breakdownBar':
+                  return _this.generateBreakdownBar(cellValue, row, column);
+                case column.type !== 'button':
+                  return _this.generateButton(column.action || cellValue, column.buttonIcon || column.icon);
+                case column.type !== 'actions':
+                  return _this.generateActions(column, row, column);
+                case !column.isLink:
+                  return "<a href='" + cellValue + "' target='_blank'>" + cellValue + "</a>";
+                default:
+                  if (column.formatter) {
+                    return column.formatter(cellValue, row, column);
+                  } else {
+                    return cellValue;
+                  }
+              }
+            })()
+          }));
+        }
+        return rowCells;
+      };
+    })(this)()
+  }));
+};
+
+;
+
+DataTable.prototype.generateBreakdownBar = function(breakdown, rowObj, columnEntity) {
+  var breakdownKeys, total;
+  breakdownKeys = this.legend || Object.keys(breakdown);
+  rowObj.breakdownBarTotal = total = this.getBreakdownTotal(breakdown, breakdownKeys);
+  if (!total) {
+    return 'N/A';
+  }
+  return markup.breakdownBar(this.markupArgs({
+    'total': total,
+    'totalFormatted': columnEntity.valueFormat ? columnEntity.valueFormat(total) : total,
+    'bars': (function() {
+      var bars, i, key, len, value;
+      bars = '';
+      for (i = 0, len = breakdownKeys.length; i < len; i++) {
+        key = breakdownKeys[i];
+        value = breakdown[key];
+        bars += markup.block_table_body_row_cell_breakdown_bar.replace('{{width}}', (value / total) * 100);
+      }
+      return bars;
+    })(),
+    'hoverBox': (function() {
+      return markup.block_table_body_row_cell_breakdown_hoverbox.replace('{{rows}}', function() {
+        var rows;
+        rows = '';
+        breakdownKeys.forEach(function(key, index) {
+          return rows += markup.block_table_body_row_cell_breakdown_hoverbox_row.replace('{{color}}', customColors(index)).replace('{{key}}', key).replace('{{value}}', columnEntity.valueFormat ? columnEntity.valueFormat(breakdown[key]) : breakdown[key]);
+        });
+        return rows;
+      });
+    })()
+  }));
+};
+
+DataTable.prototype.generateInlineFields = function(dataFields) {
+  return markup.fields(this.markupArgs({
+    'fields': (function(_this) {
+      return function() {
+        var label, output, value;
+        if (typeof dataFields !== 'object') {
+          return '';
+        }
+        output = (function() {
+          var results;
+          results = [];
+          for (label in dataFields) {
+            value = dataFields[label];
+            results.push(markup.fieldsItem(this.markupArgs({
+              label: label,
+              value: value
+            })));
+          }
+          return results;
+        }).call(_this);
+        return output.join('');
+      };
+    })(this)()
+  }));
+};
+
+DataTable.prototype.generateButton = function(action, icon, isMulti) {
+  return markup.button(this.markupArgs({
+    action: action,
+    icon: icon,
+    isMulti: isMulti
+  }));
+};
+
+DataTable.prototype.generateActions = function(column) {
+  var actionsMarkup, buttonMarkup;
+  if (column.actions == null) {
+    column.actions = 'multiActions';
+  }
+  buttonMarkup = this.generateButton(column.actions, column.buttonIcon || column.icon, true);
+  actionsMarkup = markup.actions(this.markupArgs({
+    'actions': (function(_this) {
+      return function() {
+        var action, output;
+        if (!_this.options.actions) {
+          return '';
+        }
+        output = (function() {
+          var i, len, ref, results;
+          ref = this.options.actions;
+          results = [];
+          for (i = 0, len = ref.length; i < len; i++) {
+            action = ref[i];
+            results.push(markup.actionsItem(this.markupArgs(action)));
+          }
+          return results;
+        }).call(_this);
+        return output.join('');
+      };
+    })(this)()
+  }));
+  return buttonMarkup + actionsMarkup;
+};
+
+DataTable.prototype.generateIpDetails = function(ipAddress, row, column) {
+  return markup.ipDetails(this.markupArgs({
+    ipAddress: ipAddress,
+    extra: typeof column.extraMarkup === "function" ? column.extraMarkup(ipAddress, row) : void 0
+  }));
+};
+
+;
+
+;
+
+DataTable.prototype.attachEvents = function() {
+  this.els.pagination.on('click', '._paginationItem', (function(_this) {
+    return function(event) {
+      var $this, isBack, isExtra, isNext, pageNumber;
+      $this = $(event.currentTarget);
+      isBack = $this.hasClass('_back');
+      isNext = $this.hasClass('_next');
+      isExtra = $this.hasClass('_extraIndicator');
+      if (isBack) {
+        if (_this.currentPage !== 1) {
+          return _this.currentPage--;
+        }
+      } else if (isNext) {
+        if (_this.currentPage !== _this.pageCountReal) {
+          return _this.currentPage++;
+        }
+      } else if (!isExtra) {
+        pageNumber = parseFloat($this.children().html());
+        return _this.currentPage = pageNumber;
+      }
+    };
+  })(this));
+  this.els.tableHeading.on('click', '._isSortable', (function(_this) {
+    return function(event) {
+      return _this.sortBy = event.currentTarget.children[0].textContent;
+    };
+  })(this));
+  this.els.tableBody.on('click', '._actionButton', (function(_this) {
+    return function(event) {
+      var action, button$, dataItem, itemID, itemIndex, itemRow$;
+      button$ = $(event.currentTarget);
+      if (button$.hasClass('_isMulti')) {
+        return helpers.toggleActionsPopup(button$.next().children());
+      } else {
+        itemRow$ = button$.closest('._tableRow');
+        action = button$.data('action');
+        itemID = itemRow$.data('row-id');
+        itemIndex = itemRow$.data('index');
+        dataItem = itemID ? _this.allRows.find(function(row) {
+          return helpers.compareValues(row[_this.options.uniqueID], itemID);
+        }) : void 0;
+        if (dataItem == null) {
+          dataItem = itemID;
+        }
+        if (button$.hasClass('_subActionButton')) {
+          helpers.toggleActionsPopup(button$.parent());
+        }
+        return _this.els.table.trigger("action." + action, dataItem);
+      }
+    };
+  })(this));
+  this.els.tableBody.on('click', '._expandDrilldown', (function(_this) {
+    return function(event) {
+      var button$, itemRow;
+      button$ = $(event.currentTarget);
+      itemRow = button$.parent().data('row');
+      return itemRow.drilldownOpen = !itemRow.drilldownOpen;
+    };
+  })(this));
+  this.els.tableBody.on('mouseover', '._ipDetails-trigger', (function(_this) {
+    return function(event) {
+      var content$, country$, ipAddress, isLoaded, trigger$, wrapper$;
+      trigger$ = $(event.currentTarget);
+      wrapper$ = trigger$.parent();
+      content$ = trigger$.next();
+      country$ = content$.next();
+      ipAddress = wrapper$.data('ip');
+      isLoaded = trigger$.hasClass('_isReady');
+      if (!isLoaded) {
+        return _this.options.ipDataFetcher(ipAddress).then(function(ipDetails) {
+          var label, output, value;
+          if (!ipDetails) {
+            return;
+          }
+          output = (function() {
+            var results;
+            results = [];
+            for (label in ipDetails) {
+              value = ipDetails[label];
+              results.push(markup.ipDetailsItem(this.markupArgs({
+                label: label,
+                value: value
+              })));
+            }
+            return results;
+          }).call(_this);
+          content$.html(output.join(''));
+          return wrapper$.addClass('_isReady');
+        });
+      }
+    };
+  })(this));
+  return Promise.resolve();
+};
+
+;
+
+DataTable.prototype.attachBindings = function() {
+  var column, fn, l, ref;
+  SimplyBind.settings.trackArrayChildren = false;
+  SimplyBind('noResults').of(this.state).to('className.isVisible').of(this.els.noResultsMessage).transform((function(_this) {
+    return function(noResults) {
+      if (noResults && !_this.state.loading) {
+        return 'is_visible';
+      } else {
+        return '';
+      }
+    };
+  })(this)).and.to('className.noResults').of(this.els.tableOuterwrap).transform((function(_this) {
+    return function(noResults) {
+      if (noResults && !_this.state.loading) {
+        return '_noResults';
+      } else {
+        return '';
+      }
+    };
+  })(this));
+  SimplyBind('loading').of(this.state).to('className.isVisible').of(this.els.loadingMessage).transform(function(loading) {
+    if (loading) {
+      return 'is_visible';
+    } else {
+      return '';
+    }
+  }).and.to('className.loading').of(this.els.tableOuterwrap).transform((function(_this) {
+    return function(loading) {
+      if (loading) {
+        return '_loading';
+      } else {
+        return '';
+      }
+    };
+  })(this)).and.to((function(_this) {
+    return function(loading) {
+      if (loading) {
+        return _this.state.noResults = false;
+      } else {
+        return _this.state.noResults = !_this.visibleRows.length;
+      }
+    };
+  })(this));
+  SimplyBind('error').of(this.state).to('textContent.errorMessage').of(this.els.errorMessage).and.to('className.isVisible').of(this.els.errorMessage).transform(function(hasError) {
+    if (hasError) {
+      return 'is_visible';
+    } else {
+      return '';
+    }
+  }).and.to('className.hasError').of(this.els.tableOuterwrap).transform(function(hasError) {
+    if (hasError) {
+      return '_error';
+    } else {
+      return '';
+    }
+  }).and.to(function(err) {
+    if (err) {
+      return console.error(err);
+    }
+  });
+  if (this.options.hasMobile) {
+    this.windowWidth = window.innerWidth;
+    SimplyBind('event:resize').of(window).to((function(_this) {
+      return function() {
+        return _this.windowWidth = window.innerWidth;
+      };
+    })(this));
+    SimplyBind('windowWidth').of(this).to('className.mobileVersion').of(this.els.tableOuterwrap).transform((function(_this) {
+      return function(windowWidth) {
+        if (windowWidth <= _this.options.mobileWidth) {
+          return '_mobileVersion';
+        } else {
+          return '';
+        }
+      };
+    })(this));
+  }
+  ref = this.options.columns;
+  fn = (function(_this) {
+    return function(column) {
+      return SimplyBind('hidden').of(column).to("innerHTML." + column.slug).of(_this.els.globalStyles).transform(function(isHidden) {
+        if (isHidden) {
+          return _this.tableID + " .__" + column.slug + " {display:none}";
+        } else {
+          return '';
+        }
+      });
+    };
+  })(this);
+  for (l in ref) {
+    column = ref[l];
+    fn(column);
+  }
+  SimplyBind('array:visibleRows').of(this).to((function(_this) {
+    return function(rows, prevRows) {
+      var err, i, j, len, len1, row;
+      if (prevRows != null ? prevRows.length : void 0) {
+        for (i = 0, len = prevRows.length; i < len; i++) {
+          row = prevRows[i];
+          row.visible = false;
+        }
+      }
+      try {
+        for (j = 0, len1 = rows.length; j < len1; j++) {
+          row = rows[j];
+          _this.processRow(row);
+          row.visible = true;
+        }
+      } catch (error) {
+        err = error;
+        _this.state.error = err;
+      }
+      return _this.state.noResults = !rows.length;
+    };
+  })(this)).and.to((function(_this) {
+    return function(rows) {
+      var i, largestBreakdownTotal, len, row;
+      if (!_this.hasBreakdownBar) {
+        return;
+      }
+      for (i = 0, len = rows.length; i < len; i++) {
+        row = rows[i];
+        if (row.breakdownBarTotal > largestBreakdownTotal || (typeof largestBreakdownTotal === "undefined" || largestBreakdownTotal === null)) {
+          largestBreakdownTotal = row.breakdownBarTotal;
+        }
+      }
+      return _this.largestBreakdownTotal = largestBreakdownTotal || 0;
+    };
+  })(this)).and.to('textContent.rowRange').of(this.els.pageStatus).transform((function(_this) {
+    return function(rows) {
+      return (_this.availableRows.indexOf(rows[0]) + 1) + "-" + (_this.availableRows.indexOf(rows.slice(-1)[0]) + 1);
+    };
+  })(this));
+  SimplyBind('array:allRows').of(this).to((function(_this) {
+    return function(rows) {
+      _this.searchCriteria = '';
+      _this.currentPage = 1;
+      _this.state.noResults = !rows.length;
+      if (_this.sortBy === _this.options.sortBy) {
+        _this.sortBy = '';
+        return _this.sortBy = _this.options.sortBy;
+      } else {
+        return _this.sortBy = '';
+      }
+    };
+  })(this));
+  SimplyBind('availableRows', {
+    updateOnBind: false,
+    updateEvenIfSame: true
+  }).of(this).to((function(_this) {
+    return function(rows) {
+      return _this.calcPageCount(rows);
+    };
+  })(this)).and.to('textContent.totalRows').of(this.els.pageStatus).transform(function(rows) {
+    return rows.length;
+  });
+  SimplyBind('pageCount').of(this).to('innerHTML').of(this.els.paginationItems).transform((function(_this) {
+    return function(count) {
+      var i, paginationItems, ref1, value;
+      paginationItems = '';
+      for (value = i = 1, ref1 = count; 1 <= ref1 ? i <= ref1 : i >= ref1; value = 1 <= ref1 ? ++i : --i) {
+        if (value !== 0) {
+          paginationItems += markup.paginationItem(_this.markupArgs({
+            value: value
+          }));
+        }
+      }
+      return paginationItems;
+    };
+  })(this)).and.to('className.isVisible').of(this.els.pagination).transform(function(count) {
+    if (count > 1) {
+      return 'is_visible';
+    } else {
+      return '';
+    }
+  });
+  SimplyBind('pageCountReal').of(this).to('innerHTML').of(this.els.paginationExtraSelect).transform((function(_this) {
+    return function(realCount) {
+      var i, index, options, ref1, ref2;
+      if (realCount <= _this.options.pageCountMax) {
+        return '';
+      } else {
+        options = '<option>...</option>';
+        for (index = i = ref1 = _this.options.pageCountMax + 1, ref2 = realCount; ref1 <= ref2 ? i <= ref2 : i >= ref2; index = ref1 <= ref2 ? ++i : --i) {
+          options += "<option>" + index + "</option>";
+        }
+        return options;
+      }
+    };
+  })(this)).and.to('className.hasExtra').of(this.els.pagination).transform((function(_this) {
+    return function(realCount) {
+      if (realCount > _this.options.pageCountMax) {
+        return 'has_extra';
+      } else {
+        return '';
+      }
+    };
+  })(this));
+  SimplyBind('value', {
+    updateOnBind: false
+  }).of(this.els.paginationExtraSelect).to('innerHTML').of(this.els.paginationExtraText).and.to('currentPage').of(this);
+  SimplyBind('currentPage', {
+    updateEvenIfSame: true
+  }).of(this).transformSelf((function(_this) {
+    return function(currentPage) {
+      currentPage = currentPage === '...' ? 1 : parseFloat(currentPage);
+      if (currentPage > _this.pageCountReal) {
+        return _this.pageCountReal;
+      } else {
+        return currentPage;
+      }
+    };
+  })(this)).to('value').of(this.els.paginationExtraSelect).transform((function(_this) {
+    return function(currentPage) {
+      if (currentPage > _this.options.pageCountMax) {
+        return currentPage;
+      } else {
+        return '...';
+      }
+    };
+  })(this)).and.to((function(_this) {
+    return function(currentPage) {
+      _this.setVisiblePage(currentPage);
+      return _this.setPageIndicator(currentPage);
+    };
+  })(this));
+  if (this.options.search.length) {
+    this.searchParam = this.options.search[0];
+    SimplyBind('search').of(this.options).to('innerHTML').of(this.els.searchParam).transform(function(options) {
+      return options.map(function(option) {
+        return "<option>" + option + "</option>";
+      }).join('');
+    });
+    SimplyBind('value').of(this.els.searchParam).to('searchParam').of(this).pipe('attr:placeholder').of(this.els.searchCriteria).transform(function(option) {
+      return "Search by " + option;
+    });
+  }
+  SimplyBind('value').of(this.els.searchCriteria).to('searchCriteria', {
+    updateEvenIfSame: true
+  }).of(this).bothWays().chainTo((function(_this) {
+    return function(searchCriteria) {
+      var ref1, rowsToMakeAvailable, targetColumn;
+      rowsToMakeAvailable = _this.allRows;
+      targetColumn = _this.options.columns[_this.searchParam];
+      if (searchCriteria && (targetColumn || (((ref1 = _this.allRows[0]) != null ? ref1[_this.searchParam] : void 0) != null))) {
+        rowsToMakeAvailable = rowsToMakeAvailable.filter(function(row) {
+          var rowValue;
+          rowValue = (targetColumn != null ? targetColumn.rawValueFormatter : void 0) ? targetColumn.rawValueFormatter(row[_this.searchParam]) : row[_this.searchParam];
+          return rowValue != null ? rowValue.toString().toLowerCase().includes(searchCriteria.toLowerCase()) : void 0;
+        });
+      }
+      if (_this.options.rowFilter) {
+        rowsToMakeAvailable = rowsToMakeAvailable.filter(function(row) {
+          var name, ref2, rowClone;
+          rowClone = extend.clone(row);
+          ref2 = _this.options.columns;
+          for (name in ref2) {
+            column = ref2[name];
+            if (column.rawValueFormatter) {
+              rowClone[name] = column.rawValueFormatter(rowClone[name]);
+            }
+          }
+          return _this.options.rowFilter(rowClone);
+        });
+      }
+      _this.availableRows = rowsToMakeAvailable;
+      return _this.currentPage = 1;
+    };
+  })(this));
+  SimplyBind('sortBy', {
+    updateEvenIfSame: true,
+    updateOnBind: false
+  }, true).of(this).to((function(_this) {
+    return function(currentSort, prevSort) {
+      var targetColumn;
+      if (currentSort || prevSort) {
+        if (currentSort === prevSort && prevSort) {
+          _this.sortDirection *= -1;
+        } else {
+          _this.sortDirection = -1;
+        }
+        targetColumn = currentSort ? currentSort : null;
+        _this.availableRows = _this.sortRows(_this.availableRows, targetColumn);
+        return _this.currentPage = 1;
+      }
+    };
+  })(this));
+  if (this.els.tableHeading.children('._isSortable').length) {
+    SimplyBind('sortBy', {
+      updateOnBind: true
+    }).of(this).to('multi:className.currentSort').of(this.els.tableHeading.children('._isSortable')).transform(function(current, prev, el) {
+      if (current === el.children[0].textContent) {
+        return '_currentSort';
+      } else {
+        return '';
+      }
+    });
+  }
+  SimplyBind('sortDirection').of(this).to('className.sortDirection').of(this.els.table).transform(function(sortDirection) {
+    if (sortDirection === -1) {
+      return 'desc';
+    } else {
+      return 'asc';
+    }
+  });
+  return Promise.resolve();
+};
+
+;
+
+DataTable.prototype.sortBy = function(column) {};
+
+;
+
+currentID = 0;
+
+DataTable.version = "2.9.3";
+
+DataTable.helpers = helpers;
+
+DataTable.markup = markup;
+
+DataTable.defaults = defaults;
+
+module.exports = DataTable;
+
 ;
 return module.exports;
 },
@@ -1752,1518 +3100,323 @@ module.exports = SimplyBind;
 ;
 return module.exports;
 },
-0: function (require, module, exports) {
-var DataTable, SimplyBind, currentID, escHTML, extend;
+2: function (require, module, exports) {
+var exports, extend, modifiers, newBuilder, normalizeKeys;
 
-SimplyBind = require(1);
+extend = require(17);
 
-extend = require(2);
-
-escHTML = require(3);
-
-var markup;
-
-markup = {
-  tableOuterwrap: function(arg) {
-    var ID, baseClass, cellsHavePadding, hasMobile, minWidth;
-    ID = arg.ID, baseClass = arg.baseClass, minWidth = arg.minWidth, hasMobile = arg.hasMobile, cellsHavePadding = arg.cellsHavePadding;
-    return "<div id='" + baseClass + "-" + ID + "' class='" + baseClass + "-outerwrap {{loading}} {{noResults}} {{hasError}} " + (minWidth ? '_hasMinWidth' : '') + " " + (hasMobile ? '{{mobileVersion}}' : '') + " " + (cellsHavePadding ? '_cellsHavePadding' : '') + " '></div>";
-  },
-  table: function(arg) {
-    var alignment, baseClass;
-    baseClass = arg.baseClass, alignment = arg.alignment;
-    return "<div class='" + baseClass + " alignment---" + alignment + " sortDirection---{{sortDirection}}'> <div class='" + baseClass + "-heading'> <div class='" + baseClass + "-heading-row'></div> </div> <div class='" + baseClass + "-body'></div> </div>";
-  },
-  loading: function(arg) {
-    var baseClass;
-    baseClass = arg.baseClass;
-    return "<div class='" + baseClass + "-loading {{isVisible}}'> <div class='" + baseClass + "-loading-innerwrap'> <div class='" + baseClass + "-loading-icon'></div> <div class='" + baseClass + "-loading-text'>Loading</div> </div> </div>";
-  },
-  noResults: function(arg) {
-    var baseClass, itemPluralLabel, itemSingleLabel, ref, ref1;
-    baseClass = arg.baseClass, itemSingleLabel = (ref = arg.itemSingleLabel) != null ? ref : 'Item', itemPluralLabel = (ref1 = arg.itemPluralLabel) != null ? ref1 : itemSingleLabel + 's';
-    return "<div class='" + baseClass + "-noResults {{isVisible}}'> <div class='" + baseClass + "-noResults-innerwrap'> <div class='" + baseClass + "-noResults-icon'></div> <div class='" + baseClass + "-noResults-text'> <div class='" + baseClass + "-noResults-text-title'>No " + itemSingleLabel + "s to Display</div> <div class='" + baseClass + "-noResults-text-subtitle'>There are no matching " + itemPluralLabel + " for the search query you've typed.</div> </div> </div> </div>";
-  },
-  error: function(arg) {
-    var baseClass;
-    baseClass = arg.baseClass;
-    return "<div class='" + baseClass + "-error {{isVisible}}'> <div class='" + baseClass + "-error-innerwrap'> <div class='" + baseClass + "-error-icon'></div> <div class='" + baseClass + "-error-text'> <div class='" + baseClass + "-error-text-title'>A Fatal Error has Occured</div> <div class='" + baseClass + "-error-text-subtitle'>Report the following to the admin:<br />\"{{errorMessage}}\"</div> </div> </div> </div>";
-  },
-  pageStatus: function(arg) {
-    var baseClass, showPageStatus;
-    baseClass = arg.baseClass, showPageStatus = arg.showPageStatus;
-    return "<div class='" + baseClass + "-pageStatus " + (showPageStatus ? 'is_visible' : '') + "'> Showing {{rowRange}} of {{totalRows}} </div>";
-  },
-  pagination: function(arg) {
-    var baseClass;
-    baseClass = arg.baseClass;
-    return "<div class='" + baseClass + "-pagination {{hasExtra}} {{isVisible}}'> <div class='" + baseClass + "-pagination-item _paginationItem _back'> <div class='" + baseClass + "-pagination-item-text'></div> </div> <div class='" + baseClass + "-pagination-itemswrap _paginationItems'></div> <div class='" + baseClass + "-pagination-item _paginationItem _extraIndicator'> <div class='" + baseClass + "-pagination-item-text'></div> <select class='" + baseClass + "-pagination-item-select'></select> </div> <div class='" + baseClass + "-pagination-item _paginationItem _next'> <div class='" + baseClass + "-pagination-item-text'></div> </div> </div>";
-  },
-  paginationItem: function(arg) {
-    var baseClass, value;
-    baseClass = arg.baseClass, value = arg.value;
-    return "<div class='" + baseClass + "-pagination-item _paginationItem'> <div class='" + baseClass + "-pagination-item-text'>" + value + "</div> </div>";
-  },
-  headingCell: function(arg) {
-    var baseClass, extraClasses, icon, label, ref, ref1, ref2, slug, style;
-    baseClass = arg.baseClass, extraClasses = (ref = arg.extraClasses) != null ? ref : '', slug = arg.slug, icon = (ref1 = arg.icon) != null ? ref1 : '', label = arg.label, style = (ref2 = arg.style) != null ? ref2 : '';
-    return "<div class='" + baseClass + "-heading-row-cell " + extraClasses + " __" + slug + "' data-slug='" + slug + "' data-icon='" + icon + "' " + style + "> <div class='" + baseClass + "-heading-row-cell-text'>" + label + "</div> </div>";
-  },
-  row: function(arg) {
-    var baseClass, cells, drilldown, ref, rowID;
-    baseClass = arg.baseClass, rowID = arg.rowID, cells = arg.cells, drilldown = (ref = arg.drilldown) != null ? ref : '';
-    return "<div class='" + baseClass + "-body-row _tableRow {{drilldownState}}' data-row-id='" + rowID + "'> <div class='" + baseClass + "-body-row-expandDrilldown _expandDrilldown'> <div class='" + baseClass + "-body-row-expandDrilldown-icon'></div> </div> " + cells + " <div class='" + baseClass + "-body-row-drilldown _tableRowDrilldown'> " + drilldown + " </div> </div>";
-  },
-  rowCell: function(arg) {
-    var baseClass, column, extraClasses, label, ref, ref1, slug, style, value;
-    baseClass = arg.baseClass, extraClasses = (ref = arg.extraClasses) != null ? ref : '', label = arg.label, column = arg.column, slug = arg.slug, value = arg.value, style = (ref1 = arg.style) != null ? ref1 : '';
-    return "<div class='" + baseClass + "-body-row-cell __" + slug + " " + extraClasses + "' data-slug='" + slug + "' data-column='" + column + "' " + style + "> <div class='" + baseClass + "-body-row-cell-innerwrap' title='" + label + "'>" + value + "</div> </div>";
-  },
-  searchField: function(arg) {
-    var baseClass, search;
-    baseClass = arg.baseClass, search = arg.search;
-    return "<div class='" + baseClass + "-search " + ((search != null ? search.length : void 0) ? 'is_visible' : '') + "'> <select class='" + baseClass + "-search-select'></select> <input class='" + baseClass + "-search-input' /> <div class='" + baseClass + "-search-selectTrigger'></div> </div>";
-  },
-  ipDetails: function(arg) {
-    var baseClass, extra, ipAddress, ref;
-    baseClass = arg.baseClass, ipAddress = arg.ipAddress, extra = (ref = arg.extra) != null ? ref : '';
-    return "<div class='" + baseClass + "-ipDetails _ipDetails' data-ip='" + ipAddress + "'> <div class='" + baseClass + "-ipDetails-trigger _ipDetails-trigger'></div> <div class='" + baseClass + "-ipDetails-content'>Loading IP Details</div> </div> " + extra;
-  },
-  ipDetailsItem: function(arg) {
-    var baseClass, label, value;
-    baseClass = arg.baseClass, label = arg.label, value = arg.value;
-    return "<div class='" + baseClass + "-ipDetails-content-item'> <div class='" + baseClass + "-ipDetails-content-item-label'>" + label + ": </div> <div class='" + baseClass + "-ipDetails-content-item-value'>" + value + "</div> </div>";
-  },
-  fields: function(arg) {
-    var baseClass, fields;
-    baseClass = arg.baseClass, fields = arg.fields;
-    return "<div class='" + baseClass + "-fieldGroup'>" + fields + "</div>";
-  },
-  fieldsItem: function(arg) {
-    var baseClass, label, value;
-    baseClass = arg.baseClass, label = arg.label, value = arg.value;
-    return "<div class='" + baseClass + "-fieldGroup-item'> <div class='" + baseClass + "-fieldGroup-item-label'>" + label + ": </div> <div class='" + baseClass + "-fieldGroup-item-value'>" + (escHTML(value)) + "</div> </div>";
-  },
-  button: function(arg) {
-    var action, baseClass, icon, isMulti, ref;
-    baseClass = arg.baseClass, action = arg.action, icon = (ref = arg.icon) != null ? ref : '', isMulti = arg.isMulti;
-    return "<div class='" + baseClass + "-button _actionButton " + (isMulti ? '_isMulti' : '') + "' data-action='" + action + "'> <div class='" + baseClass + "-button-icon'>" + icon + "</div> </div>";
-  },
-  actions: function(arg) {
-    var actions, baseClass;
-    baseClass = arg.baseClass, actions = arg.actions;
-    return "<div class='" + baseClass + "-actions'> <div class='" + baseClass + "-actions-popup'>" + actions + "</div> </div>";
-  },
-  actionsOverlay: function() {
-    return "<div class='" + DataTable.defaults.baseClass + "-actions-overlay'></div>";
-  },
-  actionsItem: function(arg) {
-    var action, baseClass, customIconStyle, icon, label, ref;
-    baseClass = arg.baseClass, action = arg.action, icon = arg.icon, label = arg.label, customIconStyle = (ref = arg.customIconStyle) != null ? ref : '';
-    return "<div class='" + baseClass + "-actions-popup-item _actionButton _subActionButton' data-action='" + action + "' style='" + customIconStyle + "'> <div class='" + baseClass + "-actions-popup-item-icon'>" + icon + "</div> <div class='" + baseClass + "-actions-popup-item-text'>" + label + "</div> </div>";
-  }
-};
-
-;
-
-var defaults;
-
-defaults = {
-  'perPage': 20,
-  'pageCountMax': 10,
-  'minWidth': 0,
-  'mobileWidth': 736,
-  'cellsHavePadding': false,
-  'hasMobile': true,
-  'loadOnInit': true,
-  'columns': [],
-  'search': [],
-  'percentage': {},
-  'baseClass': 'DataTable',
-  'showPageStatus': true,
-  'sortBy': '',
-  'alignment': 'left',
-  'actions': false,
-  'ipDataFetcher': function(ipAddress) {
-    return new Promise(function(resolve) {
-      return $.get("http://ipinfo.io/" + ipAddress, resolve, 'JSON');
-    });
-  }
-};
-
-;
-
-var helpers;
-
-helpers = {};
-
-helpers.compareValues = function(valueA, valueB) {
-  switch (false) {
-    case typeof valueA !== typeof valueB:
-      return valueA === valueB;
-    case typeof valueA !== 'string':
-      return valueA === '' + valueB;
-    case typeof valueA !== 'number':
-      return valueA === parseFloat(valueB);
-  }
-};
-
-helpers.toggleActionsPopup = function(actionsPopup$) {
-  var isOpen, overlay$;
-  isOpen = actionsPopup$.data('isOpen');
-  if (isOpen) {
-    actionsPopup$.data('overlay').remove();
-    actionsPopup$.removeClass('is_visible');
-  } else {
-    actionsPopup$.data('overlay', overlay$ = $(markup.actionsOverlay()));
-    actionsPopup$.addClass('is_visible');
-    overlay$.appendTo(document.body).one('click', function() {
-      return helpers.toggleActionsPopup(actionsPopup$);
-    });
-  }
-  return actionsPopup$.data('isOpen', !isOpen);
-};
-
-helpers.getBreakdownTotal = function(breakdown, breakdownKeys) {
-  switch (false) {
-    case breakdownKeys.length !== 0:
-      return 0;
-    default:
-      return breakdownKeys.map(function(breakdownItem) {
-        return breakdown[breakdownItem];
-      }).reduce(function(a, b) {
-        return a + b;
-      });
-  }
-};
-
-helpers.normalizeColumns = function(columns) {
-  var column, i, j, label, len, len1, output, ref;
-  if (!Array.isArray(columns)) {
-    output = columns;
-  } else {
+normalizeKeys = function(keys) {
+  var i, key, len, output;
+  if (keys) {
     output = {};
-    if (typeof columns[0] === 'string') {
-      for (i = 0, len = columns.length; i < len; i++) {
-        label = columns[i];
-        output[label] = {
-          label: label
-        };
+    if (typeof keys !== 'object') {
+      output[keys] = true;
+    } else {
+      if (!Array.isArray(keys)) {
+        keys = Object.keys(keys);
       }
-    } else if ((ref = columns[0]) != null ? ref.label : void 0) {
-      for (j = 0, len1 = columns.length; j < len1; j++) {
-        column = columns[j];
-        output[column.label] = column;
+      for (i = 0, len = keys.length; i < len; i++) {
+        key = keys[i];
+        output[key] = true;
       }
     }
+    return output;
   }
-  for (label in output) {
-    column = output[label];
-    if (column.label == null) {
-      column.label = label;
+};
+
+newBuilder = function(isBase) {
+  var builder;
+  builder = function(target) {
+    var theTarget;
+    var $_len = arguments.length, $_i = -1, sources = new Array($_len); while (++$_i < $_len) sources[$_i] = arguments[$_i];
+    if (builder.options.target) {
+      theTarget = builder.options.target;
+    } else {
+      theTarget = target;
+      sources.shift();
     }
-    if (column.slug == null) {
-      column.slug = column.label.toLowerCase().replace(/\W/g, '_');
-    }
-    if (column.type == null) {
-      column.type = 'text';
-    }
-  }
-  return output;
-};
-
-helpers.getBreakdownBarWidth = function(row, largest) {
-  return (row.breakdownBarTotal / largest) * (100 - 18);
-};
-
-helpers.genHeaderCellStyle = function(column) {
-  var styleString;
-  styleString = '';
-  if (column.width) {
-    styleString += "max-width: " + column.width + ";";
-  }
-  if (column.grow >= 0) {
-    styleString += "flex-grow: " + column.grow + ";";
-  }
-  if (styleString) {
-    return "style='" + styleString + "'";
-  } else {
-    return '';
-  }
-};
-
-helpers.genCellStyle = function(column) {
-  var color, styleString;
-  styleString = '';
-  if (column.width) {
-    styleString += "max-width: " + column.width + ";";
-  }
-  if (column.color) {
-    color = this.colorMapping(column.color, column.colorType);
-    styleString += "color: " + color + ";";
-  }
-  if (column.customStyle) {
-    styleString += column.customStyle;
-  }
-  if (column.grow >= 0) {
-    styleString += "flex-grow: " + column.grow + ";";
-  }
-  if (styleString) {
-    return "style='" + styleString + "'";
-  } else {
-    return '';
-  }
-};
-
-helpers.genCellClassname = function(column) {
-  var classString;
-  classString = '';
-  if (column.sortable) {
-    classString += ' _isSortable {{currentSort}}';
-  }
-  if (column.noLabel) {
-    classString += ' _noLabel';
-  }
-  if (column.isLink) {
-    classString += ' _isLink';
-  }
-  if (column.noEllipsis) {
-    classString += ' _noEllipsis';
-  }
-  if (column.showOverflow) {
-    classString += ' _showOverflow';
-  }
-  if (column.color) {
-    classString += ' _hasColor';
-  }
-  if (column.type === 'button' || column.type === 'actions') {
-    classString += ' _isButton';
-    column.alwaysCenter = true;
-  }
-  if (column.type === 'breakdownBar') {
-    classString += ' _isBreakdownBar';
-  }
-  if (column.type === 'ipDetails') {
-    classString += ' _isIpDetails';
-  }
-  if (column.type === 'fields') {
-    classString += ' _isFields';
-  }
-  if (column.alwaysCenter) {
-    classString += ' _alwaysCenter';
-  }
-  return classString;
-};
-
-helpers.colorMapping = function(value, colorType) {
-  if (colorType == null) {
-    colorType = 'name';
-  }
-  switch (colorType) {
-    case 'browser':
-      switch (false) {
-        case !value.includes('Firefox'):
-          return this.colorMapping('orange');
-        case !value.includes('Chrome'):
-          return this.colorMapping('green');
-        case !value.includes('Safari'):
-          return this.colorMapping('blue');
-        case !value.includes('Mobile Safari'):
-          return this.colorMapping('blue');
-        case !value.includes('IE'):
-          return this.colorMapping('lightblue');
-        case !value.includes('Edge'):
-          return this.colorMapping('lightblue');
-        case !value.includes('Opera'):
-          return this.colorMapping('red');
-        case !value.includes('Android'):
-          return this.colorMapping('lightgreen');
-        default:
-          return 'unknown';
-      }
-      break;
-    case 'platform':
-      switch (value) {
-        case 'Mac OS X':
-          return this.colorMapping('black');
-        case 'Windows':
-          return this.colorMapping('lightblue');
-        case 'Windows Phone':
-          return this.colorMapping('purple');
-        case 'Linux':
-          return this.colorMapping('darkyellow');
-        case 'iOS':
-          return this.colorMapping('black');
-        case 'Android':
-          return this.colorMapping("lightgreen");
-        default:
-          return 'unknown';
-      }
-      break;
-    case 'satisfaction':
-      switch (value) {
-        case 'Excellent':
-          return this.colorMapping('green');
-        case 'Normal':
-          return this.colorMapping('yellow');
-        case 'Poor':
-          return this.colorMapping('red');
-        default:
-          return 'unknown';
-      }
-      break;
-    case 'name':
-      switch (value) {
-        case 'orange':
-          return '#ee6f0e';
-        case 'green':
-          return '#00ad09';
-        case 'blue':
-          return '#4788f3';
-        case 'yellow':
-          return '#eab71e';
-        case 'red':
-          return '#cc4820';
-        case 'black':
-          return '#181818';
-        case 'purple':
-          return '#a020ba';
-        case 'lightblue':
-          return '#0cb3ee';
-        case 'lightgreen':
-          return '#78c257';
-        case 'darkyellow':
-          return '#e8ac01';
-      }
-      break;
-    default:
-      return value;
-  }
-};
-
-helpers.iconMapping = function(value, iconType) {
-  switch (iconType) {
-    case 'browser':
-      switch (false) {
-        case !value.includes('Firefox'):
-          return '#';
-        case !value.includes('Chrome'):
-          return '%';
-        case !value.includes('Safari'):
-          return '$';
-        case !value.includes('Mobile Safari'):
-          return '$';
-        case !value.includes('IE'):
-          return '&';
-        case !value.includes('Edge'):
-          return '&';
-        case !value.includes('Opera'):
-          return '"';
-        case !value.includes('Android'):
-          return '&#039;';
-        default:
-          return '4';
-      }
-      break;
-    case 'device':
-      switch (value) {
-        case 'Desktop':
-          return '!';
-        case 'Tablet':
-          return '7';
-        case 'Mobile':
-          return '6';
-        default:
-          return '4';
-      }
-      break;
-    case 'platform':
-      switch (value) {
-        case 'Mac OS X':
-          return '*';
-        case 'Windows':
-          return ')';
-        case 'Windows Phone':
-          return ')';
-        case 'Linux':
-          return '+';
-        case 'iOS':
-          return '*';
-        case 'Android':
-          return "&#039;";
-        default:
-          return '4';
-      }
-      break;
-    case 'satisfaction':
-      switch (value) {
-        case 'Excellent':
-          return '[';
-        case 'Normal':
-          return '@';
-        case 'Poor':
-          return '?';
-        default:
-          return '4';
-      }
-      break;
-    default:
-      return '4';
-  }
-};
-
-;
-
-DataTable = function(container, options) {
-  this.container = container;
-  if (options == null) {
-    options = {};
-  }
-  this.options = extend({}, DataTable.defaults, options);
-  this.state = {
-    'loading': false,
-    'noResults': false,
-    'error': false
+    return extend(builder.options, theTarget, sources);
   };
-  this.ID = ++currentID;
-  this.tableID = "\#" + this.options.baseClass + "-" + this.ID;
-  this.visibleRows = [];
-  this.availableRows = [];
-  this.allRows = [];
-  this.largestBreakdownTotal = 0;
-  this.searchCriteria = '';
-  this.searchParam = '';
-  this.sortBy = this.options.sortBy ? this.options.sortBy : '';
-  this.sortDirection = -1;
-  this.currentPage = 1;
-  this.els = {};
-  this.els.tableOuterwrap = $(markup.tableOuterwrap($.extend({
-    ID: this.ID
-  }, this.options)));
-  this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.tableHeading = this.els.table.children().first().children();
-  this.els.tableBody = this.els.table.children().last();
-  this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.loadingMessage = $(markup.loading(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.errorMessage = $(markup.error(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.pageStatus = $(markup.pageStatus(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.pagination = $(markup.pagination(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.paginationItems = this.els.pagination.children('._paginationItems');
-  this.els.paginationExtra = this.els.pagination.children('._extraIndicator');
-  this.els.paginationExtraSelect = this.els.paginationExtra.children('select');
-  this.els.paginationExtraText = this.els.paginationExtraSelect.prev();
-  this.els.searchField = $(markup.searchField(this.options)).insertBefore(this.els.table);
-  this.els.searchParam = this.els.searchField.children('select');
-  this.els.searchCriteria = this.els.searchField.children('input');
-  this.els.globalStyles = $('<style />').prependTo(this.els.tableOuterwrap);
-  this.els.tableHeading.append(this.generateHeadingColumns());
-  this.els.tableOuterwrap.appendTo(this.container);
-  this.els.table.data('DataTable', this);
-  if (this.options.minWidth) {
-    this.els.table[0].style.minWidth = this.options.minWidth + "px";
+  if (isBase) {
+    builder.isBase = true;
   }
-  Promise.bind(this).then(this.attachEvents).then(this.attachBindings).then(function() {
-    if (this.options.loadOnInit) {
-      return this.loadData();
+  builder.options = {};
+  Object.defineProperties(builder, modifiers);
+  return builder;
+};
+
+modifiers = {
+  'deep': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      _.options.deep = true;
+      return _;
     }
-  });
-  return this;
-};
-
-DataTable.prototype.fetchData = function() {
-  this.state.loading = true;
-  return Promise.resolve().then((function(_this) {
-    return function() {
-      return _this.options.data.call(_this);
-    };
-  })(this)).then((function(_this) {
-    return function(data) {
-      _this.state.loading = _this.state.error = false;
-      return data;
-    };
-  })(this))["catch"]((function(_this) {
-    return function(err) {
-      return _this.state.error = err;
-    };
-  })(this));
-};
-
-DataTable.prototype.setData = function(data) {
-  if (Array.isArray(data)) {
-    return this.allRows = data;
-  }
-};
-
-DataTable.prototype.loadData = function() {
-  var i, len, ref, row;
-  if (this.allRows.length) {
-    ref = this.allRows;
-    for (i = 0, len = ref.length; i < len; i++) {
-      row = ref[i];
-      this.unprocessRow(row);
+  },
+  'own': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      _.options.own = true;
+      return _;
     }
-  }
-  return this.fetchData().then((function(_this) {
-    return function(data) {
-      return _this.setData(data);
-    };
-  })(this));
-};
-
-DataTable.prototype.markupArgs = function(argsObject) {
-  if (argsObject == null) {
-    argsObject = {};
-  }
-  argsObject.baseClass = this.options.baseClass;
-  return argsObject;
-};
-
-DataTable.prototype.calcPageCount = function(rows) {
-  this.pageCountReal = Math.ceil(rows.length / this.options.perPage);
-  return this.pageCount = this.pageCountReal > this.options.pageCountMax ? this.options.pageCountMax : this.pageCountReal;
-};
-
-DataTable.prototype.calcPercentageString = function(columnValue, columnName, row) {
-  var columnA, columnB, formula, mathOperator, percent, percentageValue;
-  formula = this.options.percentage[columnName];
-  columnA = formula[0];
-  columnB = formula[2];
-  mathOperator = formula[1];
-  percentageValue = (function() {
-    switch (mathOperator) {
-      case '*':
-        return row[columnA] * row[columnB];
-      case '/':
-        return row[columnA] / row[columnB];
-      case '+':
-        return row[columnA] + row[columnB];
-      case '-':
-        return row[columnA] - row[columnB];
+  },
+  'allowNull': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      _.options.allowNull = true;
+      return _;
     }
-  })();
-  if (percentageValue === 2e308) {
-    percentageValue = 0;
-  }
-  percent = convertToPercent(percentageValue);
-  return columnValue + " (" + percent + ")";
-};
-
-DataTable.prototype.sortRows = function(rows, targetColumn) {
-  var customSort, rawValue;
-  if (targetColumn == null) {
-    targetColumn = this.options.sortBy;
-  }
-  switch (false) {
-    case targetColumn !== '+':
-      return rows;
-    case targetColumn !== '-':
-      return rows != null ? rows.slice().reverse() : void 0;
-    case !this.options.columns[targetColumn]:
-      customSort = this.options.columns[targetColumn].sortFn;
-      rawValue = this.options.columns[targetColumn].rawValueFormatter;
-      return rows.slice().sort(customSort || (function(_this) {
-        return function(a, b) {
-          var aValue, bValue;
-          aValue = rawValue ? rawValue(a[targetColumn]) : a[targetColumn];
-          bValue = rawValue ? rawValue(b[targetColumn]) : b[targetColumn];
-          switch (false) {
-            case !(aValue > bValue):
-              return _this.sortDirection;
-            case !(aValue < bValue):
-              return _this.sortDirection * -1;
-            default:
-              return 0;
-          }
-        };
-      })(this));
-    default:
-      return rows;
-  }
-};
-
-DataTable.prototype.setVisiblePage = function(targetPage) {
-  var i, len, row, rowsToHide, rowsToReveal, slice;
-  targetPage--;
-  slice = {
-    'start': targetPage * this.options.perPage,
-    'end': (targetPage * this.options.perPage) + this.options.perPage
-  };
-  rowsToReveal = this.availableRows.slice(slice.start, slice.end);
-  rowsToHide = this.visibleRows.slice();
-  for (i = 0, len = rowsToHide.length; i < len; i++) {
-    row = rowsToHide[i];
-    row.visible = false;
-  }
-  this.visibleRows.length = 0;
-  return this.visibleRows.push.apply(this.visibleRows, rowsToReveal);
-};
-
-DataTable.prototype.setPageIndicator = function(targetPage) {
-  var matchedPageEl$, pageItems$;
-  if (targetPage === '...') {
-    targetPage = 1;
-  }
-  targetPage = targetPage > this.options.pageCountMax ? this.options.pageCountMax : targetPage - 1;
-  pageItems$ = this.els.pagination.find('._paginationItem').slice(1, -1);
-  matchedPageEl$ = pageItems$.eq(targetPage);
-  matchedPageEl$.addClass('current');
-  return pageItems$.not(matchedPageEl$).removeClass('current');
-};
-
-;
-
-DataTable.prototype.generateHeadingColumns = function() {
-  var column, label;
-  this.options.columns = helpers.normalizeColumns(this.options.columns);
-  if ((function() {
-    var ref, results;
-    ref = this.options.columns;
-    results = [];
-    for (label in ref) {
-      column = ref[label];
-      results.push(column.type === 'breakdownBar');
+  },
+  'nullDeletes': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      _.options.nullDeletes = true;
+      return _;
     }
-    return results;
-  }).call(this)) {
-    this.hasBreakdownBar = true;
-  }
-  return Object.keys(this.options.columns).map((function(_this) {
-    return function(label) {
-      column = _this.options.columns[label];
-      _this.els.globalStyles[0].innerHTML += "{{" + column.slug + "}}\n";
-      return markup.headingCell(_this.markupArgs({
-        'slug': column.slug,
-        'icon': column.icon,
-        'label': column.label,
-        'style': helpers.genHeaderCellStyle(column),
-        'extraClasses': helpers.genCellClassname(column)
-      }));
-    };
-  })(this)).join('');
-};
-
-DataTable.prototype.updateColumns = function(updatedColumns) {
-  updatedColumns = helpers.normalizeColumns(updatedColumns);
-  extend(true, this.options.columns, updatedColumns);
-  return this.currentPage = this.currentPage;
-};
-
-;
-
-DataTable.prototype.processRow = function(row) {
-  var ref;
-  if (row.processed) {
-    return row;
-  } else {
-    this.generateRow(row);
-    SimplyBind('visible', {
-      updateEvenIfSame: true
-    }).of(row).to((function(_this) {
-      return function(isVisible, prevValue) {
-        if (!isVisible) {
-          return row.el.detach();
-        } else {
-          row.el.appendTo(_this.els.tableBody);
-          if (_this.hasBreakdownBar && !row.updatedBreakdownWidth && isVisible !== prevValue) {
-            return row.breakdownBarWidth = helpers.getBreakdownBarWidth(row, _this.largestBreakdownTotal);
-          }
-        }
+  },
+  'concat': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      _.options.concat = true;
+      return _;
+    }
+  },
+  'clone': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      _.options.target = {};
+      return _;
+    }
+  },
+  'notDeep': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      return function(keys) {
+        _.options.notDeep = normalizeKeys(keys);
+        return _;
       };
-    })(this));
-    if (this.hasBreakdownBar && ((ref = row.breakdownBarEl) != null ? ref.length : void 0)) {
-      SimplyBind('largestBreakdownTotal').of(this).to('updatedBreakdownWidth').of(row).transform(function() {
-        if (row.visible) {
-          return true;
-        } else {
-          return false;
-        }
-      }).and.to('breakdownBarWidth').of(row).transform((function(_this) {
-        return function() {
-          return helpers.getBreakdownBarWidth(row, _this.largestBreakdownTotal);
-        };
-      })(this)).chainTo('width').of(row.breakdownBarEl[0].style).transform(function(width) {
-        return width + '%';
-      }).and.to((function(_this) {
-        return function() {
-          var drilldownEl, i, index, len, ref1, ref2, width;
-          ref1 = row.drilldownEls;
-          for (index = i = 0, len = ref1.length; i < len; index = ++i) {
-            drilldownEl = ref1[index];
-            width = helpers.getBreakdownBarWidth(row.drilldown[index], row.drilldown.largestBreakdownTotal);
-            if ((ref2 = $(drilldownEl).children('.is_breakdown_bar').children().children()[0]) != null) {
-              ref2.style.width = width + '%';
-            }
-          }
-        };
-      })(this)).condition(function() {
-        return row.drilldown;
-      }).conditionAll(function() {
-        return row.visible;
-      });
     }
-    row.processed = true;
-    return row;
-  }
-};
-
-DataTable.prototype.unprocessRow = function(row) {
-  if (row.processed) {
-    SimplyBind.unBindAll(row, true);
-    if (this.hasBreakdownBar && row.breakdownBarEl[0]) {
-      SimplyBind.unBindAll(row.breakdownBarEl[0].style);
-    }
-    row.el.remove();
-    delete row.el;
-    delete row.drilldownEls;
-    delete row.visible;
-    delete row.breakdownBarEl;
-    return delete row.processed;
-  }
-};
-
-DataTable.prototype.reRenderRow = function(row) {
-  return this.generateRow(row);
-};
-
-DataTable.prototype.generateRow = function(row) {
-  var newRowEl, prevRowEl;
-  prevRowEl = row.el;
-  newRowEl = row.el = $(this.generateRowMarkup(row)).data('row', row);
-  if (prevRowEl) {
-    prevRowEl.replaceWith(newRowEl);
-  }
-  if (row.drilldown) {
-    row.expandButton = row.el.children().first();
-  }
-  if (row.drilldown) {
-    row.drilldownEls = row.el.children('._tableRowDrilldown').children();
-  }
-  if (this.hasBreakdownBar) {
-    row.breakdownBarEl = row.el.children('.isBreakdownBar').children().children();
-  }
-  if (!prevRowEl) {
-    row.visible = false;
-  }
-  if (row.drilldown) {
-    if (this.hasBreakdownBar) {
-      row.drilldown.largestBreakdownTotal = Math.max.apply(Math, row.drilldown.map(function(subRow) {
-        return subRow.breakdownBarTotal;
-      }));
-    }
-    SimplyBind('drilldownOpen').of(row).to('className.drilldownState').of(row.el).transform(function(drilldownOpen) {
-      if (drilldownOpen) {
-        return 'hasDrilldown drilldownIsOpen';
-      } else {
-        return 'hasDrilldown';
-      }
-    });
-    SimplyBind('visible').of(row).once.to(function() {
-      return SimplyBind(function() {
-        if (!row.drilldownOpen) {
-          return setTimeout(function() {
-            var buttonHeight, rowHeight;
-            rowHeight = row.el.height();
-            buttonHeight = row.expandButton.height();
-            return row.expandButton[0].style.top = (rowHeight / 2 - buttonHeight / 2) + "px";
-          });
-        }
-      }).updateOn('event:resize', {
-        throttle: 300
-      }).of(window);
-    }).condition(function(visible) {
-      return visible;
-    });
-  }
-  return row;
-};
-
-DataTable.prototype.generateRowMarkup = function(row, parentRow) {
-  var isSub;
-  isSub = !!parentRow;
-  return markup.row(this.markupArgs({
-    'rowID': isSub ? parentRow[this.options.uniqueID] : row[this.options.uniqueID],
-    'drilldown': isSub ? '' : row.drilldown ? (function(_this) {
-      return function() {
-        var drilldownMarkups, drilldownRow, i, len, ref;
-        drilldownMarkups = '';
-        ref = row.drilldown;
-        for (i = 0, len = ref.length; i < len; i++) {
-          drilldownRow = ref[i];
-          drilldownMarkups += _this.generateRowMarkup(drilldownRow, row);
-        }
-        return drilldownMarkups;
+  },
+  'deepOnly': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      return function(keys) {
+        _.options.deepOnly = normalizeKeys(keys);
+        return _;
       };
-    })(this)() : void 0,
-    'cells': (function(_this) {
-      return function() {
-        var cellValue, column, columnName, ref, rowCells;
-        rowCells = '';
-        ref = _this.options.columns;
-        for (columnName in ref) {
-          column = ref[columnName];
-          cellValue = row[columnName];
-          if (_this.options.percentage[columnName]) {
-            cellValue = _this.calcPercentageString(cellValue, columnName, row);
-          }
-          rowCells += markup.rowCell(_this.markupArgs({
-            'label': typeof cellValue === 'string' ? cellValue : '',
-            'column': columnName,
-            'slug': column.slug,
-            'extraClasses': helpers.genCellClassname(column),
-            'style': helpers.genCellStyle(column),
-            'value': (function() {
-              switch (false) {
-                case column.type !== 'fields':
-                  return _this.generateInlineFields(cellValue, row, column);
-                case column.type !== 'ipDetails':
-                  return _this.generateIpDetails(cellValue, row, column);
-                case column.type !== 'breakdownBar':
-                  return _this.generateBreakdownBar(cellValue, row, column);
-                case column.type !== 'button':
-                  return _this.generateButton(column.action || cellValue, column.buttonIcon || column.icon);
-                case column.type !== 'actions':
-                  return _this.generateActions(column, row, column);
-                case !column.isLink:
-                  return "<a href='" + cellValue + "' target='_blank'>" + cellValue + "</a>";
-                default:
-                  if (column.formatter) {
-                    return column.formatter(cellValue, row, column);
-                  } else {
-                    return cellValue;
-                  }
-              }
-            })()
-          }));
-        }
-        return rowCells;
+    }
+  },
+  'keys': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      return function(keys) {
+        _.options.keys = normalizeKeys(keys);
+        return _;
       };
-    })(this)()
-  }));
-};
-
-;
-
-DataTable.prototype.generateBreakdownBar = function(breakdown, rowObj, columnEntity) {
-  var breakdownKeys, total;
-  breakdownKeys = this.legend || Object.keys(breakdown);
-  rowObj.breakdownBarTotal = total = this.getBreakdownTotal(breakdown, breakdownKeys);
-  if (!total) {
-    return 'N/A';
-  }
-  return markup.breakdownBar(this.markupArgs({
-    'total': total,
-    'totalFormatted': columnEntity.valueFormat ? columnEntity.valueFormat(total) : total,
-    'bars': (function() {
-      var bars, i, key, len, value;
-      bars = '';
-      for (i = 0, len = breakdownKeys.length; i < len; i++) {
-        key = breakdownKeys[i];
-        value = breakdown[key];
-        bars += markup.block_table_body_row_cell_breakdown_bar.replace('{{width}}', (value / total) * 100);
-      }
-      return bars;
-    })(),
-    'hoverBox': (function() {
-      return markup.block_table_body_row_cell_breakdown_hoverbox.replace('{{rows}}', function() {
-        var rows;
-        rows = '';
-        breakdownKeys.forEach(function(key, index) {
-          return rows += markup.block_table_body_row_cell_breakdown_hoverbox_row.replace('{{color}}', customColors(index)).replace('{{key}}', key).replace('{{value}}', columnEntity.valueFormat ? columnEntity.valueFormat(breakdown[key]) : breakdown[key]);
-        });
-        return rows;
-      });
-    })()
-  }));
-};
-
-DataTable.prototype.generateInlineFields = function(dataFields) {
-  return markup.fields(this.markupArgs({
-    'fields': (function(_this) {
-      return function() {
-        var label, output, value;
-        if (typeof dataFields !== 'object') {
-          return '';
-        }
-        output = (function() {
-          var results;
-          results = [];
-          for (label in dataFields) {
-            value = dataFields[label];
-            results.push(markup.fieldsItem(this.markupArgs({
-              label: label,
-              value: value
-            })));
-          }
-          return results;
-        }).call(_this);
-        return output.join('');
+    }
+  },
+  'notKeys': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      return function(keys) {
+        _.options.notKeys = normalizeKeys(keys);
+        return _;
       };
-    })(this)()
-  }));
-};
-
-DataTable.prototype.generateButton = function(action, icon, isMulti) {
-  return markup.button(this.markupArgs({
-    action: action,
-    icon: icon,
-    isMulti: isMulti
-  }));
-};
-
-DataTable.prototype.generateActions = function(column) {
-  var actionsMarkup, buttonMarkup;
-  if (column.actions == null) {
-    column.actions = 'multiActions';
-  }
-  buttonMarkup = this.generateButton(column.actions, column.buttonIcon || column.icon, true);
-  actionsMarkup = markup.actions(this.markupArgs({
-    'actions': (function(_this) {
-      return function() {
-        var action, output;
-        if (!_this.options.actions) {
-          return '';
+    }
+  },
+  'transform': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      return function(transform) {
+        if (typeof transform === 'function') {
+          _.options.globalTransform = transform;
+        } else if (transform && typeof transform === 'object') {
+          _.options.transforms = transform;
         }
-        output = (function() {
-          var i, len, ref, results;
-          ref = this.options.actions;
-          results = [];
-          for (i = 0, len = ref.length; i < len; i++) {
-            action = ref[i];
-            results.push(markup.actionsItem(this.markupArgs(action)));
-          }
-          return results;
-        }).call(_this);
-        return output.join('');
+        return _;
       };
-    })(this)()
-  }));
-  return buttonMarkup + actionsMarkup;
-};
-
-DataTable.prototype.generateIpDetails = function(ipAddress, row, column) {
-  return markup.ipDetails(this.markupArgs({
-    ipAddress: ipAddress,
-    extra: typeof column.extraMarkup === "function" ? column.extraMarkup(ipAddress, row) : void 0
-  }));
-};
-
-;
-
-;
-
-DataTable.prototype.attachEvents = function() {
-  this.els.pagination.on('click', '._paginationItem', (function(_this) {
-    return function(event) {
-      var $this, isBack, isExtra, isNext, pageNumber;
-      $this = $(event.currentTarget);
-      isBack = $this.hasClass('_back');
-      isNext = $this.hasClass('_next');
-      isExtra = $this.hasClass('_extraIndicator');
-      if (isBack) {
-        if (_this.currentPage !== 1) {
-          return _this.currentPage--;
-        }
-      } else if (isNext) {
-        if (_this.currentPage !== _this.pageCountReal) {
-          return _this.currentPage++;
-        }
-      } else if (!isExtra) {
-        pageNumber = parseFloat($this.children().html());
-        return _this.currentPage = pageNumber;
-      }
-    };
-  })(this));
-  this.els.tableHeading.on('click', '._isSortable', (function(_this) {
-    return function(event) {
-      return _this.sortBy = event.currentTarget.children[0].textContent;
-    };
-  })(this));
-  this.els.tableBody.on('click', '._actionButton', (function(_this) {
-    return function(event) {
-      var action, button$, dataItem, itemID, itemIndex, itemRow$;
-      button$ = $(event.currentTarget);
-      if (button$.hasClass('_isMulti')) {
-        return helpers.toggleActionsPopup(button$.next().children());
-      } else {
-        itemRow$ = button$.closest('._tableRow');
-        action = button$.data('action');
-        itemID = itemRow$.data('row-id');
-        itemIndex = itemRow$.data('index');
-        dataItem = itemID ? _this.allRows.find(function(row) {
-          return helpers.compareValues(row[_this.options.uniqueID], itemID);
-        }) : void 0;
-        if (dataItem == null) {
-          dataItem = itemID;
-        }
-        if (button$.hasClass('_subActionButton')) {
-          helpers.toggleActionsPopup(button$.parent());
-        }
-        return _this.els.table.trigger("action." + action, dataItem);
-      }
-    };
-  })(this));
-  this.els.tableBody.on('click', '._expandDrilldown', (function(_this) {
-    return function(event) {
-      var button$, itemRow;
-      button$ = $(event.currentTarget);
-      itemRow = button$.parent().data('row');
-      return itemRow.drilldownOpen = !itemRow.drilldownOpen;
-    };
-  })(this));
-  this.els.tableBody.on('mouseover', '._ipDetails-trigger', (function(_this) {
-    return function(event) {
-      var content$, country$, ipAddress, isLoaded, trigger$, wrapper$;
-      trigger$ = $(event.currentTarget);
-      wrapper$ = trigger$.parent();
-      content$ = trigger$.next();
-      country$ = content$.next();
-      ipAddress = wrapper$.data('ip');
-      isLoaded = trigger$.hasClass('_isReady');
-      if (!isLoaded) {
-        return _this.options.ipDataFetcher(ipAddress).then(function(ipDetails) {
-          var label, output, value;
-          if (!ipDetails) {
-            return;
-          }
-          output = (function() {
-            var results;
-            results = [];
-            for (label in ipDetails) {
-              value = ipDetails[label];
-              results.push(markup.ipDetailsItem(this.markupArgs({
-                label: label,
-                value: value
-              })));
-            }
-            return results;
-          }).call(_this);
-          content$.html(output.join(''));
-          return wrapper$.addClass('_isReady');
-        });
-      }
-    };
-  })(this));
-  return Promise.resolve();
-};
-
-;
-
-DataTable.prototype.attachBindings = function() {
-  var column, fn, l, ref;
-  SimplyBind.settings.trackArrayChildren = false;
-  SimplyBind('noResults').of(this.state).to('className.isVisible').of(this.els.noResultsMessage).transform((function(_this) {
-    return function(noResults) {
-      if (noResults && !_this.state.loading) {
-        return 'is_visible';
-      } else {
-        return '';
-      }
-    };
-  })(this)).and.to('className.noResults').of(this.els.tableOuterwrap).transform((function(_this) {
-    return function(noResults) {
-      if (noResults && !_this.state.loading) {
-        return '_noResults';
-      } else {
-        return '';
-      }
-    };
-  })(this));
-  SimplyBind('loading').of(this.state).to('className.isVisible').of(this.els.loadingMessage).transform(function(loading) {
-    if (loading) {
-      return 'is_visible';
-    } else {
-      return '';
     }
-  }).and.to('className.loading').of(this.els.tableOuterwrap).transform((function(_this) {
-    return function(loading) {
-      if (loading) {
-        return '_loading';
-      } else {
-        return '';
-      }
-    };
-  })(this)).and.to((function(_this) {
-    return function(loading) {
-      if (loading) {
-        return _this.state.noResults = false;
-      } else {
-        return _this.state.noResults = !_this.visibleRows.length;
-      }
-    };
-  })(this));
-  SimplyBind('error').of(this.state).to('textContent.errorMessage').of(this.els.errorMessage).and.to('className.isVisible').of(this.els.errorMessage).transform(function(hasError) {
-    if (hasError) {
-      return 'is_visible';
-    } else {
-      return '';
-    }
-  }).and.to('className.hasError').of(this.els.tableOuterwrap).transform(function(hasError) {
-    if (hasError) {
-      return '_error';
-    } else {
-      return '';
-    }
-  }).and.to(function(err) {
-    if (err) {
-      return console.error(err);
-    }
-  });
-  if (this.options.hasMobile) {
-    this.windowWidth = window.innerWidth;
-    SimplyBind('event:resize').of(window).to((function(_this) {
-      return function() {
-        return _this.windowWidth = window.innerWidth;
+  },
+  'filter': {
+    get: function() {
+      var _;
+      _ = this.isBase ? newBuilder() : this;
+      return function(filter) {
+        if (typeof filter === 'function') {
+          _.options.globalFilter = filter;
+        } else if (filter && typeof filter === 'object') {
+          _.options.filters = filter;
+        }
+        return _;
       };
-    })(this));
-    SimplyBind('windowWidth').of(this).to('className.mobileVersion').of(this.els.tableOuterwrap).transform((function(_this) {
-      return function(windowWidth) {
-        if (windowWidth <= _this.options.mobileWidth) {
-          return '_mobileVersion';
-        } else {
-          return '';
-        }
-      };
-    })(this));
-  }
-  ref = this.options.columns;
-  fn = (function(_this) {
-    return function(column) {
-      return SimplyBind('hidden').of(column).to("innerHTML." + column.slug).of(_this.els.globalStyles).transform(function(isHidden) {
-        if (isHidden) {
-          return _this.tableID + " .__" + column.slug + " {display:none}";
-        } else {
-          return '';
-        }
-      });
-    };
-  })(this);
-  for (l in ref) {
-    column = ref[l];
-    fn(column);
-  }
-  SimplyBind('array:visibleRows').of(this).to((function(_this) {
-    return function(rows, prevRows) {
-      var err, i, j, len, len1, row;
-      if (prevRows != null ? prevRows.length : void 0) {
-        for (i = 0, len = prevRows.length; i < len; i++) {
-          row = prevRows[i];
-          row.visible = false;
-        }
-      }
-      try {
-        for (j = 0, len1 = rows.length; j < len1; j++) {
-          row = rows[j];
-          _this.processRow(row);
-          row.visible = true;
-        }
-      } catch (error) {
-        err = error;
-        _this.state.error = err;
-      }
-      return _this.state.noResults = !rows.length;
-    };
-  })(this)).and.to((function(_this) {
-    return function(rows) {
-      var i, largestBreakdownTotal, len, row;
-      if (!_this.hasBreakdownBar) {
-        return;
-      }
-      for (i = 0, len = rows.length; i < len; i++) {
-        row = rows[i];
-        if (row.breakdownBarTotal > largestBreakdownTotal || (typeof largestBreakdownTotal === "undefined" || largestBreakdownTotal === null)) {
-          largestBreakdownTotal = row.breakdownBarTotal;
-        }
-      }
-      return _this.largestBreakdownTotal = largestBreakdownTotal || 0;
-    };
-  })(this)).and.to('textContent.rowRange').of(this.els.pageStatus).transform((function(_this) {
-    return function(rows) {
-      return (_this.availableRows.indexOf(rows[0]) + 1) + "-" + (_this.availableRows.indexOf(rows.slice(-1)[0]) + 1);
-    };
-  })(this));
-  SimplyBind('array:allRows').of(this).to((function(_this) {
-    return function(rows) {
-      _this.searchCriteria = '';
-      _this.currentPage = 1;
-      _this.state.noResults = !rows.length;
-      if (_this.sortBy === _this.options.sortBy) {
-        _this.sortBy = '';
-        return _this.sortBy = _this.options.sortBy;
-      } else {
-        return _this.sortBy = '';
-      }
-    };
-  })(this));
-  SimplyBind('availableRows', {
-    updateOnBind: false,
-    updateEvenIfSame: true
-  }).of(this).to((function(_this) {
-    return function(rows) {
-      return _this.calcPageCount(rows);
-    };
-  })(this)).and.to('textContent.totalRows').of(this.els.pageStatus).transform(function(rows) {
-    return rows.length;
-  });
-  SimplyBind('pageCount').of(this).to('innerHTML').of(this.els.paginationItems).transform((function(_this) {
-    return function(count) {
-      var i, paginationItems, ref1, value;
-      paginationItems = '';
-      for (value = i = 1, ref1 = count; 1 <= ref1 ? i <= ref1 : i >= ref1; value = 1 <= ref1 ? ++i : --i) {
-        if (value !== 0) {
-          paginationItems += markup.paginationItem(_this.markupArgs({
-            value: value
-          }));
-        }
-      }
-      return paginationItems;
-    };
-  })(this)).and.to('className.isVisible').of(this.els.pagination).transform(function(count) {
-    if (count > 1) {
-      return 'is_visible';
-    } else {
-      return '';
     }
-  });
-  SimplyBind('pageCountReal').of(this).to('innerHTML').of(this.els.paginationExtraSelect).transform((function(_this) {
-    return function(realCount) {
-      var i, index, options, ref1, ref2;
-      if (realCount <= _this.options.pageCountMax) {
-        return '';
-      } else {
-        options = '<option>...</option>';
-        for (index = i = ref1 = _this.options.pageCountMax + 1, ref2 = realCount; ref1 <= ref2 ? i <= ref2 : i >= ref2; index = ref1 <= ref2 ? ++i : --i) {
-          options += "<option>" + index + "</option>";
-        }
-        return options;
-      }
-    };
-  })(this)).and.to('className.hasExtra').of(this.els.pagination).transform((function(_this) {
-    return function(realCount) {
-      if (realCount > _this.options.pageCountMax) {
-        return 'has_extra';
-      } else {
-        return '';
-      }
-    };
-  })(this));
-  SimplyBind('value', {
-    updateOnBind: false
-  }).of(this.els.paginationExtraSelect).to('innerHTML').of(this.els.paginationExtraText).and.to('currentPage').of(this);
-  SimplyBind('currentPage', {
-    updateEvenIfSame: true
-  }).of(this).transformSelf((function(_this) {
-    return function(currentPage) {
-      currentPage = currentPage === '...' ? 1 : parseFloat(currentPage);
-      if (currentPage > _this.pageCountReal) {
-        return _this.pageCountReal;
-      } else {
-        return currentPage;
-      }
-    };
-  })(this)).to('value').of(this.els.paginationExtraSelect).transform((function(_this) {
-    return function(currentPage) {
-      if (currentPage > _this.options.pageCountMax) {
-        return currentPage;
-      } else {
-        return '...';
-      }
-    };
-  })(this)).and.to((function(_this) {
-    return function(currentPage) {
-      _this.setVisiblePage(currentPage);
-      return _this.setPageIndicator(currentPage);
-    };
-  })(this));
-  if (this.options.search.length) {
-    this.searchParam = this.options.search[0];
-    SimplyBind('search').of(this.options).to('innerHTML').of(this.els.searchParam).transform(function(options) {
-      return options.map(function(option) {
-        return "<option>" + option + "</option>";
-      }).join('');
-    });
-    SimplyBind('value').of(this.els.searchParam).to('searchParam').of(this).pipe('attr:placeholder').of(this.els.searchCriteria).transform(function(option) {
-      return "Search by " + option;
-    });
   }
-  SimplyBind('value').of(this.els.searchCriteria).to('searchCriteria', {
-    updateEvenIfSame: true
-  }).of(this).bothWays().chainTo((function(_this) {
-    return function(searchCriteria) {
-      var ref1, rowsToMakeAvailable, targetColumn;
-      rowsToMakeAvailable = _this.allRows;
-      targetColumn = _this.options.columns[_this.searchParam];
-      if (searchCriteria && (targetColumn || (((ref1 = _this.allRows[0]) != null ? ref1[_this.searchParam] : void 0) != null))) {
-        rowsToMakeAvailable = rowsToMakeAvailable.filter(function(row) {
-          var rowValue;
-          rowValue = (targetColumn != null ? targetColumn.rawValueFormatter : void 0) ? targetColumn.rawValueFormatter(row[_this.searchParam]) : row[_this.searchParam];
-          return rowValue != null ? rowValue.toString().toLowerCase().includes(searchCriteria.toLowerCase()) : void 0;
-        });
-      }
-      if (_this.options.rowFilter) {
-        rowsToMakeAvailable = rowsToMakeAvailable.filter(function(row) {
-          var name, ref2, rowClone;
-          rowClone = $.extend({}, row);
-          ref2 = _this.options.columns;
-          for (name in ref2) {
-            column = ref2[name];
-            if (column.rawValueFormatter) {
-              rowClone[name] = column.rawValueFormatter(rowClone[name]);
-            }
-          }
-          return _this.options.rowFilter(rowClone);
-        });
-      }
-      _this.availableRows = rowsToMakeAvailable;
-      return _this.currentPage = 1;
-    };
-  })(this));
-  SimplyBind('sortBy', {
-    updateEvenIfSame: true,
-    updateOnBind: false
-  }, true).of(this).to((function(_this) {
-    return function(currentSort, prevSort) {
-      var targetColumn;
-      if (currentSort || prevSort) {
-        if (currentSort === prevSort && prevSort) {
-          _this.sortDirection *= -1;
-        } else {
-          _this.sortDirection = -1;
-        }
-        targetColumn = currentSort ? currentSort : null;
-        _this.availableRows = _this.sortRows(_this.availableRows, targetColumn);
-        return _this.currentPage = 1;
-      }
-    };
-  })(this));
-  if (this.els.tableHeading.children('._isSortable').length) {
-    SimplyBind('sortBy', {
-      updateOnBind: true
-    }).of(this).to('multi:className.currentSort').of(this.els.tableHeading.children('._isSortable')).transform(function(current, prev, el) {
-      if (current === el.children[0].textContent) {
-        return '_currentSort';
-      } else {
-        return '';
-      }
-    });
-  }
-  SimplyBind('sortDirection').of(this).to('className.sortDirection').of(this.els.table).transform(function(sortDirection) {
-    if (sortDirection === -1) {
-      return 'desc';
-    } else {
-      return 'asc';
-    }
-  });
-  return Promise.resolve();
 };
 
-;
+module.exports = exports = newBuilder(true);
 
-DataTable.prototype.sortBy = function(column) {};
-
-;
-
-currentID = 0;
-
-DataTable.version = "2.9.2";
-
-DataTable.helpers = helpers;
-
-DataTable.markup = markup;
-
-DataTable.defaults = defaults;
-
-module.exports = DataTable;
+exports.version = "1.7.3";
 
 ;
 return module.exports;
 },
-2: function (require, module, exports) {
+3: function (require, module, exports) {
+/*!
+ * escape-html
+ * Copyright(c) 2012-2013 TJ Holowaychuk
+ * Copyright(c) 2015 Andreas Lubbe
+ * Copyright(c) 2015 Tiancheng "Timothy" Gu
+ * MIT Licensed
+ */
+
 'use strict';
 
-var hasOwn = Object.prototype.hasOwnProperty;
-var toStr = Object.prototype.toString;
+/**
+ * Module variables.
+ * @private
+ */
 
-var isArray = function isArray(arr) {
-	if (typeof Array.isArray === 'function') {
-		return Array.isArray(arr);
-	}
+var matchHtmlRegExp = /["'&<>]/;
 
-	return toStr.call(arr) === '[object Array]';
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = escapeHtml;
+
+/**
+ * Escape special characters in the given string of html.
+ *
+ * @param  {string} string The string to escape for inserting into HTML
+ * @return {string}
+ * @public
+ */
+
+function escapeHtml(string) {
+  var str = '' + string;
+  var match = matchHtmlRegExp.exec(str);
+
+  if (!match) {
+    return str;
+  }
+
+  var escape;
+  var html = '';
+  var index = 0;
+  var lastIndex = 0;
+
+  for (index = match.index; index < str.length; index++) {
+    switch (str.charCodeAt(index)) {
+      case 34: // "
+        escape = '&quot;';
+        break;
+      case 38: // &
+        escape = '&amp;';
+        break;
+      case 39: // '
+        escape = '&#39;';
+        break;
+      case 60: // <
+        escape = '&lt;';
+        break;
+      case 62: // >
+        escape = '&gt;';
+        break;
+      default:
+        continue;
+    }
+
+    if (lastIndex !== index) {
+      html += str.substring(lastIndex, index);
+    }
+
+    lastIndex = index + 1;
+    html += escape;
+  }
+
+  return lastIndex !== index
+    ? html + str.substring(lastIndex, index)
+    : html;
+}
+;
+return module.exports;
+},
+17: function (require, module, exports) {
+var extend, isArray, isObject, shouldDeepExtend;
+
+isArray = function(target) {
+  return Array.isArray(target);
 };
 
-var isPlainObject = function isPlainObject(obj) {
-	if (!obj || toStr.call(obj) !== '[object Object]') {
-		return false;
-	}
-
-	var hasOwnConstructor = hasOwn.call(obj, 'constructor');
-	var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
-	// Not own constructor property must be Object
-	if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
-		return false;
-	}
-
-	// Own properties are enumerated firstly, so to speed up,
-	// if last one is own, then all properties are own.
-	var key;
-	for (key in obj) { /**/ }
-
-	return typeof key === 'undefined' || hasOwn.call(obj, key);
+isObject = function(target) {
+  return target && Object.prototype.toString.call(target) === '[object Object]' || isArray(target);
 };
 
-module.exports = function extend() {
-	var options, name, src, copy, copyIsArray, clone;
-	var target = arguments[0];
-	var i = 1;
-	var length = arguments.length;
-	var deep = false;
-
-	// Handle a deep copy situation
-	if (typeof target === 'boolean') {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
-	}
-	if (target == null || (typeof target !== 'object' && typeof target !== 'function')) {
-		target = {};
-	}
-
-	for (; i < length; ++i) {
-		options = arguments[i];
-		// Only deal with non-null/undefined values
-		if (options != null) {
-			// Extend the base object
-			for (name in options) {
-				src = target[name];
-				copy = options[name];
-
-				// Prevent never-ending loop
-				if (target !== copy) {
-					// Recurse if we're merging plain objects or arrays
-					if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
-						if (copyIsArray) {
-							copyIsArray = false;
-							clone = src && isArray(src) ? src : [];
-						} else {
-							clone = src && isPlainObject(src) ? src : {};
-						}
-
-						// Never move original objects, clone them
-						target[name] = extend(deep, clone, copy);
-
-					// Don't bring in undefined values
-					} else if (typeof copy !== 'undefined') {
-						target[name] = copy;
-					}
-				}
-			}
-		}
-	}
-
-	// Return the modified object
-	return target;
+shouldDeepExtend = function(options, target, parentKey) {
+  if (options.deep) {
+    if (options.notDeep) {
+      return !options.notDeep[target];
+    } else {
+      return true;
+    }
+  } else if (options.deepOnly) {
+    return options.deepOnly[target] || parentKey && shouldDeepExtend(options, parentKey);
+  }
 };
+
+module.exports = extend = function(options, target, sources, parentKey) {
+  var i, key, len, source, sourceValue, subTarget, targetValue;
+  if (!target || typeof target !== 'object' && typeof target !== 'function') {
+    target = {};
+  }
+  for (i = 0, len = sources.length; i < len; i++) {
+    source = sources[i];
+    if (source != null) {
+      for (key in source) {
+        sourceValue = source[key];
+        targetValue = target[key];
+        if (sourceValue === target || sourceValue === void 0 || (sourceValue === null && !options.allowNull && !options.nullDeletes) || (options.keys && !options.keys[key]) || (options.notKeys && options.notKeys[key]) || (options.own && !source.hasOwnProperty(key)) || (options.globalFilter && !options.globalFilter(sourceValue, key, source)) || (options.filters && options.filters[key] && !options.filters[key](sourceValue, key, source))) {
+          continue;
+        }
+        if (sourceValue === null && options.nullDeletes) {
+          delete target[key];
+          continue;
+        }
+        if (options.globalTransform) {
+          sourceValue = options.globalTransform(sourceValue, key, source);
+        }
+        if (options.transforms && options.transforms[key]) {
+          sourceValue = options.transforms[key](sourceValue, key, source);
+        }
+        switch (false) {
+          case !(options.concat && isArray(sourceValue) && isArray(targetValue)):
+            target[key] = targetValue.concat(sourceValue);
+            break;
+          case !(shouldDeepExtend(options, key, parentKey) && isObject(sourceValue)):
+            subTarget = isObject(targetValue) ? targetValue : isArray(sourceValue) ? [] : {};
+            target[key] = extend(options, subTarget, [sourceValue], key);
+            break;
+          default:
+            target[key] = sourceValue;
+        }
+      }
+    }
+  }
+  return target;
+};
+
 ;
 return module.exports;
 }
@@ -3277,4 +3430,4 @@ module.exports = require(0);
 } else {
 return this['DataTable'] = require(0);
 }
-}).call(this, null);
+}).call(this, null, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : this);

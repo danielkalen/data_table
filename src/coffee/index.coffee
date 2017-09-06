@@ -75,7 +75,7 @@ DataTable::loadData = ()->
 	@unprocessRow(row) for row in @allRows if @allRows.length
 	@fetchData().then (data)=> @setData(data)
 
-DataTable::refresh: ()->
+DataTable::refresh = ()->
 	@availableRows = @availableRows
 	@currentPage = @currentPage
 
