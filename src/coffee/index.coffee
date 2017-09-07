@@ -71,6 +71,9 @@ DataTable::fetchData = ()->
 DataTable::setData = (data)->
 	@allRows = data if Array.isArray(data)
 
+DataTable::appendData = (data)->
+	@allRows.push(data...)
+
 DataTable::loadData = ()->
 	@unprocessRow(row) for row in @allRows if @allRows.length
 	@fetchData().then (data)=> @setData(data)
