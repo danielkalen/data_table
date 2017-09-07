@@ -549,6 +549,11 @@ DataTable.prototype.setData = function(data) {
   }
 };
 
+DataTable.prototype.appendData = function(data) {
+  var ref;
+  return (ref = this.allRows).push.apply(ref, data);
+};
+
 DataTable.prototype.loadData = function() {
   var i, len, ref, row;
   if (this.allRows.length) {
@@ -1342,7 +1347,7 @@ DataTable.prototype.attachBindings = function() {
       }).join('');
     });
     SimplyBind('value').of(this.els.searchParam).to('searchParam').of(this).pipe('attr:placeholder').of(this.els.searchCriteria).transform(function(option) {
-      return "Search by " + option;
+      return "Filter by " + option;
     });
   }
   SimplyBind('value').of(this.els.searchCriteria).to('searchCriteria', {
@@ -1424,7 +1429,7 @@ DataTable.prototype.sortBy = function(column) {};
 
 currentID = 0;
 
-DataTable.version = "2.9.3";
+DataTable.version = "2.9.4";
 
 DataTable.helpers = helpers;
 
