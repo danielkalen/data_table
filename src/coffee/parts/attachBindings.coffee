@@ -176,7 +176,7 @@ DataTable::attachBindings = ()->
 		SimplyBind('value').of(@els.searchParam)
 			.to('searchParam').of(@)
 				.pipe('attr:placeholder').of(@els.searchCriteria)
-					.transform (option)-> "Search by #{option}"
+					.transform (option)-> "Filter by #{option}"
 
 
 
