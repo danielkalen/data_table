@@ -1,6 +1,6 @@
 {
   "name": "@danielkalen/data_table",
-  "version": "2.9.5",
+  "version": "2.9.6",
   "description": "Tiny library for displaying database-fetched data in an HTML table with front-end pagination",
   "main": "dist/js/data_table.js",
   "browser": {
