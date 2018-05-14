@@ -480,6 +480,7 @@ this.container = container;
 if (options == null) {
 options = {};
 }
+DataTable.__super__.constructor.apply(this, arguments);
 this.options = extend.clone.deepOnly('columns')(DataTable.defaults, options);
 this.state = {
 'loading': false,
