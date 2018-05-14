@@ -1422,7 +1422,7 @@ DataTable.prototype.sortBy = function(column) {};
 
 ;
 currentID = 0;
-DataTable.version = "2.9.5";
+DataTable.version = "2.9.6";
 DataTable.helpers = helpers;
 DataTable.markup = markup;
 DataTable.defaults = defaults;
