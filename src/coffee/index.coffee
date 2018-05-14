@@ -7,6 +7,7 @@ import './parts/helpers'
 
 class DataTable extends require('event-lite')
 	constructor: (@container, options={})->
+		super
 		@options = extend.clone.deepOnly('columns')(DataTable.defaults, options)
 		@state = 'loading':false, 'noResults':false, 'error':false
 		@ID = ++currentID
