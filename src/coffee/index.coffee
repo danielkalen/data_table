@@ -5,56 +5,57 @@ import './parts/markup'
 import './parts/defaults'
 import './parts/helpers'
 
-DataTable = (@container, options={})->
-	@options = extend.clone.deepOnly('columns')(DataTable.defaults, options)
-	@state = 'loading':false, 'noResults':false, 'error':false
-	@ID = ++currentID
-	@tableID = "\##{@options.baseClass}-#{@ID}"
-	@visibleRows = []
-	@availableRows = []
-	@allRows = []
-	@largestBreakdownTotal = 0
-	@searchCriteria = ''
-	@searchParam = ''
-	@sortBy = if @options.sortBy then @options.sortBy else ''
-	@sortDirection = -1
-	@currentPage = 1
+class DataTable extends require('event-lite')
+	constructor: (@container, options={})->
+		@options = extend.clone.deepOnly('columns')(DataTable.defaults, options)
+		@state = 'loading':false, 'noResults':false, 'error':false
+		@ID = ++currentID
+		@tableID = "\##{@options.baseClass}-#{@ID}"
+		@visibleRows = []
+		@availableRows = []
+		@allRows = []
+		@largestBreakdownTotal = 0
+		@searchCriteria = ''
+		@searchParam = ''
+		@sortBy = if @options.sortBy then @options.sortBy else ''
+		@sortDirection = -1
+		@currentPage = 1
 
 
-	# ==== Markup =================================================================================
-	@els = {}
-	@els.tableOuterwrap = $(markup.tableOuterwrap extend({@ID}, @options))
-	@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
-	@els.tableHeading = @els.table.children().first().children()
-	@els.tableBody = @els.table.children().last()
-	@els.noResultsMessage = $(markup.noResults(@options)).appendTo(@els.tableOuterwrap)
-	@els.loadingMessage = $(markup.loading(@options)).appendTo(@els.tableOuterwrap)
-	@els.errorMessage = $(markup.error(@options)).appendTo(@els.tableOuterwrap)
-	@els.pageStatus = $(markup.pageStatus(@options)).appendTo(@els.tableOuterwrap)
-	@els.pagination = $(markup.pagination(@options)).appendTo(@els.tableOuterwrap)
-	@els.paginationItems = @els.pagination.children('._paginationItems')
-	@els.paginationExtra = @els.pagination.children('._extraIndicator')
-	@els.paginationExtraSelect = @els.paginationExtra.children('select')
-	@els.paginationExtraText = @els.paginationExtraSelect.prev()
-	@els.searchField = $(markup.searchField(@options)).insertBefore(@els.table)
-	@els.searchParam = @els.searchField.children('select')
-	@els.searchCriteria = @els.searchField.children('input')
-	@els.globalStyles = $('<style />').prependTo(@els.tableOuterwrap)
+		# ==== Markup =================================================================================
+		@els = {}
+		@els.tableOuterwrap = $(markup.tableOuterwrap extend({@ID}, @options))
+		@els.table = $(markup.table(@options)).appendTo(@els.tableOuterwrap)
+		@els.tableHeading = @els.table.children().first().children()
+		@els.tableBody = @els.table.children().last()
+		@els.noResultsMessage = $(markup.noResults(@options)).appendTo(@els.tableOuterwrap)
+		@els.loadingMessage = $(markup.loading(@options)).appendTo(@els.tableOuterwrap)
+		@els.errorMessage = $(markup.error(@options)).appendTo(@els.tableOuterwrap)
+		@els.pageStatus = $(markup.pageStatus(@options)).appendTo(@els.tableOuterwrap)
+		@els.pagination = $(markup.pagination(@options)).appendTo(@els.tableOuterwrap)
+		@els.paginationItems = @els.pagination.children('._paginationItems')
+		@els.paginationExtra = @els.pagination.children('._extraIndicator')
+		@els.paginationExtraSelect = @els.paginationExtra.children('select')
+		@els.paginationExtraText = @els.paginationExtraSelect.prev()
+		@els.searchField = $(markup.searchField(@options)).insertBefore(@els.table)
+		@els.searchParam = @els.searchField.children('select')
+		@els.searchCriteria = @els.searchField.children('input')
+		@els.globalStyles = $('<style />').prependTo(@els.tableOuterwrap)
 
-	@els.tableHeading.append(@generateHeadingColumns())
+		@els.tableHeading.append(@generateHeadingColumns())
 
-	@els.tableOuterwrap.appendTo @container
-	@els.table.data 'DataTable', @
-	@els.table[0].style.minWidth = "#{@options.minWidth}px" if @options.minWidth
+		@els.tableOuterwrap.appendTo @container
+		@els.table.data 'DataTable', @
+		@els.table[0].style.minWidth = "#{@options.minWidth}px" if @options.minWidth
 
 
-	# ==== Events & Bindings =================================================================================
-	Promise.bind(@)
-		.then(@attachEvents)
-		.then(@attachBindings)
-		.then ()-> if @options.loadOnInit then @loadData()
+		# ==== Events & Bindings =================================================================================
+		Promise.bind(@)
+			.then(@attachEvents)
+			.then(@attachBindings)
+			.then ()-> if @options.loadOnInit then @loadData()
 
-	return @
+		return @
 
 
 

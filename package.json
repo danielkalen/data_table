@@ -17,6 +17,7 @@
     "@danielkalen/simplybind": "^1.15.8",
     "bluebird": "^3.5.0",
     "escape-html": "^1.0.3",
+    "event-lite": "^0.1.1",
     "smart-extend": "^1.7.3"
   },
   "devDependencies": {
@@ -26,8 +27,8 @@
     "node-sass": "^4.5.3",
     "promise-break": "^0.1.1",
     "sass-module-importer": "github:danielkalen/sass-module-importer",
-    "simplyimport": "^4.0.0-s33",
-    "simplywatch": "^3.0.0-l2"
+    "simplyimport": "^4.0.0-t7",
+    "simplywatch": "^3.0.0-l5"
   },
   "sassFns": "node_modules/@danielkalen/sass-base/compiler-fns.js",
   "sassImporter": "node_modules/sass-module-importer/lib/index.js",
