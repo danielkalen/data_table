@@ -8,14 +8,21 @@ exports: {}
 };
 })({}, {
 0: function (require, module, exports) {
-var DataTable, SimplyBind, currentID, escHTML, extend;
-
+var DataTable, SimplyBind, currentID, escHTML, extend, extend1 = function (child, parent) {
+for (var key in parent) {
+if (hasProp.call(parent, key)) child[key] = parent[key];
+}
+function ctor() {
+this.constructor = child;
+}
+ctor.prototype = parent.prototype;
+child.prototype = new ctor();
+child.__super__ = parent.prototype;
+return child;
+}, hasProp = ({}).hasOwnProperty;
 SimplyBind = require(1);
-
 extend = require(2);
-
 escHTML = require(3);
-
 var markup;
 
 markup = {
@@ -120,7 +127,6 @@ markup = {
 };
 
 ;
-
 var defaults;
 
 defaults = {
@@ -147,7 +153,6 @@ defaults = {
 };
 
 ;
-
 var helpers;
 
 helpers = {};
@@ -468,121 +473,117 @@ helpers.iconMapping = function(value, iconType) {
 };
 
 ;
-
-DataTable = function(container, options) {
-  this.container = container;
-  if (options == null) {
-    options = {};
-  }
-  this.options = extend.clone.deepOnly('columns')(DataTable.defaults, options);
-  this.state = {
-    'loading': false,
-    'noResults': false,
-    'error': false
-  };
-  this.ID = ++currentID;
-  this.tableID = "\#" + this.options.baseClass + "-" + this.ID;
-  this.visibleRows = [];
-  this.availableRows = [];
-  this.allRows = [];
-  this.largestBreakdownTotal = 0;
-  this.searchCriteria = '';
-  this.searchParam = '';
-  this.sortBy = this.options.sortBy ? this.options.sortBy : '';
-  this.sortDirection = -1;
-  this.currentPage = 1;
-  this.els = {};
-  this.els.tableOuterwrap = $(markup.tableOuterwrap(extend({
-    ID: this.ID
-  }, this.options)));
-  this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.tableHeading = this.els.table.children().first().children();
-  this.els.tableBody = this.els.table.children().last();
-  this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.loadingMessage = $(markup.loading(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.errorMessage = $(markup.error(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.pageStatus = $(markup.pageStatus(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.pagination = $(markup.pagination(this.options)).appendTo(this.els.tableOuterwrap);
-  this.els.paginationItems = this.els.pagination.children('._paginationItems');
-  this.els.paginationExtra = this.els.pagination.children('._extraIndicator');
-  this.els.paginationExtraSelect = this.els.paginationExtra.children('select');
-  this.els.paginationExtraText = this.els.paginationExtraSelect.prev();
-  this.els.searchField = $(markup.searchField(this.options)).insertBefore(this.els.table);
-  this.els.searchParam = this.els.searchField.children('select');
-  this.els.searchCriteria = this.els.searchField.children('input');
-  this.els.globalStyles = $('<style />').prependTo(this.els.tableOuterwrap);
-  this.els.tableHeading.append(this.generateHeadingColumns());
-  this.els.tableOuterwrap.appendTo(this.container);
-  this.els.table.data('DataTable', this);
-  if (this.options.minWidth) {
-    this.els.table[0].style.minWidth = this.options.minWidth + "px";
-  }
-  Promise.bind(this).then(this.attachEvents).then(this.attachBindings).then(function() {
-    if (this.options.loadOnInit) {
-      return this.loadData();
-    }
-  });
-  return this;
+DataTable = (function (superClass) {
+extend1(DataTable, superClass);
+function DataTable(container, options) {
+this.container = container;
+if (options == null) {
+options = {};
+}
+this.options = extend.clone.deepOnly('columns')(DataTable.defaults, options);
+this.state = {
+'loading': false,
+'noResults': false,
+'error': false
 };
-
-DataTable.prototype.fetchData = function() {
-  this.state.loading = true;
-  return Promise.resolve().then((function(_this) {
-    return function() {
-      return _this.options.data.call(_this);
-    };
-  })(this)).then((function(_this) {
-    return function(data) {
-      _this.state.loading = _this.state.error = false;
-      return data;
-    };
-  })(this))["catch"]((function(_this) {
-    return function(err) {
-      return _this.state.error = err;
-    };
-  })(this));
+this.ID = ++currentID;
+this.tableID = "\#" + this.options.baseClass + "-" + this.ID;
+this.visibleRows = [];
+this.availableRows = [];
+this.allRows = [];
+this.largestBreakdownTotal = 0;
+this.searchCriteria = '';
+this.searchParam = '';
+this.sortBy = this.options.sortBy ? this.options.sortBy : '';
+this.sortDirection = -1;
+this.currentPage = 1;
+this.els = {};
+this.els.tableOuterwrap = $(markup.tableOuterwrap(extend({
+ID: this.ID
+}, this.options)));
+this.els.table = $(markup.table(this.options)).appendTo(this.els.tableOuterwrap);
+this.els.tableHeading = this.els.table.children().first().children();
+this.els.tableBody = this.els.table.children().last();
+this.els.noResultsMessage = $(markup.noResults(this.options)).appendTo(this.els.tableOuterwrap);
+this.els.loadingMessage = $(markup.loading(this.options)).appendTo(this.els.tableOuterwrap);
+this.els.errorMessage = $(markup.error(this.options)).appendTo(this.els.tableOuterwrap);
+this.els.pageStatus = $(markup.pageStatus(this.options)).appendTo(this.els.tableOuterwrap);
+this.els.pagination = $(markup.pagination(this.options)).appendTo(this.els.tableOuterwrap);
+this.els.paginationItems = this.els.pagination.children('._paginationItems');
+this.els.paginationExtra = this.els.pagination.children('._extraIndicator');
+this.els.paginationExtraSelect = this.els.paginationExtra.children('select');
+this.els.paginationExtraText = this.els.paginationExtraSelect.prev();
+this.els.searchField = $(markup.searchField(this.options)).insertBefore(this.els.table);
+this.els.searchParam = this.els.searchField.children('select');
+this.els.searchCriteria = this.els.searchField.children('input');
+this.els.globalStyles = $('<style />').prependTo(this.els.tableOuterwrap);
+this.els.tableHeading.append(this.generateHeadingColumns());
+this.els.tableOuterwrap.appendTo(this.container);
+this.els.table.data('DataTable', this);
+if (this.options.minWidth) {
+this.els.table[0].style.minWidth = this.options.minWidth + "px";
+}
+Promise.bind(this).then(this.attachEvents).then(this.attachBindings).then(function () {
+if (this.options.loadOnInit) {
+return this.loadData();
+}
+});
+return this;
+}
+return DataTable;
+})(require(7));
+DataTable.prototype.fetchData = function () {
+this.state.loading = true;
+return Promise.resolve().then((function (_this) {
+return function () {
+return _this.options.data.call(_this);
 };
-
-DataTable.prototype.setData = function(data) {
-  if (Array.isArray(data)) {
-    return this.allRows = data;
-  }
+})(this)).then((function (_this) {
+return function (data) {
+_this.state.loading = _this.state.error = false;
+return data;
 };
-
-DataTable.prototype.appendData = function(data) {
-  var ref;
-  return (ref = this.allRows).push.apply(ref, data);
+})(this))["catch"]((function (_this) {
+return function (err) {
+return _this.state.error = err;
 };
-
-DataTable.prototype.loadData = function() {
-  var i, len, ref, row;
-  if (this.allRows.length) {
-    ref = this.allRows;
-    for (i = 0, len = ref.length; i < len; i++) {
-      row = ref[i];
-      this.unprocessRow(row);
-    }
-  }
-  return this.fetchData().then((function(_this) {
-    return function(data) {
-      return _this.setData(data);
-    };
-  })(this));
+})(this));
 };
-
-DataTable.prototype.refresh = function() {
-  this.availableRows = this.availableRows;
-  return this.currentPage = this.currentPage;
+DataTable.prototype.setData = function (data) {
+if (Array.isArray(data)) {
+return this.allRows = data;
+}
 };
-
-DataTable.prototype.markupArgs = function(argsObject) {
-  if (argsObject == null) {
-    argsObject = {};
-  }
-  argsObject.baseClass = this.options.baseClass;
-  return argsObject;
+DataTable.prototype.appendData = function (data) {
+var ref;
+return (ref = this.allRows).push.apply(ref, data);
 };
-
+DataTable.prototype.loadData = function () {
+var i, len, ref, row;
+if (this.allRows.length) {
+ref = this.allRows;
+for ((i = 0, len = ref.length); i < len; i++) {
+row = ref[i];
+this.unprocessRow(row);
+}
+}
+return this.fetchData().then((function (_this) {
+return function (data) {
+return _this.setData(data);
+};
+})(this));
+};
+DataTable.prototype.refresh = function () {
+this.availableRows = this.availableRows;
+return this.currentPage = this.currentPage;
+};
+DataTable.prototype.markupArgs = function (argsObject) {
+if (argsObject == null) {
+argsObject = {};
+}
+argsObject.baseClass = this.options.baseClass;
+return argsObject;
+};
 DataTable.prototype.calcPageCount = function(rows) {
   this.pageCountReal = Math.ceil(rows.length / this.options.perPage);
   return this.pageCount = this.pageCountReal > this.options.pageCountMax ? this.options.pageCountMax : this.pageCountReal;
@@ -676,7 +677,6 @@ DataTable.prototype.setPageIndicator = function(targetPage) {
 };
 
 ;
-
 DataTable.prototype.generateHeadingColumns = function() {
   var column, label;
   this.options.columns = helpers.normalizeColumns(this.options.columns);
@@ -714,7 +714,6 @@ DataTable.prototype.updateColumns = function(updatedColumns) {
 };
 
 ;
-
 DataTable.prototype.processRow = function(row) {
   var ref;
   if (row.processed) {
@@ -907,7 +906,6 @@ DataTable.prototype.generateRowMarkup = function(row, parentRow) {
 };
 
 ;
-
 DataTable.prototype.generateBreakdownBar = function(breakdown, rowObj, columnEntity) {
   var breakdownKeys, total;
   breakdownKeys = this.legend || Object.keys(breakdown);
@@ -1013,9 +1011,7 @@ DataTable.prototype.generateIpDetails = function(ipAddress, row, column) {
 };
 
 ;
-
 ;
-
 DataTable.prototype.attachEvents = function() {
   this.els.pagination.on('click', '._paginationItem', (function(_this) {
     return function(event) {
@@ -1112,7 +1108,6 @@ DataTable.prototype.attachEvents = function() {
 };
 
 ;
-
 DataTable.prototype.attachBindings = function() {
   var column, fn, l, ref;
   SimplyBind.settings.trackArrayChildren = false;
@@ -1422,72 +1417,52 @@ DataTable.prototype.attachBindings = function() {
 };
 
 ;
-
 DataTable.prototype.sortBy = function(column) {};
 
 ;
-
 currentID = 0;
-
-DataTable.version = "2.9.4";
-
+DataTable.version = "2.9.5";
 DataTable.helpers = helpers;
-
 DataTable.markup = markup;
-
 DataTable.defaults = defaults;
-
 module.exports = DataTable;
-
-;
 return module.exports;
 },
 1: function (require, module, exports) {
 var arrayMutatorMethods, boundInstances, currentID, defaultOptions, dummyPropertyDescriptor, placeholder, settings;
-
 currentID = 0;
-
 arrayMutatorMethods = ['push', 'pop', 'shift', 'unshift', 'splice', 'reverse', 'sort'];
-
 dummyPropertyDescriptor = {};
-
 boundInstances = {};
-
 placeholder = ['{{', '}}'];
-
 settings = Object.create({
-  silent: false
+silent: false
 }, {
-  placeholder: {
-    get: function() {
-      return placeholder;
-    },
-    set: function(newPlaceholder) {
-      if (checkIf.isArray(newPlaceholder) && newPlaceholder.length === 2) {
-        placeholder = newPlaceholder;
-        setPholderRegEx();
-      }
-    }
-  }
+placeholder: {
+get: function () {
+return placeholder;
+},
+set: function (newPlaceholder) {
+if (checkIf.isArray(newPlaceholder) && newPlaceholder.length === 2) {
+placeholder = newPlaceholder;
+setPholderRegEx();
+}
+}
+}
 });
-
 defaultOptions = {
-  delay: false,
-  throttle: false,
-  simpleSelector: false,
-  promiseTransforms: false,
-  dispatchEvents: false,
-  sendArrayCopies: false,
-  updateEvenIfSame: false,
-  updateOnBind: true
+delay: false,
+throttle: false,
+simpleSelector: false,
+promiseTransforms: false,
+dispatchEvents: false,
+sendArrayCopies: false,
+updateEvenIfSame: false,
+updateOnBind: true
 };
-
 var defineProperty, genID, genObj, genProxiedInterface, genSelfUpdater, getDescriptor, setValueNoop;
-
 defineProperty = Object.defineProperty;
-
 getDescriptor = Object.getOwnPropertyDescriptor;
-
 var cachedEvent, changeEvent;
 
 cachedEvent = null;
@@ -1503,47 +1478,39 @@ changeEvent = function() {
 };
 
 ;
-
 var requiresDomDescriptorFix;
 
 requiresDomDescriptorFix = (!('className' in Element.prototype)) || !getDescriptor(Element.prototype, 'className').get;
 
 ;
-
 var windowPropsToIgnore;
 
 windowPropsToIgnore = ['innerWidth', 'innerHeight', 'outerWidth', 'outerHeight', 'scrollX', 'scrollY', 'pageXOffset', 'pageYOffset', 'screenX', 'screenY', 'screenLeft', 'screenTop'];
 
 ;
-
-setValueNoop = function(v, publisher) {
-  return this.updateAllSubs(publisher || this);
+setValueNoop = function (v, publisher) {
+return this.updateAllSubs(publisher || this);
 };
-
-genID = function() {
-  return '' + (++currentID);
+genID = function () {
+return '' + (++currentID);
 };
-
-genObj = function() {
-  return Object.create(null);
+genObj = function () {
+return Object.create(null);
 };
-
-genProxiedInterface = function(isSub, completeCallback) {
-  return function(subject, customOptions, saveOptions) {
-    return SimplyBind(subject, customOptions, saveOptions, isSub, completeCallback);
-  };
+genProxiedInterface = function (isSub, completeCallback) {
+return function (subject, customOptions, saveOptions) {
+return SimplyBind(subject, customOptions, saveOptions, isSub, completeCallback);
 };
-
-genSelfUpdater = function(binding, fetchValue) {
-  return binding.selfUpdater || (binding.selfUpdater = new Binding(function() {
-    if (fetchValue) {
-      return binding.setValue(binding.fetchDirectValue(), binding, true);
-    } else {
-      return binding.updateAllSubs(binding);
-    }
-  }, 'Func', {}));
 };
-
+genSelfUpdater = function (binding, fetchValue) {
+return binding.selfUpdater || (binding.selfUpdater = new Binding(function () {
+if (fetchValue) {
+return binding.setValue(binding.fetchDirectValue(), binding, true);
+} else {
+return binding.updateAllSubs(binding);
+}
+}, 'Func', {}));
+};
 var checkIf, targetIncludes;
 
 targetIncludes = function(target, item) {
@@ -1609,168 +1576,162 @@ checkIf = {
 };
 
 ;
-
 var convertToLive, convertToReg, fetchDescriptor;
-
-fetchDescriptor = function(object, property, isProto) {
-  var descriptor, objectProto;
-  descriptor = getDescriptor(object, property);
-  if (descriptor) {
-    if (isProto) {
-      descriptor.configurable = true;
-    }
-    return descriptor;
-  } else if (objectProto = Object.getPrototypeOf(object)) {
-    return fetchDescriptor(objectProto, property, true);
-  }
+fetchDescriptor = function (object, property, isProto) {
+var descriptor, objectProto;
+descriptor = getDescriptor(object, property);
+if (descriptor) {
+if (isProto) {
+descriptor.configurable = true;
+}
+return descriptor;
+} else if (objectProto = Object.getPrototypeOf(object)) {
+return fetchDescriptor(objectProto, property, true);
+}
 };
-
-convertToLive = function(bindingInstance, object, onlyArrayMethods) {
-  var _, context, getterValue, origFn, propertyDescriptor, proxyFn, shouldIndicateUpdateIsFromSelf, shouldWriteLiveProp, slice, typeIsArray;
-  _ = bindingInstance;
-  if (!_.origDescriptor) {
-    _.origDescriptor = fetchDescriptor(object, _.property);
-  }
-  if (onlyArrayMethods) {
-    arrayMutatorMethods.forEach(function(method) {
-      return defineProperty(object, method, {
-        configurable: true,
-        value: function() {
-          var result;
-          result = Array.prototype[method].apply(object, arguments);
-          _.updateAllSubs(_);
-          return result;
-        }
-      });
-    });
-  } else {
-    if (_.type === 'Proxy') {
-      origFn = _.origFn = _.value;
-      context = object;
-      _.value = {
-        result: null,
-        args: null
-      };
-      if (checkIf.isFunction(origFn)) {
-        slice = [].slice;
-        getterValue = proxyFn = function() {
-          var args, result;
-          args = slice.call(arguments);
-          _.value.args = args = _.selfTransform ? _.selfTransform(args) : args;
-          _.value.result = result = origFn.apply(context, args);
-          _.updateAllSubs(_);
-          return result;
-        };
-        defineProperty(object, _.property, {
-          configurable: _.isLiveProp = true,
-          get: function() {
-            return getterValue;
-          },
-          set: function(newValue) {
-            if (!checkIf.isFunction(newValue)) {
-              getterValue = newValue;
-            } else if (newValue !== origFn) {
-              if (newValue !== proxyFn) {
-                origFn = _.origFn = newValue;
-              }
-              if (getterValue !== proxyFn) {
-                getterValue = proxyFn;
-              }
-            }
-          }
-        });
-      }
-    } else if (!targetIncludes(_.type, 'DOM') && !(_.object === window && targetIncludes(windowPropsToIgnore, _.property))) {
-      propertyDescriptor = _.origDescriptor || dummyPropertyDescriptor;
-      if (propertyDescriptor.get) {
-        _.origGetter = propertyDescriptor.get.bind(object);
-      }
-      if (propertyDescriptor.set) {
-        _.origSetter = propertyDescriptor.set.bind(object);
-      }
-      shouldWriteLiveProp = propertyDescriptor.configurable;
-      shouldWriteLiveProp = shouldWriteLiveProp && object.constructor !== CSSStyleDeclaration;
-      
-      /**
-       * There is a bug in webkit/blink engines in which native attributes/properties 
-       * of DOM elements are not exposed on the element's prototype and instead is
-       * exposed directly on the element instance; when looking up the property descriptor
-       * of the element a data descriptor is returned instead of an accessor descriptor
-       * (i.e. descriptor with getter/setter) which means we are not able to define our
-       * own proxy getter/setters. This was fixed only in April 2015 in Chrome v43 and
-       * Safari v10. Although we won't be able to get notified when the objects get
-       * their values set, we would at least provide working functionality lacking update
-       * listeners. Since v1.14.0 HTMLInputElement::value bindings invoke the original
-       * getter and setter methods in Binding::setValue(), and since we want to avoid
-       * increasing the amount of logic present in Binding::setValue() for performance
-       * reasons, we patch those setters here. We clone the target element and check for
-       * the existence of the target property - if it exists then it indicates the target
-       * property is a native property (since only native properties are copied over in
-       * Element::cloneNode). This patching is only for native properties.
-       *
-       * https://bugs.webkit.org/show_bug.cgi?id=49739
-       * https://bugs.webkit.org/show_bug.cgi?id=75297
-       * https://bugs.chromium.org/p/chromium/issues/detail?id=43394
-       * https://bugs.chromium.org/p/chromium/issues/detail?id=431492
-       * https://bugs.chromium.org/p/chromium/issues/detail?id=13175
-       * https://developers.google.com/web/updates/2015/04/DOM-attributes-now-on-the-prototype-chain
-       */
-      var shouldWriteLiveProp;
-      
-      if (requiresDomDescriptorFix && _.isDom && _.property in object.cloneNode(false)) {
-        _.origDescriptor = shouldWriteLiveProp = false;
-        _.isLiveProp = true;
-        _.origGetter = function() {
-          return _.object[_.property];
-        };
-        _.origSetter = function(newValue) {
-          return _.object[_.property] = newValue;
-        };
-      }
-      
-      ;
-      if (shouldWriteLiveProp) {
-        typeIsArray = _.type === 'Array';
-        shouldIndicateUpdateIsFromSelf = !_.origSetter && !typeIsArray;
-        defineProperty(object, _.property, {
-          configurable: _.isLiveProp = true,
-          enumerable: propertyDescriptor.enumerable,
-          get: _.origGetter || function() {
-            return _.value;
-          },
-          set: function(newValue) {
-            _.setValue(newValue, _, shouldIndicateUpdateIsFromSelf);
-          }
-        });
-        if (typeIsArray) {
-          convertToLive(_, object[_.property], true);
-        }
-      }
-    }
-  }
+convertToLive = function (bindingInstance, object, onlyArrayMethods) {
+var _, context, getterValue, origFn, propertyDescriptor, proxyFn, shouldIndicateUpdateIsFromSelf, shouldWriteLiveProp, slice, typeIsArray;
+_ = bindingInstance;
+if (!_.origDescriptor) {
+_.origDescriptor = fetchDescriptor(object, _.property);
+}
+if (onlyArrayMethods) {
+arrayMutatorMethods.forEach(function (method) {
+return defineProperty(object, method, {
+configurable: true,
+value: function () {
+var result;
+result = Array.prototype[method].apply(object, arguments);
+_.updateAllSubs(_);
+return result;
+}
+});
+});
+} else {
+if (_.type === 'Proxy') {
+origFn = _.origFn = _.value;
+context = object;
+_.value = {
+result: null,
+args: null
 };
-
-convertToReg = function(bindingInstance, object, onlyArrayMethods) {
-  var _, i, len, method, newDescriptor, results;
-  if (onlyArrayMethods) {
-    results = [];
-    for (i = 0, len = arrayMutatorMethods.length; i < len; i++) {
-      method = arrayMutatorMethods[i];
-      results.push(delete object[method]);
-    }
-    return results;
-  } else {
-    _ = bindingInstance;
-    newDescriptor = _.origDescriptor;
-    if (!(newDescriptor.set || newDescriptor.get)) {
-      newDescriptor.value = _.origFn || _.value;
-    }
-    return defineProperty(object, _.property, newDescriptor);
-  }
+if (checkIf.isFunction(origFn)) {
+slice = [].slice;
+getterValue = proxyFn = function () {
+var args, result;
+args = slice.call(arguments);
+_.value.args = args = _.selfTransform ? _.selfTransform(args) : args;
+_.value.result = result = origFn.apply(context, args);
+_.updateAllSubs(_);
+return result;
 };
+defineProperty(object, _.property, {
+configurable: _.isLiveProp = true,
+get: function () {
+return getterValue;
+},
+set: function (newValue) {
+if (!checkIf.isFunction(newValue)) {
+getterValue = newValue;
+} else if (newValue !== origFn) {
+if (newValue !== proxyFn) {
+origFn = _.origFn = newValue;
+}
+if (getterValue !== proxyFn) {
+getterValue = proxyFn;
+}
+}
+}
+});
+}
+} else if (!targetIncludes(_.type, 'DOM') && !(_.object === window && targetIncludes(windowPropsToIgnore, _.property))) {
+propertyDescriptor = _.origDescriptor || dummyPropertyDescriptor;
+if (propertyDescriptor.get) {
+_.origGetter = propertyDescriptor.get.bind(object);
+}
+if (propertyDescriptor.set) {
+_.origSetter = propertyDescriptor.set.bind(object);
+}
+shouldWriteLiveProp = propertyDescriptor.configurable;
+shouldWriteLiveProp = shouldWriteLiveProp && object.constructor !== CSSStyleDeclaration;
+
+/**
+ * There is a bug in webkit/blink engines in which native attributes/properties 
+ * of DOM elements are not exposed on the element's prototype and instead is
+ * exposed directly on the element instance; when looking up the property descriptor
+ * of the element a data descriptor is returned instead of an accessor descriptor
+ * (i.e. descriptor with getter/setter) which means we are not able to define our
+ * own proxy getter/setters. This was fixed only in April 2015 in Chrome v43 and
+ * Safari v10. Although we won't be able to get notified when the objects get
+ * their values set, we would at least provide working functionality lacking update
+ * listeners. Since v1.14.0 HTMLInputElement::value bindings invoke the original
+ * getter and setter methods in Binding::setValue(), and since we want to avoid
+ * increasing the amount of logic present in Binding::setValue() for performance
+ * reasons, we patch those setters here. We clone the target element and check for
+ * the existence of the target property - if it exists then it indicates the target
+ * property is a native property (since only native properties are copied over in
+ * Element::cloneNode). This patching is only for native properties.
+ *
+ * https://bugs.webkit.org/show_bug.cgi?id=49739
+ * https://bugs.webkit.org/show_bug.cgi?id=75297
+ * https://bugs.chromium.org/p/chromium/issues/detail?id=43394
+ * https://bugs.chromium.org/p/chromium/issues/detail?id=431492
+ * https://bugs.chromium.org/p/chromium/issues/detail?id=13175
+ * https://developers.google.com/web/updates/2015/04/DOM-attributes-now-on-the-prototype-chain
+ */
+var shouldWriteLiveProp;
+
+if (requiresDomDescriptorFix && _.isDom && _.property in object.cloneNode(false)) {
+  _.origDescriptor = shouldWriteLiveProp = false;
+  _.isLiveProp = true;
+  _.origGetter = function() {
+    return _.object[_.property];
+  };
+  _.origSetter = function(newValue) {
+    return _.object[_.property] = newValue;
+  };
+}
 
 ;
-
+if (shouldWriteLiveProp) {
+typeIsArray = _.type === 'Array';
+shouldIndicateUpdateIsFromSelf = !_.origSetter && !typeIsArray;
+defineProperty(object, _.property, {
+configurable: _.isLiveProp = true,
+enumerable: propertyDescriptor.enumerable,
+get: _.origGetter || (function () {
+return _.value;
+}),
+set: function (newValue) {
+_.setValue(newValue, _, shouldIndicateUpdateIsFromSelf);
+}
+});
+if (typeIsArray) {
+convertToLive(_, object[_.property], true);
+}
+}
+}
+}
+};
+convertToReg = function (bindingInstance, object, onlyArrayMethods) {
+var _, i, len, method, newDescriptor, results;
+if (onlyArrayMethods) {
+results = [];
+for ((i = 0, len = arrayMutatorMethods.length); i < len; i++) {
+method = arrayMutatorMethods[i];
+results.push(delete object[method]);
+}
+return results;
+} else {
+_ = bindingInstance;
+newDescriptor = _.origDescriptor;
+if (!(newDescriptor.set || newDescriptor.get)) {
+newDescriptor.value = _.origFn || _.value;
+}
+return defineProperty(object, _.property, newDescriptor);
+}
+};
+;
 var cloneObject, extendState;
 
 cloneObject = function(object) {
@@ -1792,7 +1753,6 @@ extendState = function(base, stateToInherit) {
 };
 
 ;
-
 var cache;
 
 cache = {
@@ -1836,7 +1796,6 @@ cache = {
 };
 
 ;
-
 var addToNodeStore, applyPlaceholders, escapeRegEx, pholderRegEx, pholderRegExSplit, scanTextNodesPlaceholders, setPholderRegEx, textContent;
 
 escapeRegEx = /[.*+?^${}()|[\]\\]/g;
@@ -1903,7 +1862,6 @@ scanTextNodesPlaceholders = function(element, nodeStore) {
 };
 
 ;
-
 var getErrSource, throwError, throwErrorBadArg, throwWarning;
 
 throwError = function(errorName) {
@@ -1929,9 +1887,7 @@ getErrSource = function(depth) {
 };
 
 ;
-
 ;
-
 var errors;
 
 errors = {
@@ -1944,129 +1900,115 @@ errors = {
 };
 
 ;
-
 ;
-
 var SimplyBind;
-
-SimplyBind = function(subject, options, saveOptions, isSub, completeCallback) {
-  var interfaceToReturn, newInterface;
-  if ((!subject && subject !== 0) || (!checkIf.isString(subject) && !checkIf.isNumber(subject) && !checkIf.isFunction(subject) && !(subject instanceof Array))) {
-    if (!checkIf.isBindingInterface(subject)) {
-      throwError('invalidParamName');
-    }
-  }
-  if (checkIf.isObject(subject) && !(subject instanceof Array)) {
-    interfaceToReturn = completeCallback ? completeCallback(subject) : subject.selfClone();
-  } else {
-    newInterface = new BindingInterface(options);
-    newInterface.saveOptions = saveOptions;
-    newInterface.isSub = isSub;
-    newInterface.completeCallback = completeCallback;
-    if (checkIf.isFunction(subject)) {
-      interfaceToReturn = newInterface.setObject(subject, true);
-    } else {
-      interfaceToReturn = newInterface.setProperty(subject);
-    }
-  }
-  return interfaceToReturn;
+SimplyBind = function (subject, options, saveOptions, isSub, completeCallback) {
+var interfaceToReturn, newInterface;
+if ((!subject && subject !== 0) || (!checkIf.isString(subject) && !checkIf.isNumber(subject) && !checkIf.isFunction(subject) && !(subject instanceof Array))) {
+if (!checkIf.isBindingInterface(subject)) {
+throwError('invalidParamName');
+}
+}
+if (checkIf.isObject(subject) && !(subject instanceof Array)) {
+interfaceToReturn = completeCallback ? completeCallback(subject) : subject.selfClone();
+} else {
+newInterface = new BindingInterface(options);
+newInterface.saveOptions = saveOptions;
+newInterface.isSub = isSub;
+newInterface.completeCallback = completeCallback;
+if (checkIf.isFunction(subject)) {
+interfaceToReturn = newInterface.setObject(subject, true);
+} else {
+interfaceToReturn = newInterface.setProperty(subject);
+}
+}
+return interfaceToReturn;
 };
-
 SimplyBind.version = "1.15.8";
-
 SimplyBind.settings = settings;
-
 SimplyBind.defaultOptions = defaultOptions;
+SimplyBind.unBindAll = function (object, bothWays) {
+var boundID, prop, propMap;
+if (object && (checkIf.isObject(object) || checkIf.isFunction(object))) {
 
-SimplyBind.unBindAll = function(object, bothWays) {
-  var boundID, prop, propMap;
-  if (object && (checkIf.isObject(object) || checkIf.isFunction(object))) {
-    
-    /**
-     * Conditional Checks:
-     *
-     * 1) Make sure the subject object is iterable (and thus a possible candidate for being an element collection)
-     * 2) Make sure the subject object isn't an array binding (since element collection objects don't get directly bound)
-     * 3) Make sure the first element in the collection is a valid object (i.e. isn't undefined and isn't null)
-     * 4) Make sure the first element is a DOM object
-     */
-    var object;
-    
-    if (checkIf.isIterable(object) && !object._sb_ID && object[0] && (checkIf.isDom(object[0]))) {
-      object = object[0];
-    }
-    
-    ;
-    propMap = object._sb_map;
-    if (object._sb_ID) {
-      boundInstances[object._sb_ID].removeAllSubs(bothWays);
-    }
-    if (propMap) {
-      for (prop in propMap) {
-        boundID = propMap[prop];
-        boundInstances[boundID].removeAllSubs(bothWays);
-      }
-    }
-  }
+/**
+ * Conditional Checks:
+ *
+ * 1) Make sure the subject object is iterable (and thus a possible candidate for being an element collection)
+ * 2) Make sure the subject object isn't an array binding (since element collection objects don't get directly bound)
+ * 3) Make sure the first element in the collection is a valid object (i.e. isn't undefined and isn't null)
+ * 4) Make sure the first element is a DOM object
+ */
+var object;
+
+if (checkIf.isIterable(object) && !object._sb_ID && object[0] && (checkIf.isDom(object[0]))) {
+  object = object[0];
+}
+
+;
+propMap = object._sb_map;
+if (object._sb_ID) {
+boundInstances[object._sb_ID].removeAllSubs(bothWays);
+}
+if (propMap) {
+for (prop in propMap) {
+boundID = propMap[prop];
+boundInstances[boundID].removeAllSubs(bothWays);
+}
+}
+}
 };
-
 ;
-
 ;
-
 var Binding;
-
-Binding = function(object, type, state) {
-  var parentBinding, parentProperty, subjectValue;
-  extendState(this, state);
-  this.optionsDefault = this.saveOptions ? this.options : defaultOptions;
-  this.type = type;
-  this.object = object;
-  this.ID = genID();
-  this.subs = [];
-  this.subsMeta = genObj();
-  this.pubsMap = genObj();
-  this.attachedEvents = [];
-  if (this.type === 'Proxy') {
-    this.setValue = setValueNoop;
-  }
-
-  /* ========================================================================== */
-  if (this.isMultiChoice) {
-    this.choices = genObj();
-    this.object.forEach((function(_this) {
-      return function(choiceEl) {
-        var choiceBinding;
-        choiceBinding = _this.choices[choiceEl.value] = SimplyBind('checked').of(choiceEl)._;
-        choiceBinding.addSub(_this);
-        choiceBinding.subsMeta[_this.ID].transformFn = function() {
-          return choiceBinding;
-        };
-        choiceBinding.groupBinding = _this;
-      };
-    })(this));
-  }
-  if (!(this.type === 'Event' || (this.type === 'Func' && this.isSub))) {
-    if (this.type === 'Pholder') {
-      parentProperty = this.descriptor && !targetIncludes(this.descriptor, 'multi') ? this.descriptor + ":" + this.property : this.property;
-      parentBinding = this.parentBinding = SimplyBind(parentProperty).of(object)._;
-      parentBinding.scanForPholders();
-      this.value = parentBinding.pholderValues[this.pholder];
-      if (parentBinding.textNodes) {
-        this.textNodes = parentBinding.textNodes[this.pholder];
-      }
-    } else {
-      this.value = subjectValue = this.fetchDirectValue();
-      if (this.type === 'ObjectProp' && !checkIf.isDefined(subjectValue) && !getDescriptor(this.object, this.property)) {
-        this.object[this.property] = subjectValue;
-      }
-      convertToLive(this, this.object);
-    }
-  }
-  this.attachEvents();
-  return boundInstances[this.ID] = this;
+Binding = function (object, type, state) {
+var parentBinding, parentProperty, subjectValue;
+extendState(this, state);
+this.optionsDefault = this.saveOptions ? this.options : defaultOptions;
+this.type = type;
+this.object = object;
+this.ID = genID();
+this.subs = [];
+this.subsMeta = genObj();
+this.pubsMap = genObj();
+this.attachedEvents = [];
+if (this.type === 'Proxy') {
+this.setValue = setValueNoop;
+}
+if (this.isMultiChoice) {
+this.choices = genObj();
+this.object.forEach((function (_this) {
+return function (choiceEl) {
+var choiceBinding;
+choiceBinding = _this.choices[choiceEl.value] = SimplyBind('checked').of(choiceEl)._;
+choiceBinding.addSub(_this);
+choiceBinding.subsMeta[_this.ID].transformFn = function () {
+return choiceBinding;
 };
-
+choiceBinding.groupBinding = _this;
+};
+})(this));
+}
+if (!(this.type === 'Event' || (this.type === 'Func' && this.isSub))) {
+if (this.type === 'Pholder') {
+parentProperty = this.descriptor && !targetIncludes(this.descriptor, 'multi') ? this.descriptor + ":" + this.property : this.property;
+parentBinding = this.parentBinding = SimplyBind(parentProperty).of(object)._;
+parentBinding.scanForPholders();
+this.value = parentBinding.pholderValues[this.pholder];
+if (parentBinding.textNodes) {
+this.textNodes = parentBinding.textNodes[this.pholder];
+}
+} else {
+this.value = subjectValue = this.fetchDirectValue();
+if (this.type === 'ObjectProp' && !checkIf.isDefined(subjectValue) && !getDescriptor(this.object, this.property)) {
+this.object[this.property] = subjectValue;
+}
+convertToLive(this, this.object);
+}
+}
+this.attachEvents();
+return boundInstances[this.ID] = this;
+};
 var eventUpdateHandler;
 
 Binding.prototype = {
@@ -2501,257 +2443,242 @@ eventUpdateHandler = function() {
 };
 
 ;
-
 ;
-
-
-/**
- * Stage definitions:
- * 
- * 0: Selection:			Got selector, awaiting object.
- * 1: Indication:			Got object, awaiting proxied property / function / Binding-object.
- * 2: Binding Complete:		Complete, awaiting additional (optional) bindings/mutations.
- */
 var BindingInterface;
-
-BindingInterface = function(options, inheritedState) {
-  var key;
-  if (inheritedState) {
-    extendState(this, inheritedState);
-    this.stage = 1;
-  } else {
-    this.stage = 0;
-    this.subs = [];
-    this.optionsPassed = options || (options = {});
-    this.options = {};
-    for (key in defaultOptions) {
-      this.options[key] = options[key] != null ? options[key] : defaultOptions[key];
-    }
-  }
-  return this;
+BindingInterface = function (options, inheritedState) {
+var key;
+if (inheritedState) {
+extendState(this, inheritedState);
+this.stage = 1;
+} else {
+this.stage = 0;
+this.subs = [];
+this.optionsPassed = options || (options = {});
+this.options = {};
+for (key in defaultOptions) {
+this.options[key] = options[key] != null ? options[key] : defaultOptions[key];
+}
+}
+return this;
 };
-
 var BindingInterfacePrivate;
-
 BindingInterfacePrivate = {
-  selfClone: function() {
-    return new BindingInterface(null, this);
-  },
-  defineMainProps: function(binding) {
-    this._ = binding;
-    return Object.defineProperties(this, {
-      'value': {
-        get: function() {
-          return binding.value;
-        }
-      },
-      'original': {
-        get: function() {
-          return binding.objects || binding.object;
-        }
-      },
-      'subscribers': {
-        get: function() {
-          return binding.subs.slice().map(function(sub) {
-            return sub.object;
-          });
-        }
-      }
-    });
-  },
-  createBinding: function(subject, newObjectType, bindingInterface, isFunction) {
-    var cachedBinding, newBinding;
-    this.object = subject;
-    cachedBinding = cache.get(subject, isFunction, this.selector, this.isMultiChoice);
-    if (cachedBinding) {
-      return this.patchCachedBinding(cachedBinding);
+selfClone: function () {
+return new BindingInterface(null, this);
+},
+defineMainProps: function (binding) {
+this._ = binding;
+return Object.defineProperties(this, {
+'value': {
+get: function () {
+return binding.value;
+}
+},
+'original': {
+get: function () {
+return binding.objects || binding.object;
+}
+},
+'subscribers': {
+get: function () {
+return binding.subs.slice().map(function (sub) {
+return sub.object;
+});
+}
+}
+});
+},
+createBinding: function (subject, newObjectType, bindingInterface, isFunction) {
+var cachedBinding, newBinding;
+this.object = subject;
+cachedBinding = cache.get(subject, isFunction, this.selector, this.isMultiChoice);
+if (cachedBinding) {
+return this.patchCachedBinding(cachedBinding);
+} else {
+newBinding = new Binding(subject, newObjectType, bindingInterface);
+cache.set(newBinding, isFunction);
+return newBinding;
+}
+},
+patchCachedBinding: function (cachedBinding) {
+var key, option, ref, ref1, value;
+if (cachedBinding.type === 'ObjectProp' && !((this.property in this.object))) {
+convertToLive(cachedBinding, this.object);
+}
+if (this.saveOptions) {
+ref = this.optionsPassed;
+for (option in ref) {
+value = ref[option];
+cachedBinding.optionsDefault[option] = value;
+}
+}
+ref1 = cachedBinding.optionsDefault;
+for (key in ref1) {
+value = ref1[key];
+this.options[key] = checkIf.isDefined(this.optionsPassed[key]) ? this.optionsPassed[key] : value;
+}
+return cachedBinding;
+},
+setProperty: function (subject) {
+var split;
+if (checkIf.isNumber(subject)) {
+subject = subject.toString();
+}
+this.selector = this.property = subject;
+if (!this.options.simpleSelector) {
+if (targetIncludes(subject, ':')) {
+split = subject.split(':');
+this.descriptor = split.slice(0, -1).join(':');
+this.property = split[split.length - 1];
+}
+if (targetIncludes(subject, '.')) {
+split = this.property.split('.');
+this.property = split[0];
+this.pholder = split.slice(1).join('.');
+}
+if (targetIncludes(this.descriptor, 'event')) {
+if (targetIncludes(subject, '#')) {
+split = this.property.split('#');
+this.eventName = split[0];
+this.property = split[1];
+} else {
+this.eventName = this.property;
+this.property = 0;
+}
+if (isNaN(parseInt(this.property))) {
+throwWarning('badEventArg', 1);
+}
+}
+}
+return this;
+},
+setObject: function (subject, isFunction) {
+var newObjectType;
+this.stage = 1;
+var isDomCheckbox, isDomRadio, isIterable, sampleItem, subject;
+
+isIterable = subject !== window && checkIf.isIterable(subject) && !subject.nodeType;
+
+sampleItem = isIterable ? subject[0] : subject;
+
+if (!sampleItem) {
+  if (isIterable && checkIf.isElCollection(subject)) {
+    throwError('emptyList');
+  }
+} else if (this.isDom = checkIf.isDom(sampleItem)) {
+  if (this.property === 'checked') {
+    isDomRadio = sampleItem && checkIf.isDomRadio(sampleItem);
+    isDomCheckbox = !isDomRadio && sampleItem && checkIf.isDomCheckbox(sampleItem);
+  } else if (this.property === 'value') {
+    this.isDomInput = checkIf.isDomInput(sampleItem);
+  }
+  if (isIterable && !targetIncludes(this.descriptor, 'multi')) {
+    if (subject.length === 1) {
+      subject = subject[0];
     } else {
-      newBinding = new Binding(subject, newObjectType, bindingInterface);
-      cache.set(newBinding, isFunction);
-      return newBinding;
-    }
-  },
-  patchCachedBinding: function(cachedBinding) {
-    var key, option, ref, ref1, value;
-    if (cachedBinding.type === 'ObjectProp' && !(this.property in this.object)) {
-      convertToLive(cachedBinding, this.object);
-    }
-    if (this.saveOptions) {
-      ref = this.optionsPassed;
-      for (option in ref) {
-        value = ref[option];
-        cachedBinding.optionsDefault[option] = value;
-      }
-    }
-    ref1 = cachedBinding.optionsDefault;
-    for (key in ref1) {
-      value = ref1[key];
-      this.options[key] = checkIf.isDefined(this.optionsPassed[key]) ? this.optionsPassed[key] : value;
-    }
-    return cachedBinding;
-  },
-  setProperty: function(subject) {
-    var split;
-    if (checkIf.isNumber(subject)) {
-      subject = subject.toString();
-    }
-    this.selector = this.property = subject;
-    if (!this.options.simpleSelector) {
-      if (targetIncludes(subject, ':')) {
-        split = subject.split(':');
-        this.descriptor = split.slice(0, -1).join(':');
-        this.property = split[split.length - 1];
-      }
-      if (targetIncludes(subject, '.')) {
-        split = this.property.split('.');
-        this.property = split[0];
-        this.pholder = split.slice(1).join('.');
-      }
-      if (targetIncludes(this.descriptor, 'event')) {
-        if (targetIncludes(subject, '#')) {
-          split = this.property.split('#');
-          this.eventName = split[0];
-          this.property = split[1];
-        } else {
-          this.eventName = this.property;
-          this.property = 0;
-        }
-        if (isNaN(parseInt(this.property))) {
-          throwWarning('badEventArg', 1);
-        }
-      }
-    }
-    return this;
-  },
-  setObject: function(subject, isFunction) {
-    var newObjectType;
-    this.stage = 1;
-    var isDomCheckbox, isDomRadio, isIterable, sampleItem, subject;
-    
-    isIterable = subject !== window && checkIf.isIterable(subject) && !subject.nodeType;
-    
-    sampleItem = isIterable ? subject[0] : subject;
-    
-    if (!sampleItem) {
-      if (isIterable && checkIf.isElCollection(subject)) {
-        throwError('emptyList');
-      }
-    } else if (this.isDom = checkIf.isDom(sampleItem)) {
-      if (this.property === 'checked') {
-        isDomRadio = sampleItem && checkIf.isDomRadio(sampleItem);
-        isDomCheckbox = !isDomRadio && sampleItem && checkIf.isDomCheckbox(sampleItem);
-      } else if (this.property === 'value') {
-        this.isDomInput = checkIf.isDomInput(sampleItem);
-      }
-      if (isIterable && !targetIncludes(this.descriptor, 'multi')) {
-        if (subject.length === 1) {
-          subject = subject[0];
-        } else {
-          if ((isDomRadio || isDomCheckbox) && !checkIf.domElsAreSame(subject)) {
-            return throwWarning('mixedElList', 3);
-          } else {
-            if (isDomRadio || isDomCheckbox) {
-              this.isMultiChoice = true;
-              subject = [].slice.call(subject);
-            } else {
-              subject = subject[0];
-              throwWarning('onlyOneDOMElement', 3);
-            }
-          }
-        }
-      }
-    }
-    
-    ;
-    switch (false) {
-      case !isFunction:
-        newObjectType = 'Func';
-        break;
-      case !this.pholder:
-        newObjectType = 'Pholder';
-        break;
-      case !(targetIncludes(this.descriptor, 'array') && checkIf.isArray(subject[this.property])):
-        newObjectType = 'Array';
-        break;
-      case !targetIncludes(this.descriptor, 'event'):
-        newObjectType = 'Event';
-        this.eventMethods = {
-          listen: this.optionsPassed.listenMethod,
-          remove: this.optionsPassed.removeMethod,
-          emit: this.optionsPassed.emitMethod
-        };
-        
-        if (!subject[this.eventMethods.listen]) {
-          this.eventMethods.listen = checkIf.isDomNode(subject) ? 'addEventListener' : 'on';
-        }
-        
-        if (!subject[this.eventMethods.remove]) {
-          this.eventMethods.remove = checkIf.isDomNode(subject) ? 'removeEventListener' : 'removeListener';
-        }
-        
-        if (!subject[this.eventMethods.emit]) {
-          this.eventMethods.emit = checkIf.isDomNode(subject) ? 'dispatchEvent' : 'emit';
-        }
-        
-        ;
-        break;
-      case !targetIncludes(this.descriptor, 'func'):
-        newObjectType = 'Proxy';
-        break;
-      case !isDomRadio:
-        newObjectType = 'DOMRadio';
-        break;
-      case !isDomCheckbox:
-        newObjectType = 'DOMCheckbox';
-        break;
-      case !targetIncludes(this.descriptor, 'attr'):
-        newObjectType = 'DOMAttr';
-        break;
-      default:
-        newObjectType = 'ObjectProp';
-    }
-    if (targetIncludes(this.descriptor, 'multi')) {
-      if (!subject.length) {
-        throwError('emptyList');
-      }
-      this.defineMainProps(new GroupBinding(this, subject, newObjectType));
-    } else {
-      this.defineMainProps(this.createBinding(subject, newObjectType, this, isFunction));
-    }
-    if (targetIncludes(this._.type, 'Event') || targetIncludes(this._.type, 'Proxy')) {
-      this.options.updateOnBind = false;
-    } else if (targetIncludes(this._.type, 'Func')) {
-      this.options.updateOnBind = true;
-    }
-    if (this.completeCallback) {
-      return this.completeCallback(this);
-    } else {
-      return this;
-    }
-  },
-  addToPublisher: function(publisherInterface) {
-    var alreadyHadSub, binding, i, len, ref;
-    publisherInterface.stage = 2;
-    publisherInterface.subs.push(this);
-    alreadyHadSub = publisherInterface._.addSub(this._, publisherInterface.options, publisherInterface.updateOnce);
-    if (publisherInterface.updateOnce) {
-      delete publisherInterface.updateOnce;
-    } else if (publisherInterface.options.updateOnBind && !alreadyHadSub) {
-      if (this._.isMulti) {
-        ref = this._.bindings;
-        for (i = 0, len = ref.length; i < len; i++) {
-          binding = ref[i];
-          publisherInterface._.updateSub(binding, publisherInterface._);
-        }
+      if ((isDomRadio || isDomCheckbox) && !checkIf.domElsAreSame(subject)) {
+        return throwWarning('mixedElList', 3);
       } else {
-        publisherInterface._.updateSub(this._, publisherInterface._);
+        if (isDomRadio || isDomCheckbox) {
+          this.isMultiChoice = true;
+          subject = [].slice.call(subject);
+        } else {
+          subject = subject[0];
+          throwWarning('onlyOneDOMElement', 3);
+        }
       }
     }
   }
-};
+}
 
 ;
+switch (false) {
+case !isFunction:
+newObjectType = 'Func';
+break;
+case !this.pholder:
+newObjectType = 'Pholder';
+break;
+case !(targetIncludes(this.descriptor, 'array') && checkIf.isArray(subject[this.property])):
+newObjectType = 'Array';
+break;
+case !targetIncludes(this.descriptor, 'event'):
+newObjectType = 'Event';
+this.eventMethods = {
+  listen: this.optionsPassed.listenMethod,
+  remove: this.optionsPassed.removeMethod,
+  emit: this.optionsPassed.emitMethod
+};
 
+if (!subject[this.eventMethods.listen]) {
+  this.eventMethods.listen = checkIf.isDomNode(subject) ? 'addEventListener' : 'on';
+}
+
+if (!subject[this.eventMethods.remove]) {
+  this.eventMethods.remove = checkIf.isDomNode(subject) ? 'removeEventListener' : 'removeListener';
+}
+
+if (!subject[this.eventMethods.emit]) {
+  this.eventMethods.emit = checkIf.isDomNode(subject) ? 'dispatchEvent' : 'emit';
+}
+
+;
+break;
+case !targetIncludes(this.descriptor, 'func'):
+newObjectType = 'Proxy';
+break;
+case !isDomRadio:
+newObjectType = 'DOMRadio';
+break;
+case !isDomCheckbox:
+newObjectType = 'DOMCheckbox';
+break;
+case !targetIncludes(this.descriptor, 'attr'):
+newObjectType = 'DOMAttr';
+break;
+default:
+newObjectType = 'ObjectProp';
+}
+if (targetIncludes(this.descriptor, 'multi')) {
+if (!subject.length) {
+throwError('emptyList');
+}
+this.defineMainProps(new GroupBinding(this, subject, newObjectType));
+} else {
+this.defineMainProps(this.createBinding(subject, newObjectType, this, isFunction));
+}
+if (targetIncludes(this._.type, 'Event') || targetIncludes(this._.type, 'Proxy')) {
+this.options.updateOnBind = false;
+} else if (targetIncludes(this._.type, 'Func')) {
+this.options.updateOnBind = true;
+}
+if (this.completeCallback) {
+return this.completeCallback(this);
+} else {
+return this;
+}
+},
+addToPublisher: function (publisherInterface) {
+var alreadyHadSub, binding, i, len, ref;
+publisherInterface.stage = 2;
+publisherInterface.subs.push(this);
+alreadyHadSub = publisherInterface._.addSub(this._, publisherInterface.options, publisherInterface.updateOnce);
+if (publisherInterface.updateOnce) {
+delete publisherInterface.updateOnce;
+} else if (publisherInterface.options.updateOnBind && !alreadyHadSub) {
+if (this._.isMulti) {
+ref = this._.bindings;
+for ((i = 0, len = ref.length); i < len; i++) {
+binding = ref[i];
+publisherInterface._.updateSub(binding, publisherInterface._);
+}
+} else {
+publisherInterface._.updateSub(this._, publisherInterface._);
+}
+}
+}
+};
+;
 var METHOD_bothWays, METHOD_chainTo, METHOD_condition, METHOD_conditionAll, METHOD_of, METHOD_pollEvery, METHOD_set, METHOD_setOption, METHOD_stopPolling, METHOD_transform, METHOD_transformAll, METHOD_transformSelf, METHOD_unBind;
 
 BindingInterface.prototype = Object.create(BindingInterfacePrivate, {
@@ -3043,9 +2970,7 @@ METHOD_setOption = function(optionName, newValue) {
 };
 
 ;
-
 ;
-
 var GroupBinding, proto;
 
 GroupBinding = function(bindingInterface, objects, objectType) {
@@ -3099,330 +3024,367 @@ proto.addBinding = function(object, objectType) {
 };
 
 ;
-
 module.exports = SimplyBind;
-
-;
 return module.exports;
 },
 2: function (require, module, exports) {
 var exports, extend, modifiers, newBuilder, normalizeKeys;
-
-extend = require(17);
-
-normalizeKeys = function(keys) {
-  var i, key, len, output;
-  if (keys) {
-    output = {};
-    if (typeof keys !== 'object') {
-      output[keys] = true;
-    } else {
-      if (!Array.isArray(keys)) {
-        keys = Object.keys(keys);
-      }
-      for (i = 0, len = keys.length; i < len; i++) {
-        key = keys[i];
-        output[key] = true;
-      }
-    }
-    return output;
-  }
+extend = require(18);
+normalizeKeys = function (keys) {
+var i, key, len, output;
+if (keys) {
+output = {};
+if (typeof keys !== 'object') {
+output[keys] = true;
+} else {
+if (!Array.isArray(keys)) {
+keys = Object.keys(keys);
+}
+for ((i = 0, len = keys.length); i < len; i++) {
+key = keys[i];
+output[key] = true;
+}
+}
+return output;
+}
 };
-
-newBuilder = function(isBase) {
-  var builder;
-  builder = function(target) {
-    var theTarget;
-    var $_len = arguments.length, $_i = -1, sources = new Array($_len); while (++$_i < $_len) sources[$_i] = arguments[$_i];
-    if (builder.options.target) {
-      theTarget = builder.options.target;
-    } else {
-      theTarget = target;
-      sources.shift();
-    }
-    return extend(builder.options, theTarget, sources);
-  };
-  if (isBase) {
-    builder.isBase = true;
-  }
-  builder.options = {};
-  Object.defineProperties(builder, modifiers);
-  return builder;
+newBuilder = function (isBase) {
+var builder;
+builder = function (target) {
+var theTarget;
+var $_len = arguments.length, $_i = -1, sources = new Array($_len);
+while (++$_i < $_len) sources[$_i] = arguments[$_i];
+if (builder.options.target) {
+theTarget = builder.options.target;
+} else {
+theTarget = target;
+sources.shift();
+}
+return extend(builder.options, theTarget, sources);
 };
-
+if (isBase) {
+builder.isBase = true;
+}
+builder.options = {};
+Object.defineProperties(builder, modifiers);
+return builder;
+};
 modifiers = {
-  'deep': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      _.options.deep = true;
-      return _;
-    }
-  },
-  'own': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      _.options.own = true;
-      return _;
-    }
-  },
-  'allowNull': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      _.options.allowNull = true;
-      return _;
-    }
-  },
-  'nullDeletes': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      _.options.nullDeletes = true;
-      return _;
-    }
-  },
-  'concat': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      _.options.concat = true;
-      return _;
-    }
-  },
-  'clone': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      _.options.target = {};
-      return _;
-    }
-  },
-  'notDeep': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      return function(keys) {
-        _.options.notDeep = normalizeKeys(keys);
-        return _;
-      };
-    }
-  },
-  'deepOnly': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      return function(keys) {
-        _.options.deepOnly = normalizeKeys(keys);
-        return _;
-      };
-    }
-  },
-  'keys': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      return function(keys) {
-        _.options.keys = normalizeKeys(keys);
-        return _;
-      };
-    }
-  },
-  'notKeys': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      return function(keys) {
-        _.options.notKeys = normalizeKeys(keys);
-        return _;
-      };
-    }
-  },
-  'transform': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      return function(transform) {
-        if (typeof transform === 'function') {
-          _.options.globalTransform = transform;
-        } else if (transform && typeof transform === 'object') {
-          _.options.transforms = transform;
-        }
-        return _;
-      };
-    }
-  },
-  'filter': {
-    get: function() {
-      var _;
-      _ = this.isBase ? newBuilder() : this;
-      return function(filter) {
-        if (typeof filter === 'function') {
-          _.options.globalFilter = filter;
-        } else if (filter && typeof filter === 'object') {
-          _.options.filters = filter;
-        }
-        return _;
-      };
-    }
-  }
+'deep': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+_.options.deep = true;
+return _;
+}
+},
+'own': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+_.options.own = true;
+return _;
+}
+},
+'allowNull': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+_.options.allowNull = true;
+return _;
+}
+},
+'nullDeletes': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+_.options.nullDeletes = true;
+return _;
+}
+},
+'concat': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+_.options.concat = true;
+return _;
+}
+},
+'clone': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+_.options.target = {};
+return _;
+}
+},
+'notDeep': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+return function (keys) {
+_.options.notDeep = normalizeKeys(keys);
+return _;
 };
-
+}
+},
+'deepOnly': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+return function (keys) {
+_.options.deepOnly = normalizeKeys(keys);
+return _;
+};
+}
+},
+'keys': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+return function (keys) {
+_.options.keys = normalizeKeys(keys);
+return _;
+};
+}
+},
+'notKeys': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+return function (keys) {
+_.options.notKeys = normalizeKeys(keys);
+return _;
+};
+}
+},
+'transform': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+return function (transform) {
+if (typeof transform === 'function') {
+_.options.globalTransform = transform;
+} else if (transform && typeof transform === 'object') {
+_.options.transforms = transform;
+}
+return _;
+};
+}
+},
+'filter': {
+get: function () {
+var _;
+_ = this.isBase ? newBuilder() : this;
+return function (filter) {
+if (typeof filter === 'function') {
+_.options.globalFilter = filter;
+} else if (filter && typeof filter === 'object') {
+_.options.filters = filter;
+}
+return _;
+};
+}
+}
+};
 module.exports = exports = newBuilder(true);
-
 exports.version = "1.7.3";
-
-;
 return module.exports;
 },
 3: function (require, module, exports) {
-/*!
- * escape-html
- * Copyright(c) 2012-2013 TJ Holowaychuk
- * Copyright(c) 2015 Andreas Lubbe
- * Copyright(c) 2015 Tiancheng "Timothy" Gu
- * MIT Licensed
- */
-
 'use strict';
-
-/**
- * Module variables.
- * @private
- */
-
 var matchHtmlRegExp = /["'&<>]/;
-
-/**
- * Module exports.
- * @public
- */
-
 module.exports = escapeHtml;
-
-/**
- * Escape special characters in the given string of html.
- *
- * @param  {string} string The string to escape for inserting into HTML
- * @return {string}
- * @public
- */
-
 function escapeHtml(string) {
-  var str = '' + string;
-  var match = matchHtmlRegExp.exec(str);
-
-  if (!match) {
-    return str;
-  }
-
-  var escape;
-  var html = '';
-  var index = 0;
-  var lastIndex = 0;
-
-  for (index = match.index; index < str.length; index++) {
-    switch (str.charCodeAt(index)) {
-      case 34: // "
-        escape = '&quot;';
-        break;
-      case 38: // &
-        escape = '&amp;';
-        break;
-      case 39: // '
-        escape = '&#39;';
-        break;
-      case 60: // <
-        escape = '&lt;';
-        break;
-      case 62: // >
-        escape = '&gt;';
-        break;
-      default:
-        continue;
-    }
-
-    if (lastIndex !== index) {
-      html += str.substring(lastIndex, index);
-    }
-
-    lastIndex = index + 1;
-    html += escape;
-  }
-
-  return lastIndex !== index
-    ? html + str.substring(lastIndex, index)
-    : html;
+var str = '' + string;
+var match = matchHtmlRegExp.exec(str);
+if (!match) {
+return str;
 }
-;
+var escape;
+var html = '';
+var index = 0;
+var lastIndex = 0;
+for (index = match.index; index < str.length; index++) {
+switch (str.charCodeAt(index)) {
+case 34:
+escape = '&quot;';
+break;
+case 38:
+escape = '&amp;';
+break;
+case 39:
+escape = '&#39;';
+break;
+case 60:
+escape = '&lt;';
+break;
+case 62:
+escape = '&gt;';
+break;
+default:
+continue;
+}
+if (lastIndex !== index) {
+html += str.substring(lastIndex, index);
+}
+lastIndex = index + 1;
+html += escape;
+}
+return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
+}
 return module.exports;
 },
-17: function (require, module, exports) {
+7: function (require, module, exports) {
+function EventLite() {
+if (!(this instanceof EventLite)) return new EventLite();
+}
+(function (EventLite) {
+if ("undefined" !== typeof module) module.exports = EventLite;
+var LISTENERS = "listeners";
+var methods = {
+on: on,
+once: once,
+off: off,
+emit: emit
+};
+mixin(EventLite.prototype);
+EventLite.mixin = mixin;
+function mixin(target) {
+for (var key in methods) {
+target[key] = methods[key];
+}
+return target;
+}
+function on(type, func) {
+getListeners(this, type).push(func);
+return this;
+}
+function once(type, func) {
+var that = this;
+wrap.originalListener = func;
+getListeners(that, type).push(wrap);
+return that;
+function wrap() {
+off.call(that, type, wrap);
+func.apply(this, arguments);
+}
+}
+function off(type, func) {
+var that = this;
+var listners;
+if (!arguments.length) {
+delete that[LISTENERS];
+} else if (!func) {
+listners = that[LISTENERS];
+if (listners) {
+delete listners[type];
+if (!Object.keys(listners).length) return off.call(that);
+}
+} else {
+listners = getListeners(that, type, true);
+if (listners) {
+listners = listners.filter(ne);
+if (!listners.length) return off.call(that, type);
+that[LISTENERS][type] = listners;
+}
+}
+return that;
+function ne(test) {
+return test !== func && test.originalListener !== func;
+}
+}
+function emit(type, value) {
+var that = this;
+var listeners = getListeners(that, type, true);
+if (!listeners) return false;
+var arglen = arguments.length;
+if (arglen === 1) {
+listeners.forEach(zeroarg);
+} else if (arglen === 2) {
+listeners.forEach(onearg);
+} else {
+var args = Array.prototype.slice.call(arguments, 1);
+listeners.forEach(moreargs);
+}
+return !!listeners.length;
+function zeroarg(func) {
+func.call(that);
+}
+function onearg(func) {
+func.call(that, value);
+}
+function moreargs(func) {
+func.apply(that, args);
+}
+}
+function getListeners(that, type, readonly) {
+if (readonly && !that[LISTENERS]) return;
+var listeners = that[LISTENERS] || (that[LISTENERS] = {});
+return listeners[type] || (listeners[type] = []);
+}
+})(EventLite);
+return module.exports;
+},
+18: function (require, module, exports) {
 var extend, isArray, isObject, shouldDeepExtend;
-
-isArray = function(target) {
-  return Array.isArray(target);
+isArray = function (target) {
+return Array.isArray(target);
 };
-
-isObject = function(target) {
-  return target && Object.prototype.toString.call(target) === '[object Object]' || isArray(target);
+isObject = function (target) {
+return target && Object.prototype.toString.call(target) === '[object Object]' || isArray(target);
 };
-
-shouldDeepExtend = function(options, target, parentKey) {
-  if (options.deep) {
-    if (options.notDeep) {
-      return !options.notDeep[target];
-    } else {
-      return true;
-    }
-  } else if (options.deepOnly) {
-    return options.deepOnly[target] || parentKey && shouldDeepExtend(options, parentKey);
-  }
+shouldDeepExtend = function (options, target, parentKey) {
+if (options.deep) {
+if (options.notDeep) {
+return !options.notDeep[target];
+} else {
+return true;
+}
+} else if (options.deepOnly) {
+return options.deepOnly[target] || parentKey && shouldDeepExtend(options, parentKey);
+}
 };
-
-module.exports = extend = function(options, target, sources, parentKey) {
-  var i, key, len, source, sourceValue, subTarget, targetValue;
-  if (!target || typeof target !== 'object' && typeof target !== 'function') {
-    target = {};
-  }
-  for (i = 0, len = sources.length; i < len; i++) {
-    source = sources[i];
-    if (source != null) {
-      for (key in source) {
-        sourceValue = source[key];
-        targetValue = target[key];
-        if (sourceValue === target || sourceValue === void 0 || (sourceValue === null && !options.allowNull && !options.nullDeletes) || (options.keys && !options.keys[key]) || (options.notKeys && options.notKeys[key]) || (options.own && !source.hasOwnProperty(key)) || (options.globalFilter && !options.globalFilter(sourceValue, key, source)) || (options.filters && options.filters[key] && !options.filters[key](sourceValue, key, source))) {
-          continue;
-        }
-        if (sourceValue === null && options.nullDeletes) {
-          delete target[key];
-          continue;
-        }
-        if (options.globalTransform) {
-          sourceValue = options.globalTransform(sourceValue, key, source);
-        }
-        if (options.transforms && options.transforms[key]) {
-          sourceValue = options.transforms[key](sourceValue, key, source);
-        }
-        switch (false) {
-          case !(options.concat && isArray(sourceValue) && isArray(targetValue)):
-            target[key] = targetValue.concat(sourceValue);
-            break;
-          case !(shouldDeepExtend(options, key, parentKey) && isObject(sourceValue)):
-            subTarget = isObject(targetValue) ? targetValue : isArray(sourceValue) ? [] : {};
-            target[key] = extend(options, subTarget, [sourceValue], key);
-            break;
-          default:
-            target[key] = sourceValue;
-        }
-      }
-    }
-  }
-  return target;
+module.exports = extend = function (options, target, sources, parentKey) {
+var i, key, len, source, sourceValue, subTarget, targetValue;
+if (!target || typeof target !== 'object' && typeof target !== 'function') {
+target = {};
+}
+for ((i = 0, len = sources.length); i < len; i++) {
+source = sources[i];
+if (source != null) {
+for (key in source) {
+sourceValue = source[key];
+targetValue = target[key];
+if (sourceValue === target || sourceValue === void 0 || (sourceValue === null && !options.allowNull && !options.nullDeletes) || (options.keys && !options.keys[key]) || (options.notKeys && options.notKeys[key]) || (options.own && !source.hasOwnProperty(key)) || (options.globalFilter && !options.globalFilter(sourceValue, key, source)) || (options.filters && options.filters[key] && !options.filters[key](sourceValue, key, source))) {
+continue;
+}
+if (sourceValue === null && options.nullDeletes) {
+delete target[key];
+continue;
+}
+if (options.globalTransform) {
+sourceValue = options.globalTransform(sourceValue, key, source);
+}
+if (options.transforms && options.transforms[key]) {
+sourceValue = options.transforms[key](sourceValue, key, source);
+}
+switch (false) {
+case !(options.concat && isArray(sourceValue) && isArray(targetValue)):
+target[key] = targetValue.concat(sourceValue);
+break;
+case !(shouldDeepExtend(options, key, parentKey) && isObject(sourceValue)):
+subTarget = isObject(targetValue) ? targetValue : isArray(sourceValue) ? [] : {};
+target[key] = extend(options, subTarget, [sourceValue], key);
+break;
+default:
+target[key] = sourceValue;
+}
+}
+}
+}
+return target;
 };
-
-;
 return module.exports;
 }
 }, this);
