@@ -33,14 +33,16 @@ DataTable::sortRows = (rows, targetColumn=@options.sortBy)-> switch
 	when @options.columns[targetColumn]
 		customSort = @options.columns[targetColumn].sortFn
 		rawValue = @options.columns[targetColumn].rawValueFormatter
-		
-		rows.slice().sort customSort or (a,b)=>
+		sorter = customSort
+		sorter ||= (a,b)=>
 			aValue = if rawValue then rawValue(a[targetColumn]) else a[targetColumn]
 			bValue = if rawValue then rawValue(b[targetColumn]) else b[targetColumn]
 			switch
 				when aValue > bValue then @sortDirection
 				when aValue < bValue then @sortDirection * -1
 				else 0
+		
+		rows.slice().sort sorter
 
 	else rows
 	

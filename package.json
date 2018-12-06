@@ -12,6 +12,23 @@
       "simplyimport/compat"
     ]
   },
+  "simplyimport": {
+    "finalTransform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            [
+              "@babel/preset-env",
+              {
+                "modules": false
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
   "dependencies": {
     "@danielkalen/sass-base": "^1.5.2",
     "@danielkalen/simplybind": "^1.15.8",
@@ -21,13 +38,16 @@
     "smart-extend": "^1.7.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "babelify": "^10.0.0",
     "chalk": "^2.0.1",
     "coffee-script": "^1.12.6",
     "fs-jetpack": "^1.1.0",
     "node-sass": "^4.5.3",
     "promise-break": "^0.1.1",
     "sass-module-importer": "github:danielkalen/sass-module-importer",
-    "simplyimport": "^4.0.0-t7",
+    "simplyimport": "^4.0.10",
     "simplywatch": "^3.0.0-l5"
   },
   "sassFns": "node_modules/@danielkalen/sass-base/compiler-fns.js",
