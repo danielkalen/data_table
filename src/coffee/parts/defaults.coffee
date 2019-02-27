@@ -1,4 +1,4 @@
-defaults = 
+export default 
 	'perPage': 20
 	'pageCountMax': 10
 	'minWidth': 0

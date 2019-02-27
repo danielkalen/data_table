@@ -1,4 +1,7 @@
-DataTable::attachBindings = ()->
+import * as markup from './markup'
+import SimplyBind from '@danielkalen/simplybind'
+
+export attachBindings = ()->
 	SimplyBind.settings.trackArrayChildren = false
 	## ==========================================================================
 	## State

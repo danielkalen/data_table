@@ -1,1 +1,1 @@
-DataTable::sortBy = (column)->
+export sortBy = (column)-> ;

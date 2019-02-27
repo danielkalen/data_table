@@ -1,4 +1,8 @@
-DataTable::attachEvents = ()->
+import $ from 'jquery'
+import * as markup from './markup'
+import {toggleActionsPopup, compareValues} from './helpers'
+
+export attachEvents = ()->
 	# ==== Pagination =================================================================================
 	@els.pagination.on 'click', '._paginationItem', (event)=>
 		$this = $(event.currentTarget)
@@ -30,18 +34,18 @@ DataTable::attachEvents = ()->
 	@els.tableBody.on 'click', '._actionButton', (event)=>
 		button$ = $(event.currentTarget)
 		if button$.hasClass('_isMulti')
-			helpers.toggleActionsPopup button$.next().children()
+			toggleActionsPopup button$.next().children()
 		
 		else
 			itemRow$ = button$.closest('._tableRow')
 			action = button$.data('action')
 			itemID = itemRow$.data('row-id')
 			itemIndex = itemRow$.data('index')
-			dataItem = if itemID then @allRows.find (row)=> helpers.compareValues(row[@options.uniqueID], itemID)
+			dataItem = if itemID then @allRows.find (row)=> compareValues(row[@options.uniqueID], itemID)
 			dataItem ?= itemID
 
 			if button$.hasClass('_subActionButton')
-				helpers.toggleActionsPopup button$.parent()
+				toggleActionsPopup button$.parent()
 
 			@els.table.trigger "action.#{action}", dataItem
 

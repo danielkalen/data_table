@@ -1,4 +1,4 @@
-DataTable::calcPageCount = (rows)->
+export calcPageCount = (rows)->
 	@pageCountReal = Math.ceil rows.length/@options.perPage
 	@pageCount = if @pageCountReal > @options.pageCountMax then @options.pageCountMax else @pageCountReal
 
@@ -6,7 +6,7 @@ DataTable::calcPageCount = (rows)->
 
 
 
-DataTable::calcPercentageString = (columnValue, columnName, row)->
+export calcPercentageString = (columnValue, columnName, row)->
 	formula = @options.percentage[columnName]
 	columnA = formula[0]
 	columnB = formula[2]
@@ -27,7 +27,7 @@ DataTable::calcPercentageString = (columnValue, columnName, row)->
 
 
 
-DataTable::sortRows = (rows, targetColumn=@options.sortBy)-> switch
+export sortRows = (rows, targetColumn=@options.sortBy)-> switch
 	when targetColumn is '+' then rows
 	when targetColumn is '-' then rows?.slice().reverse()
 	when @options.columns[targetColumn]
@@ -48,7 +48,7 @@ DataTable::sortRows = (rows, targetColumn=@options.sortBy)-> switch
 	
 
 
-DataTable::setVisiblePage = (targetPage)->
+export setVisiblePage = (targetPage)->
 	targetPage-- # Dec by 1 for array-index style
 	slice =
 		'start': targetPage*@options.perPage
@@ -64,7 +64,7 @@ DataTable::setVisiblePage = (targetPage)->
 
 
 
-DataTable::setPageIndicator = (targetPage)->
+export setPageIndicator = (targetPage)->
 	targetPage = 1 if targetPage is '...'
 	targetPage = if targetPage > @options.pageCountMax then @options.pageCountMax else targetPage-1 # 0-based index so we subtract 1
 	pageItems$ = @els.pagination.find('._paginationItem').slice(1,-1)

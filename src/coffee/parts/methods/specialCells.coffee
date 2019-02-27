@@ -1,37 +1,39 @@
-DataTable::generateBreakdownBar = (breakdown, rowObj, columnEntity)->
-	breakdownKeys = @legend or Object.keys(breakdown)
-	rowObj.breakdownBarTotal = total = @getBreakdownTotal(breakdown, breakdownKeys)
-	
-	return 'N/A' unless total
-	
-	markup.breakdownBar @markupArgs
-		'total': total
-		'totalFormatted': if columnEntity.valueFormat then columnEntity.valueFormat(total) else total
-		'bars': do ()->
-			bars = ''
-			for key in breakdownKeys
-				value = breakdown[key]
-				bars += markup.block_table_body_row_cell_breakdown_bar.replace '{{width}}', (value/total)*100
-			return bars
+import * as markup from '../markup'
 
-		'hoverBox': do ()->
-			markup.block_table_body_row_cell_breakdown_hoverbox
-				.replace '{{rows}}', ()->
-					rows = ''
+# export generateBreakdownBar = (breakdown, rowObj, columnEntity)->
+# 	breakdownKeys = @legend or Object.keys(breakdown)
+# 	rowObj.breakdownBarTotal = total = @getBreakdownTotal(breakdown, breakdownKeys)
+	
+# 	return 'N/A' unless total
+	
+# 	markup.breakdownBar @markupArgs
+# 		'total': total
+# 		'totalFormatted': if columnEntity.valueFormat then columnEntity.valueFormat(total) else total
+# 		'bars': do ()->
+# 			bars = ''
+# 			for key in breakdownKeys
+# 				value = breakdown[key]
+# 				bars += markup.block_table_body_row_cell_breakdown_bar.replace '{{width}}', (value/total)*100
+# 			return bars
+
+# 		'hoverBox': do ()->
+# 			markup.block_table_body_row_cell_breakdown_hoverbox
+# 				.replace '{{rows}}', ()->
+# 					rows = ''
 					
-					breakdownKeys.forEach (key, index)->
-						rows += markup.block_table_body_row_cell_breakdown_hoverbox_row
-							.replace '{{color}}', customColors(index)
-							.replace '{{key}}', key
-							.replace '{{value}}', if columnEntity.valueFormat then columnEntity.valueFormat(breakdown[key]) else breakdown[key]
+# 					breakdownKeys.forEach (key, index)->
+# 						rows += markup.block_table_body_row_cell_breakdown_hoverbox_row
+# 							.replace '{{color}}', customColors(index)
+# 							.replace '{{key}}', key
+# 							.replace '{{value}}', if columnEntity.valueFormat then columnEntity.valueFormat(breakdown[key]) else breakdown[key]
 
-					return rows
-
-
+# 					return rows
 
 
 
-DataTable::generateInlineFields = (dataFields)->
+
+
+export generateInlineFields = (dataFields)->
 	markup.fields @markupArgs 'fields': do ()=>
 		return '' unless typeof dataFields is 'object'
 		
@@ -46,14 +48,14 @@ DataTable::generateInlineFields = (dataFields)->
 
 
 
-DataTable::generateButton = (action, icon, isMulti)->
+export generateButton = (action, icon, isMulti)->
 	markup.button(@markupArgs {action, icon, isMulti})
 
 
 
 
 
-DataTable::generateActions = (column)->
+export generateActions = (column)->
 	column.actions ?= 'multiActions'
 	buttonMarkup = @generateButton(column.actions, (column.buttonIcon or column.icon), true)
 	actionsMarkup = markup.actions @markupArgs 'actions': do ()=>
@@ -71,7 +73,7 @@ DataTable::generateActions = (column)->
 
 
 
-DataTable::generateIpDetails = (ipAddress, row, column)->
+export generateIpDetails = (ipAddress, row, column)->
 	markup.ipDetails @markupArgs {ipAddress, extra:column.extraMarkup?(ipAddress, row)} # data attribute
 
 

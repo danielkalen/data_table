@@ -4,10 +4,11 @@ promiseBreak = require 'promise-break'
 spawn = require('child_process').spawn
 extend = require 'smart-extend'
 fs = require 'fs-jetpack'
+packageInstall = require 'package-install'
 chalk = require 'chalk'
 Path = require 'path'
 process.env.SOURCE_MAPS ?= 1
-buildModules = ['listr','google-closure-compiler-js','uglify-js@3.0.24']
+buildModules = ['listr']
 testModules = ['@danielkalen/polyfills', 'mocha', 'chai', 'chai-dom', 'chai-style', 'chai-almost', 'chai-asserttype', 'chai-events']
 karmaModules = ['request', 'electron', 'karma@1.6.0', 'karma-chrome-launcher', 'karma-coverage', 'karma-electron', 'karma-firefox-launcher', 'karma-ie-launcher', 'karma-mocha', 'karma-opera-launcher', 'karma-safari-launcher', 'github:danielkalen/karma-sauce-launcher']
 karmaModules = testModules.concat(karmaModules)
@@ -56,11 +57,8 @@ task 'build:css', (options)->
 
 
 task 'build:js', (options)->
-	debug = if options.debug then '.debug' else ''
-	Promise.resolve()
-		.then ()-> {src:"src/coffee/index.coffee", dest:"build/js/dataTable#{debug}.js"}
-		.tap ()-> console.log 'compiling js' unless global.silent
-		.then (file)-> compileJS(file, debug:options.debug, umd:'DataTable', target:'browser')
+	console.log 'bundling lib'
+	compileJS(require './.config/rollup.lib')
 
 
 
@@ -78,43 +76,22 @@ task 'watch:css', (options)->
 
 
 task 'watch:js', (options)->
-	require('simplywatch')
-		globs: "#{SRC}/coffee/*.coffee"
-		command: (file, params)-> invoke 'build:js'
-
+	require('rollup').watch(require './.config/rollup.lib')
 
 
 
 task 'install', ()->
 	Promise.resolve()
 		.then ()-> invoke 'install:build'
+		# .then ()-> invoke 'install:test'
 		# .then ()-> invoke 'install:coverage'
-		# .then ()-> invoke 'install:bench'
+		# .then ()-> invoke 'install:measure'
 
-
-task 'install:build', ()->
-	Promise.resolve()
-		.then ()-> buildModules.filter (module)-> not moduleInstalled(module)
-		.tap (missingModules)-> promiseBreak() if missingModules.length is 0
-		.tap (missingModules)-> installModules(missingModules)
-		.catch promiseBreak.end
-
-
-task 'install:test', ()->
-	Promise.resolve()
-		.then ()-> testModules.filter (module)-> not moduleInstalled(module)
-		.tap (missingModules)-> promiseBreak() if missingModules.length is 0
-		.tap (missingModules)-> installModules(missingModules)
-		.catch promiseBreak.end
-
-
-task 'install:karma', ()->
-	Promise.resolve()
-		.then ()-> karmaModules.filter (module)-> not moduleInstalled(module)
-		.tap (missingModules)-> promiseBreak() if missingModules.length is 0
-		.tap (missingModules)-> installModules(missingModules)
-		.catch promiseBreak.end
-
+task 'install:build', ()-> packageInstall buildModules
+task 'install:test', ()-> packageInstall testModules
+task 'install:karma', ()-> packageInstall testModules.concat(karmaModules)
+task 'install:coverage', ()-> packageInstall ['istanbul', 'badge-gen', 'coffee-coverage']
+task 'install:measure', ()-> packageInstall ['gzipped', 'sugar']
 
 
 
@@ -142,13 +119,15 @@ runTaskListSerial = (tasks)->
 
 
 
-compileJS = (file, options)->
-	Promise.resolve()
-		.then ()-> require('simplyimport')(extend {file:file.src}, options)
-		.then (result)-> fs.writeAsync(file.dest, result)
-		.catch (err)->
-			console.error(err)
-			throw err
+compileJS = (configs)->
+	rollup = require 'rollup'
+
+	for config,i in configs
+		console.log "bundling config ##{i+1} (#{config.input})"
+		bundle = await rollup.rollup(config)
+
+		for dest in config.output
+			await bundle.write(dest)
 
 
 compileCSS = (file, options)->
@@ -166,32 +145,5 @@ compileCSS = (file, options)->
 
 
 
-installModules = (targetModules)-> new Promise (resolve, reject)->
-	targetModules = targetModules
-		.filter (module)-> if typeof module is 'string' then true else module[1]()
-		.map (module)-> if typeof module is 'string' then module else module[0]
-	
-	return resolve() if not targetModules.length
-	console.log "#{chalk.yellow('Installing')} #{chalk.dim targetModules.join ', '}"
-	
-	install = spawn('npm', ['install', '--no-save', '--no-purne', targetModules...], {stdio:'inherit'})
-	install.on 'error', reject
-	install.on 'close', resolve
-
-
-moduleInstalled = (targetModule)->
-	targetModule = targetModule[0] if typeof targetModule is 'object'
-	if (split=targetModule.split('@')) and split[0].length
-		targetModule = split[0]
-		targetVersion = split[1]
-	
-	pkgFile = Path.resolve('node_modules',targetModule,'package.json')
-	exists = fs.exists(pkgFile)
-	
-	if exists and targetVersion?
-		currentVersion = fs.read(pkgFile, 'json').version
-		exists = require('semver').gte(currentVersion, targetVersion)
-
-	return exists
 
 
