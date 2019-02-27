@@ -1,11 +1,13 @@
-SimplyBind = import '@danielkalen/simplybind'
-extend = import 'smart-extend'
-escHTML = import 'escape-html'
-import './parts/markup'
-import './parts/defaults'
-import './parts/helpers'
+import extend from 'smart-extend'
+import EventEmitter from 'event-lite'
+import {version} from '../../package.json'
+import defaults from './parts/defaults'
+import $ from 'jquery'
+import * as markup from './parts/markup'
+import * as helpers from './parts/helpers'
+currentID = 0
 
-class DataTable extends require('event-lite')
+class DataTable extends EventEmitter
 	constructor: (@container, options={})->
 		super()
 		@options = extend.clone.deepOnly('columns')(DataTable.defaults, options)
@@ -60,48 +62,48 @@ class DataTable extends require('event-lite')
 
 
 
-DataTable::fetchData = ()->
-	@state.loading = true
-	Promise.resolve()
-		.then ()=> @options.data.call(@)
-		.then (data)=>
-			@state.loading = @state.error = false
-			return data
-		.catch (err)=>
-			@state.error = err
+	fetchData: ()->
+		@state.loading = true
+		Promise.resolve()
+			.then ()=> @options.data.call(@)
+			.then (data)=>
+				@state.loading = @state.error = false
+				return data
+			.catch (err)=>
+				@state.error = err
 
-DataTable::setData = (data)->
-	@allRows = data if Array.isArray(data)
+	setData: (data)->
+		@allRows = data if Array.isArray(data)
 
-DataTable::appendData = (data)->
-	@allRows.push(data...)
+	appendData: (data)->
+		@allRows.push(data...)
 
-DataTable::loadData = ()->
-	@unprocessRow(row) for row in @allRows if @allRows.length
-	@fetchData().then (data)=> @setData(data)
+	loadData: ()->
+		@unprocessRow(row) for row in @allRows if @allRows.length
+		@fetchData().then (data)=> @setData(data)
 
-DataTable::refresh = ()->
-	@availableRows = @availableRows
-	@currentPage = @currentPage
+	refresh: ()->
+		@availableRows = @availableRows
+		@currentPage = @currentPage
 
-DataTable::markupArgs = (argsObject={})->
-	argsObject.baseClass = @options.baseClass
-	return argsObject
-
-
+	markupArgs: (argsObject={})->
+		argsObject.baseClass = @options.baseClass
+		return argsObject
 
 
-import './parts/methods'
-import './parts/attachEvents'
-import './parts/attachBindings'
-import './parts/userActionMethods'
+import * as generalMethods from './parts/methods'
+import * as eventMethods from './parts/attachEvents'
+import * as bindingMethods from './parts/attachBindings'
+import * as userActionMethods from './parts/userActionMethods'
+extend DataTable::, generalMethods, eventMethods, bindingMethods, userActionMethods
 
-currentID = 0
-DataTable.version = import '../../package.json $ version'
+
+DataTable.version = version
 DataTable.helpers = helpers
 DataTable.markup = markup
 DataTable.defaults = defaults
-module.exports = DataTable
+
+export default DataTable
 
 
 

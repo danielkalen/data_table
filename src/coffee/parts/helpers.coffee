@@ -1,7 +1,8 @@
-helpers = {}
+import * as markup from './markup'
+import $ from 'jquery'
 
 
-helpers.compareValues = (valueA, valueB)-> switch
+export compareValues = (valueA, valueB)-> switch
 	when typeof valueA is typeof valueB
 		valueA is valueB
 	
@@ -12,7 +13,7 @@ helpers.compareValues = (valueA, valueB)-> switch
 		valueA is parseFloat(valueB)
 
 
-helpers.toggleActionsPopup = (actionsPopup$)->
+export toggleActionsPopup = (actionsPopup$)->
 	isOpen = actionsPopup$.data 'isOpen'
 
 	if isOpen
@@ -21,12 +22,12 @@ helpers.toggleActionsPopup = (actionsPopup$)->
 	else
 		actionsPopup$.data 'overlay', overlay$ = $(markup.actionsOverlay())
 		actionsPopup$.addClass 'is_visible'
-		overlay$.appendTo(document.body).one 'click', ()-> helpers.toggleActionsPopup(actionsPopup$)
+		overlay$.appendTo(document.body).one 'click', ()-> toggleActionsPopup(actionsPopup$)
 
 	actionsPopup$.data 'isOpen', !isOpen
 
 
-helpers.getBreakdownTotal = (breakdown, breakdownKeys)-> switch
+export getBreakdownTotal = (breakdown, breakdownKeys)-> switch
 	when breakdownKeys.length is 0 then 0
 	else
 		breakdownKeys
@@ -35,7 +36,7 @@ helpers.getBreakdownTotal = (breakdown, breakdownKeys)-> switch
 
 
 
-helpers.normalizeColumns = (columns)->
+export normalizeColumns = (columns)->
 	if not Array.isArray(columns)
 		output = columns
 	else
@@ -55,11 +56,11 @@ helpers.normalizeColumns = (columns)->
 	return output 
 
 
-helpers.getBreakdownBarWidth = (row, largest)->
+export getBreakdownBarWidth = (row, largest)->
 	(row.breakdownBarTotal / largest) * (100 - 18)
 
 
-helpers.genHeaderCellStyle = (column)->
+export genHeaderCellStyle = (column)->
 	styleString = ''
 
 	if column.width
@@ -72,7 +73,7 @@ helpers.genHeaderCellStyle = (column)->
 
 
 
-helpers.genCellStyle = (column)->
+export genCellStyle = (column)->
 	styleString = ''
 
 	if column.width
@@ -93,7 +94,7 @@ helpers.genCellStyle = (column)->
 
 
 
-helpers.genCellClassname = (column)->
+export genCellClassname = (column)->
 	classString = ''
 	
 	if column.sortable
@@ -138,7 +139,7 @@ helpers.genCellClassname = (column)->
 
 
 
-helpers.colorMapping = (value, colorType='name')-> switch colorType
+export colorMapping = (value, colorType='name')-> switch colorType
 	when 'browser' then switch
 		when value.includes 'Firefox' then @colorMapping('orange')
 		when value.includes 'Chrome' then @colorMapping('green')
@@ -186,7 +187,7 @@ helpers.colorMapping = (value, colorType='name')-> switch colorType
 
 
 
-helpers.iconMapping = (value, iconType)-> switch iconType
+export iconMapping = (value, iconType)-> switch iconType
 	when 'browser'
 		switch
 			when value.includes 'Firefox' then '#'

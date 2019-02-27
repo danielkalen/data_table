@@ -1,4 +1,9 @@
-DataTable::processRow = (row)-> if row.processed then row else
+import SimplyBind from '@danielkalen/simplybind'
+import * as markup from '../markup'
+import {getBreakdownBarWidth, genCellClassname, genCellStyle} from '../helpers'
+import $ from 'jquery'
+
+export processRow = (row)-> if row.processed then row else
 	@generateRow(row)
 
 	SimplyBind('visible', updateEvenIfSame:true).of(row)
@@ -9,7 +14,7 @@ DataTable::processRow = (row)-> if row.processed then row else
 				row.el.appendTo @els.tableBody
 
 				if @hasBreakdownBar and not row.updatedBreakdownWidth and isVisible isnt prevValue
-					row.breakdownBarWidth = helpers.getBreakdownBarWidth(row, @largestBreakdownTotal)
+					row.breakdownBarWidth = getBreakdownBarWidth(row, @largestBreakdownTotal)
 				
 
 	if @hasBreakdownBar and row.breakdownBarEl?.length
@@ -17,14 +22,14 @@ DataTable::processRow = (row)-> if row.processed then row else
 			.to('updatedBreakdownWidth').of(row)
 				.transform ()-> if row.visible then true else false
 			.and.to('breakdownBarWidth').of(row)
-				.transform ()=> helpers.getBreakdownBarWidth(row, @largestBreakdownTotal)
+				.transform ()=> getBreakdownBarWidth(row, @largestBreakdownTotal)
 
 				.chainTo('width').of(row.breakdownBarEl[0].style)
 					.transform (width)-> width+'%'
 
 				.and.to ()=>
 					for drilldownEl,index in row.drilldownEls
-						width = helpers.getBreakdownBarWidth(row.drilldown[index], row.drilldown.largestBreakdownTotal)
+						width = getBreakdownBarWidth(row.drilldown[index], row.drilldown.largestBreakdownTotal)
 						$(drilldownEl).children('.is_breakdown_bar').children().children()[0]?.style.width = width+'%'
 					return
 				.condition ()-> row.drilldown
@@ -38,7 +43,7 @@ DataTable::processRow = (row)-> if row.processed then row else
 
 
 
-DataTable::unprocessRow = (row)-> if row.processed
+export unprocessRow = (row)-> if row.processed
 	SimplyBind.unBindAll(row, true)
 	
 	if @hasBreakdownBar and row.breakdownBarEl[0]
@@ -53,12 +58,12 @@ DataTable::unprocessRow = (row)-> if row.processed
 
 
 
-DataTable::reRenderRow = (row)->
+export reRenderRow = (row)->
 	@generateRow(row)
 
 
 
-DataTable::generateRow = (row)->
+export generateRow = (row)->
 	prevRowEl = row.el
 	newRowEl = row.el = $(@generateRowMarkup(row)).data('row', row)
 	prevRowEl.replaceWith(newRowEl) if prevRowEl
@@ -93,7 +98,7 @@ DataTable::generateRow = (row)->
 
 
 
-DataTable::generateRowMarkup = (row, parentRow)->
+export generateRowMarkup = (row, parentRow)->
 	isSub = !!parentRow
 	
 	markup.row @markupArgs
@@ -117,8 +122,8 @@ DataTable::generateRowMarkup = (row, parentRow)->
 					'label': if typeof cellValue is 'string' then cellValue else ''
 					'column': columnName
 					'slug': column.slug
-					'extraClasses': helpers.genCellClassname(column)
-					'style': helpers.genCellStyle(column)
+					'extraClasses': genCellClassname(column)
+					'style': genCellStyle(column)
 					'value': do ()=> switch
 						when column.type is 'fields' 		then @generateInlineFields(cellValue, row, column)
 						when column.type is 'ipDetails' 	then @generateIpDetails(cellValue, row, column)

@@ -1,5 +1,8 @@
-DataTable::generateHeadingColumns = ()->
-	@options.columns = helpers.normalizeColumns(@options.columns)
+import * as markup from '../markup'
+import {normalizeColumns, genHeaderCellStyle, genCellClassname} from '../helpers'
+
+export generateHeadingColumns = ()->
+	@options.columns = normalizeColumns(@options.columns)
 	@hasBreakdownBar = true if column.type is 'breakdownBar' for label,column of @options.columns
 
 	Object.keys(@options.columns)
@@ -11,16 +14,16 @@ DataTable::generateHeadingColumns = ()->
 				'slug': column.slug
 				'icon': column.icon
 				'label': column.label
-				'style': helpers.genHeaderCellStyle(column)
-				'extraClasses': helpers.genCellClassname(column)
+				'style': genHeaderCellStyle(column)
+				'extraClasses': genCellClassname(column)
 		.join('')
 
 
 
 
 
-DataTable::updateColumns = (updatedColumns)->
-	updatedColumns = helpers.normalizeColumns(updatedColumns)
+export updateColumns = (updatedColumns)->
+	updatedColumns = normalizeColumns(updatedColumns)
 	extend.deep(@options.columns, updatedColumns)
 	@currentPage = @currentPage
 
