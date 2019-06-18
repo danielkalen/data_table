@@ -1,4 +1,4 @@
-import extend$1 from'smart-extend';import EventEmitter from'event-lite';import $$1 from'jquery';import escHTML from'escape-html';import SimplyBind from'@danielkalen/simplybind';var version = "2.10.1";var defaults = {
+import extend from'smart-extend';import EventEmitter from'event-lite';import $$1 from'jquery';import escHTML from'escape-html';import SimplyBind from'@danielkalen/simplybind';var version = "2.10.2";var defaults = {
   'perPage': 20,
   'pageCountMax': 10,
   'minWidth': 0,
@@ -685,7 +685,7 @@ var setPageIndicator = function (targetPage) {
 };
 var updateColumns = function (updatedColumns) {
   updatedColumns = normalizeColumns(updatedColumns);
-  extend$1.deep(this.options.columns, updatedColumns);
+  extend.deep(this.options.columns, updatedColumns);
   return this.currentPage = this.currentPage;
 };var processRow = function (row) {
   var ref;
@@ -1413,7 +1413,7 @@ DataTable = class DataTable extends EventEmitter {
   constructor(container, options = {}) {
     super();
     this.container = container;
-    this.options = extend$1.clone.deepOnly('columns')(DataTable.defaults, options);
+    this.options = extend.clone.deepOnly('columns')(DataTable.defaults, options);
     this.state = {
       'loading': false,
       'noResults': false,
@@ -1432,7 +1432,7 @@ DataTable = class DataTable extends EventEmitter {
     this.currentPage = 1; // ==== Markup =================================================================================
 
     this.els = {};
-    this.els.tableOuterwrap = $$1(tableOuterwrap(extend$1({
+    this.els.tableOuterwrap = $$1(tableOuterwrap(extend({
       ID: this.ID
     }, this.options)));
     this.els.table = $$1(table(this.options)).appendTo(this.els.tableOuterwrap);
@@ -1518,7 +1518,7 @@ DataTable = class DataTable extends EventEmitter {
   }
 
 };
-extend$1(DataTable.prototype, generalMethods, eventMethods, bindingMethods, userActionMethods);
+extend(DataTable.prototype, generalMethods, eventMethods, bindingMethods, userActionMethods);
 DataTable.version = version;
 DataTable.helpers = helpers;
 DataTable.markup = markup;

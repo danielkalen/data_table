@@ -1,4 +1,4 @@
-(function(g,f){typeof exports==='object'&&typeof module!=='undefined'?module.exports=f(require('smart-extend'),require('event-lite'),require('jquery'),require('escape-html'),require('@danielkalen/simplybind')):typeof define==='function'&&define.amd?define(['smart-extend','event-lite','jquery','escape-html','@danielkalen/simplybind'],f):(g=g||self,g['@danielkalen/data_table']=f(g.extend$1,g.EventEmitter,g.$$1,g.escHTML,g.SimplyBind));}(this,function(extend$1, EventEmitter, $$1, escHTML, SimplyBind){'use strict';extend$1=extend$1&&extend$1.hasOwnProperty('default')?extend$1['default']:extend$1;EventEmitter=EventEmitter&&EventEmitter.hasOwnProperty('default')?EventEmitter['default']:EventEmitter;$$1=$$1&&$$1.hasOwnProperty('default')?$$1['default']:$$1;escHTML=escHTML&&escHTML.hasOwnProperty('default')?escHTML['default']:escHTML;SimplyBind=SimplyBind&&SimplyBind.hasOwnProperty('default')?SimplyBind['default']:SimplyBind;var version = "2.10.1";var defaults = {
+(function(g,f){typeof exports==='object'&&typeof module!=='undefined'?module.exports=f(require('smart-extend'),require('event-lite'),require('jquery'),require('escape-html'),require('@danielkalen/simplybind')):typeof define==='function'&&define.amd?define(['smart-extend','event-lite','jquery','escape-html','@danielkalen/simplybind'],f):(g=g||self,g['@danielkalen/data_table']=f(g.extend,g.EventEmitter,g.$$1,g.escHTML,g.SimplyBind));}(this,function(extend, EventEmitter, $$1, escHTML, SimplyBind){'use strict';extend=extend&&extend.hasOwnProperty('default')?extend['default']:extend;EventEmitter=EventEmitter&&EventEmitter.hasOwnProperty('default')?EventEmitter['default']:EventEmitter;$$1=$$1&&$$1.hasOwnProperty('default')?$$1['default']:$$1;escHTML=escHTML&&escHTML.hasOwnProperty('default')?escHTML['default']:escHTML;SimplyBind=SimplyBind&&SimplyBind.hasOwnProperty('default')?SimplyBind['default']:SimplyBind;var version = "2.10.2";var defaults = {
   'perPage': 20,
   'pageCountMax': 10,
   'minWidth': 0,
@@ -685,7 +685,7 @@ var setPageIndicator = function (targetPage) {
 };
 var updateColumns = function (updatedColumns) {
   updatedColumns = normalizeColumns(updatedColumns);
-  extend$1.deep(this.options.columns, updatedColumns);
+  extend.deep(this.options.columns, updatedColumns);
   return this.currentPage = this.currentPage;
 };var processRow = function (row) {
   var ref;
@@ -1413,7 +1413,7 @@ DataTable = class DataTable extends EventEmitter {
   constructor(container, options = {}) {
     super();
     this.container = container;
-    this.options = extend$1.clone.deepOnly('columns')(DataTable.defaults, options);
+    this.options = extend.clone.deepOnly('columns')(DataTable.defaults, options);
     this.state = {
       'loading': false,
       'noResults': false,
@@ -1432,7 +1432,7 @@ DataTable = class DataTable extends EventEmitter {
     this.currentPage = 1; // ==== Markup =================================================================================
 
     this.els = {};
-    this.els.tableOuterwrap = $$1(tableOuterwrap(extend$1({
+    this.els.tableOuterwrap = $$1(tableOuterwrap(extend({
       ID: this.ID
     }, this.options)));
     this.els.table = $$1(table(this.options)).appendTo(this.els.tableOuterwrap);
@@ -1518,7 +1518,7 @@ DataTable = class DataTable extends EventEmitter {
   }
 
 };
-extend$1(DataTable.prototype, generalMethods, eventMethods, bindingMethods, userActionMethods);
+extend(DataTable.prototype, generalMethods, eventMethods, bindingMethods, userActionMethods);
 DataTable.version = version;
 DataTable.helpers = helpers;
 DataTable.markup = markup;
