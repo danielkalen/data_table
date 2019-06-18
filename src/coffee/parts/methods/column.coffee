@@ -1,4 +1,5 @@
 import * as markup from '../markup'
+import extend from 'smart-extend'
 import {normalizeColumns, genHeaderCellStyle, genCellClassname} from '../helpers'
 
 export generateHeadingColumns = ()->
