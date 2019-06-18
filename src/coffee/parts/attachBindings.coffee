@@ -1,4 +1,5 @@
 import * as markup from './markup'
+import extend from 'smart-extend'
 import SimplyBind from '@danielkalen/simplybind'
 
 export attachBindings = ()->
