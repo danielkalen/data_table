@@ -1,4 +1,4 @@
-import extend$1 from'smart-extend';import EventEmitter from'event-lite';import $$1 from'jquery';import escHTML from'escape-html';import SimplyBind from'@danielkalen/simplybind';var version = "2.10.0";var defaults = {
+import extend$1 from'smart-extend';import EventEmitter from'event-lite';import $$1 from'jquery';import escHTML from'escape-html';import SimplyBind from'@danielkalen/simplybind';var version = "2.10.1";var defaults = {
   'perPage': 20,
   'pageCountMax': 10,
   'minWidth': 0,
@@ -685,7 +685,7 @@ var setPageIndicator = function (targetPage) {
 };
 var updateColumns = function (updatedColumns) {
   updatedColumns = normalizeColumns(updatedColumns);
-  extend.deep(this.options.columns, updatedColumns);
+  extend$1.deep(this.options.columns, updatedColumns);
   return this.currentPage = this.currentPage;
 };var processRow = function (row) {
   var ref;
